@@ -1,1 +1,1 @@
-TimeBan is a plugin for your Craftbukkit and provide a feature for a time limited banning.
+= TimeBan is a plugin for your Craftbukkit and provide a feature for a time limited banning. =
