@@ -26,7 +26,7 @@ public class TimeBan extends JavaPlugin
 		
 		TimeBanRunnable t = new TimeBanRunnable();
 		TimeBanRunnable.setSet(BanSet);
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this, t, 60L, 200L); // Synchronous, using main thread every 10 sec
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, t, 60L, 200L); // Synchronous, using main thread every 10 sec
 		
 		log.info("Hey, this is TimeBan 0.1");
 	}
