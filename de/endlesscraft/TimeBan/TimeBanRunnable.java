@@ -1,24 +1,33 @@
 package de.endlesscraft.TimeBan;
 
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
- * Check for x seconds if there is a upcoming unban.
+ * Check x seconds if there is a upcoming unban.
  * @author Bambusstock
  *
  */
 public class TimeBanRunnable implements Runnable
 {
-	Logger log = Logger.getLogger("Minecraft");
+	private Set<Ban> set;
 	
-	static Set<Object> set;
+	/**
+	 * Set a set of bans to watch for unban.
+	 * @param set
+	 */
+	public void setSet(Set<Ban> set) {
+		this.set = set;
+	}
 	
-	public static void setSet(Set<Object> set) {
-		TimeBanRunnable.set = set;
+	/**
+	 * Return the set of bans to watch for unban.
+	 * @return Set
+	 */
+	public Set<Ban> getSet() {
+		return this.set;
 	}
 	
 	public void run() {
-		log.info("Hi I'm you're scheduler.");
+		// check for upcoming unbans...
 	}
 }
