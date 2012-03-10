@@ -2,6 +2,8 @@ package de.endlesscraft.TimeBan;
 
 import java.util.Calendar;
 
+import org.bukkit.entity.Player;
+
 /**
  * Class to handle a ban.
  * @author Bambusstock
@@ -9,12 +11,12 @@ import java.util.Calendar;
  */
 public class Ban
 {
-	public static String[] stdReasons = {"Standard reasons"};
+	public static String stdReason = "Standard reasons";
 	public static int stdBanDuration = 3600;
 	
-	protected String user;
+	protected Player player;
 	protected Calendar until;
-	protected String[] reasons;
+	protected String reason;
 	
 	/**
 	 * Use the standard ban duration to create a standard Calendar-Object, 
@@ -29,46 +31,46 @@ public class Ban
 	
 	/**
 	 * Instantiate a ban.
-	 * @param user The standard username
+	 * @param Player Player object
 	 * @param until Date until user is banned
-	 * @param reasons Array of reasons why the user had been banned
+	 * @param reason Reasons why the user had been banned
 	 */
-	public Ban(String user, Calendar until, String[] reasons) {
-		this.user = user;
+	public Ban(Player player, Calendar until, String reason) {
+		this.player= player;
 		this.until = until;
-		this.reasons = reasons;
+		this.reason = reason;
 	}
 	
 	/**
 	 * Instantiate a ban using the default reason.
-	 * @param user The standard username
+	 * @param Player Player object
 	 * @param until Date until the user is banned
 	 */
-	public Ban(String user, Calendar until) {
-		this.user = user;
+	public Ban(Player player, Calendar until) {
+		this.player = player;
 		this.until = until;
-		this.reasons = Ban.stdReasons;
+		this.reason = Ban.stdReason;
 	}
 	
 	/**
 	 * Instantiate a ban using the default duration.
-	 * @param user The standard username
-	 * @param reasons Array of reasons why the user had been banned
+	 * @param Player object
+	 * @param Reason why the player was banned
 	 */
-	public Ban(String user, String[] reasons) {
-		this.user = user;
+	public Ban(Player player, String reason) {
+		this.player= player;
 		this.until = this.stdDurationToCalendar();
-		this.reasons = reasons;
+		this.reason = reason;
 	}
 	
 	/**
 	 * Instantiate a ban using the default duration and default reasons.
-	 * @param user The standard username
+	 * @param Player object
 	 */
-	public Ban(String user) {
-		this.user = user;
+	public Ban(Player player) {
+		this.player = player;
 		this.until = this.stdDurationToCalendar();
-		this.reasons = Ban.stdReasons;
+		this.reason = Ban.stdReason;
 	}
 	
 	/**
@@ -81,17 +83,16 @@ public class Ban
 	
 	/**
 	 * Set the standard reasons.
-	 * @param reasons Array of reasons use if no reasons were given.
+	 * @param Standard reason used if no given
 	 */
-	public static void setStandardReasons(String[] reasons) {
-		Ban.stdReasons = reasons;
+	public static void setStandardReasons(String reason) {
+		Ban.stdReason = reason;
 	}
-	
 	
 	/**
 	 * Convert this object into a string.
 	 */
 	public String toString() {
-		return "User `" +  this.user + "` banned until the " + this.until.toString() + "because of "  + this.reasons.toString();
+		return "User `" +  this.player + "` banned until " + this.until.getTime().toString() + " because of "  + this.reason;
 	}
 }
