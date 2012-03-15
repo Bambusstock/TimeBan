@@ -1,8 +1,9 @@
 package de.endlesscraft.TimeBan;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 /**
  * Class to handle a ban.
@@ -10,24 +11,17 @@ import org.bukkit.entity.Player;
  *
  */
 public class Ban
+implements Serializable, Comparable<Ban>
 {
-	public static String stdReason = "Standard reasons";
+	private static final long	serialVersionUID	= -4327491657720734089L;
+	private transient TimeBan plugin;
+	
+	public static String stdReason = "Standard reason";
 	public static int stdBanDuration = 3600;
 	
-	protected Player player;
+	protected String player;
 	protected Calendar until;
 	protected String reason;
-	
-	/**
-	 * Use the standard ban duration to create a standard Calendar-Object, 
-	 * that is used to define date until user is banned.
-	 * @return 
-	 */
-	private Calendar stdDurationToCalendar() {
-		Calendar result = Calendar.getInstance();
-		result.set(Calendar.SECOND, result.get(Calendar.SECOND) + Ban.stdBanDuration);
-		return result;
-	}
 	
 	/**
 	 * Instantiate a ban.
@@ -35,9 +29,10 @@ public class Ban
 	 * @param until Date until user is banned
 	 * @param reason Reasons why the user had been banned
 	 */
-	public Ban(Player player, Calendar until, String reason) {
-		this.player= player;
-		this.until = until;
+	public Ban(TimeBan plugin, String player, Calendar until, String reason) {
+		this.player = player;
+		this.plugin = plugin;
+		this.until  = until;
 		this.reason = reason;
 	}
 	
@@ -46,8 +41,9 @@ public class Ban
 	 * @param Player Player object
 	 * @param until Date until the user is banned
 	 */
-	public Ban(Player player, Calendar until) {
+	public Ban(TimeBan plugin, String player, Calendar until) {
 		this.player = player;
+		this.plugin = plugin;
 		this.until = until;
 		this.reason = Ban.stdReason;
 	}
@@ -57,8 +53,9 @@ public class Ban
 	 * @param Player object
 	 * @param Reason why the player was banned
 	 */
-	public Ban(Player player, String reason) {
+	public Ban(TimeBan plugin, String player, String reason) {
 		this.player= player;
+		this.plugin = plugin;
 		this.until = this.stdDurationToCalendar();
 		this.reason = reason;
 	}
@@ -67,10 +64,24 @@ public class Ban
 	 * Instantiate a ban using the default duration and default reasons.
 	 * @param Player object
 	 */
-	public Ban(Player player) {
+	public Ban(TimeBan plugin, String player) {
 		this.player = player;
+		this.plugin = plugin;
 		this.until = this.stdDurationToCalendar();
 		this.reason = Ban.stdReason;
+	}
+	
+	/**
+	 * Compare two bans by time.
+	 */
+	public int compareTo(Ban ban) {
+		if(this.until.after(ban)) {
+			return 1;
+		} else if(this.until.before(ban)) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 	
 	/**
@@ -88,6 +99,37 @@ public class Ban
 	public static void setStandardReasons(String reason) {
 		Ban.stdReason = reason;
 	}
+	
+	/**
+	 * Use the standard ban duration to create a standard Calendar-Object, 
+	 * that is used to define date until user is banned.
+	 * @return 
+	 */
+	private Calendar stdDurationToCalendar() {
+		Calendar result = Calendar.getInstance();
+		result.set(Calendar.SECOND, result.get(Calendar.SECOND) + Ban.stdBanDuration);
+		return result;
+	}
+	
+	/**
+	 * Return the OfflinePlayer Object of this ban.
+	 * @return
+	 */
+	public OfflinePlayer getPlayer() {
+		return this.plugin.getServer().getOfflinePlayer(this.player);
+	}
+	
+	public Calendar getCalendar() {
+		return this.until;
+	}
+	
+	/**
+     * Return the banning reason
+     * @return Reason
+     */
+    public String getReason() {
+    	return this.reason;
+    }
 	
 	/**
 	 * Convert this object into a string.
