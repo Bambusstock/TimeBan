@@ -24,6 +24,13 @@ implements Serializable, Comparable<Ban>
 	protected String reason;
 	
 	/**
+	 * Instantiate a empty ban.
+	 */
+	public Ban() {
+		
+	}
+	
+	/**
 	 * Instantiate a ban.
 	 * @param Player Player object
 	 * @param until Date until user is banned
@@ -112,13 +119,17 @@ implements Serializable, Comparable<Ban>
 	}
 	
 	/**
-	 * Return the OfflinePlayer Object of this ban.
-	 * @return
+	 * 
+	 * @return OfflinePlayer object for this ban.
 	 */
 	public OfflinePlayer getPlayer() {
 		return this.plugin.getServer().getOfflinePlayer(this.player);
 	}
 	
+	/**
+	 * 
+	 * @return Calender object for this ban.
+	 */
 	public Calendar getCalendar() {
 		return this.until;
 	}
@@ -128,7 +139,12 @@ implements Serializable, Comparable<Ban>
      * @return Reason
      */
     public String getReason() {
-    	return this.reason;
+    	if(!this.reason.isEmpty()) {
+    		return this.reason;
+    	}
+    	else {
+    		return Ban.stdReason;
+    	}
     }
 	
 	/**
@@ -136,5 +152,16 @@ implements Serializable, Comparable<Ban>
 	 */
 	public String toString() {
 		return "User `" +  this.player + "` banned until " + this.until.getTime().toString() + " because of "  + this.reason;
+	}
+	
+	/**
+	 * Check if this ban is empty.
+	 * @return
+	 */
+	public boolean isEmpty() {
+		if(!this.player.isEmpty() && !this.reason.isEmpty()) {
+		 return true;
+		}
+		return false;
 	}
 }

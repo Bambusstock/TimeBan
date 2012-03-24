@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+
 /**
  * TODO:
  * 	- add security for file management
@@ -25,6 +26,21 @@ implements Serializable
 	private static final long	serialVersionUID	= -5972004136609506533L;
 	
 	/**
+	 * Get a Ban object by a players name.
+	 * @param name
+	 * @return Ban object for the player. If not found return empty Ban!
+	 */
+	public Ban getBanByPlayerName(String name) {
+		Ban result = new Ban();
+		for(Ban ban : this) {
+			if(ban.getPlayer().getName().equals(name)) {
+				result = ban;
+			}
+		}
+		return result;
+	}
+	
+	/**
 	 * Load a ban list.
 	 * @param handle File object pointing to the file where to save the data.
 	 * @param plugin Plugin instance.
@@ -32,6 +48,7 @@ implements Serializable
 	public void load(File handle, TimeBan plugin) {
 		IOHelper helper = new IOHelper(handle, plugin);
 		helper.load();
+		log.info("[TimeBan] Loaded ´" + this.size() + "´ bans."); 
 	}
 	
 	/**
@@ -42,6 +59,7 @@ implements Serializable
 	public void save(File handle, TimeBan plugin) {
 		IOHelper helper = new IOHelper(handle, plugin);
 		helper.save();
+		log.info("[TimeBan] Saved ´" + this.size() + "´ bans.");
 	}
 	
 	/**
@@ -95,11 +113,11 @@ implements Serializable
 				input.close();
 			}
 			catch (IOException e) {
-				log.warning("[TimeBan] Error while writing to stream.");
+				log.warning("[TimeBan IOHelper] Error while writing to stream.");
 				log.info(e.toString());
 			}
 			catch (ClassNotFoundException e) {
-				log.warning("[TimeBan] Class not found.");
+				log.warning("[TimeBan IOHelper] Class not found.");
 				log.info(e.toString());
 			}
 		}

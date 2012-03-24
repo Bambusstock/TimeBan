@@ -7,10 +7,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @TODO:
- * 	- complete methods to load/save ban list to/from json
- *  - make Ban comparable
  * 	- add permission system
  *  - add commands
+ *  	- make it available from console and ingame
  * @author Bambusstock
  *
  */
@@ -23,11 +22,10 @@ public class TimeBan extends JavaPlugin
 	 * Load a ban list, initialize Listener of TimeBan event and a synchronous scheduler. 
 	 */
 	public void onEnable() {
-		this.banSet.load(new File("plugins/TimeBan/banlist.dat"), this);
-		
+		this.banSet.load(new File("plugins/TimeBan/banlist.dat"), this);		
 		this.getServer().getPluginManager().registerEvents(new BanListener(this), this);
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, 200L); // all 10 secs
-				
+		this.getCommand("timeban").setExecutor(new TimeBanExecutor(this));
 	}
 	
 	/**
