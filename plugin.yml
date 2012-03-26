@@ -1,9 +1,9 @@
 name: TimeBan
 main: me.Bambusstock.TimeBan.TimeBan
-version: 0.1
+version: 0.2
 commands:
  timeban:
-  description: Use /timeban help to display help for all commands
+  description: Use `/timeban help` to display help for all commands
   usage: /<command> [argument]
   permission: TimeBan.timeban
   permission-message: You don't have <permission>
