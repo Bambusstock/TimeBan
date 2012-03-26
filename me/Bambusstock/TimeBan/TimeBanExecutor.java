@@ -1,10 +1,15 @@
 package me.Bambusstock.TimeBan;
 
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import me.Bambusstock.TimeBan.event.TimeBanEvent;
+import me.Bambusstock.TimeBan.event.TimeUnbanEvent;
 
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,10 +34,11 @@ public class TimeBanExecutor implements CommandExecutor
 	}
 	
 	public void help(Player receiver) {
-		receiver.sendMessage(ChatColor.DARK_GREEN + "TimeBan Helptext.");
+		receiver.sendMessage(ChatColor.DARK_GREEN + "TimeBan Helptext");
+		receiver.sendMessage(ChatColor.DARK_GREEN + "==============");
 		
-		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban ban <username,...> <seconds,...> <reason,...>");
-		receiver.sendMessage(ChatColor.GOLD + "Ban a player or more for x seconds. For banning multiple users see documentation!");
+		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban ban <username,...> <seconds> <reason>");
+		receiver.sendMessage(ChatColor.GOLD + "Ban a player or more for x seconds.");
 		
 		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban unban <username,username2>");
 		receiver.sendMessage(ChatColor.GOLD + "Unban a player or more.");
@@ -46,39 +52,33 @@ public class TimeBanExecutor implements CommandExecutor
 	}
 	
 	/**
-	 * Ban a player and add him to the banSet.
+	 * Create a ban for the given player and call the TimeBanEvent
 	 * @param sender Player how send the cmd
 	 * @param args Arguments: player to ban, until, reason
 	 */
 	public void ban(Player sender, String[] args) {
-		String[] banPlayers = args[1].split(",");
+		String[] banPlayers = args[1].split(",");	
 		UntilStringParser parser = new UntilStringParser(args[2]);
 		Calendar until = parser.getCalendar();
 		
-		if(args[3].isEmpty()) {
-			args[3] = "";
-		}
-		
 		for(String playerName : banPlayers) {
-			OfflinePlayer banPlayer = this.plugin.getServer().getOfflinePlayer(playerName);
-			banPlayer.setBanned(true);
-			this.plugin.banSet.add(new Ban(this.plugin, banPlayer.getName(), until, args[3]));
+			Ban ban = new Ban(this.plugin, playerName, until, args[3]);			
+			TimeBanEvent event = new TimeBanEvent(sender, ban);
+			this.plugin.getServer().getPluginManager().callEvent(event);
 		}
 	}
 	
 	/**
-	 * Unban a player.
+	 * Get a ban for the given player and call the TimeUnbanEvent
 	 * @param sender Player who send the command.
 	 * @param args Arguments: player to unban, possible -a
 	 */
 	public void unban(Player sender, String[] args) {
-		// with -a
+		// with -a go through all
 		if(args[2].equalsIgnoreCase("-a")) {
 			for(Ban ban : this.plugin.banSet) {
-				OfflinePlayer unbanPlayer = ban.getPlayer();
-				unbanPlayer.setBanned(false);
-				this.plugin.banSet.remove(ban);
-				log.info("Unbaned and removed `" + ban.getPlayer().getName() + "` from ban list.");
+				TimeUnbanEvent event = new TimeUnbanEvent(sender, ban);
+				this.plugin.getServer().getPluginManager().callEvent(event);
 			}
 		}
 		else {
@@ -86,10 +86,8 @@ public class TimeBanExecutor implements CommandExecutor
 			for(String playerName : unbanPlayers) {
 				Ban ban = this.plugin.banSet.getBanByPlayerName(playerName);
 				if(!ban.isEmpty()) {
-					OfflinePlayer unbanPlayer = ban.getPlayer();
-					unbanPlayer.setBanned(false);
-					this.plugin.banSet.remove(ban);
-					log.info("Unbaned and removed `" + ban.getPlayer().getName() + "` from ban list.");
+					TimeUnbanEvent event = new TimeUnbanEvent(sender, ban);
+					this.plugin.getServer().getPluginManager().callEvent(event);
 				}
 			}
 		}
@@ -102,21 +100,37 @@ public class TimeBanExecutor implements CommandExecutor
 	 * @param args
 	 */
 	public void list(Player sender, String[] args) {
-		// entered: /timeban list '' ...
-		if(args[1].equals("''")) {
-			if(args[2].equalsIgnoreCase("-r")) {
-				for(Ban ban : this.plugin.banSet.descendingSet()) {
-					sender.sendMessage(ban.toString());
-				}
-			}
-			else {
-				for(Ban ban : this.plugin.banSet) {
-					sender.sendMessage(ban.toString());
-				}	
+		BanSet resultSet = new BanSet();
+		// collect data
+		// check for a search query
+		if(!args[2].equalsIgnoreCase("''")) {
+			Pattern search = Pattern.compile(args[2]);
+			for(Ban ban : this.plugin.banSet) {
+				Matcher m = search.matcher(ban.getPlayer().getName());
+				if(m.matches()) resultSet.add(ban);
 			}
 		}
+		// all wanted
 		else {
-			
+			resultSet = (BanSet)this.plugin.banSet.clone();
+		}
+		
+		// format output
+		Iterator<Ban> iterator = this.plugin.banSet.iterator();
+		if(args[3].contains("r")) {
+			iterator = resultSet.descendingIterator(); 
+		}
+		
+		if(args[2].equalsIgnoreCase("''")) {
+			if(args[3].contains("s")) {
+				while(iterator.hasNext()) sender.sendMessage(iterator.next().toString());
+			}
+			else {
+				while(iterator.hasNext()) {
+					Ban ban = iterator.next();
+					sender.sendMessage("`" + ban.getPlayer().getName() + "` banned until " + ban.getUntil().getTime() + "because `" + ban.getReason() + "`");
+				}
+			}
 		}
 	}
 	
@@ -134,7 +148,12 @@ public class TimeBanExecutor implements CommandExecutor
 			return true;
 		}
 		else if(args[0].equalsIgnoreCase("list")) {
-			this.list((Player)sender, args);
+			if(this.plugin.banSet.size() == 0) {
+				sender.sendMessage(ChatColor.RED + "Ban list is empty!");		
+			}
+			else {
+				this.list((Player)sender, args);
+			}
 			return true;
 		}
 		return false;
