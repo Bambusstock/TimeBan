@@ -1,0 +1,39 @@
+package me.Bambusstock.TimeBan.event;
+
+
+import me.Bambusstock.TimeBan.Ban;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+ 
+public class TimeUnbanEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
+    protected Ban ban;
+    protected Player sender;
+ 
+    public TimeUnbanEvent(Player sender, Ban ban) {
+     	this.ban = ban;
+     	this.sender = sender;
+    }
+ 
+    /**
+     * Return a ban object.
+     * @return Ban object
+     */
+    public Ban getBan() {
+        return this.ban;
+    }
+    
+    public Player getSender() {
+    	return this.sender;
+    }
+     
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+ 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+}
