@@ -130,7 +130,7 @@ implements Serializable, Comparable<Ban>
 	 * 
 	 * @return Calender object for this ban.
 	 */
-	public Calendar getCalendar() {
+	public Calendar getUntil() {
 		return this.until;
 	}
 	
@@ -151,7 +151,7 @@ implements Serializable, Comparable<Ban>
 	 * Convert this object into a string.
 	 */
 	public String toString() {
-		return "User `" +  this.player + "` banned until " + this.until.getTime().toString() + " because of "  + this.reason;
+		return "`" +  this.player + "` until " + this.until.getTime().toString() + " --> "  + this.reason;
 	}
 	
 	/**
