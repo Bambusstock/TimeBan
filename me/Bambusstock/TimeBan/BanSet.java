@@ -79,6 +79,25 @@ implements Serializable
 		private IOHelper(File handle, TimeBan plugin) {
 			this.handle = handle;
 			this.plugin = plugin;
+			this.checkFileExists();
+		}
+		
+		/**
+		 * Check if a file to save the banlist exists. If not it will be created if
+		 * defined in the configuration.
+		 */
+		private void checkFileExists() {
+			if(!this.handle.exists()) {
+				try {
+					log.info("[TimeBan IOHelper] Create file to load and save the banlist...");
+					this.handle.createNewFile();
+					log.info("[TimeBan IOHelper] Done.");
+				}
+				catch (IOException e) {
+					log.warning("[TimeBan IOHelper] Error while creating new file to save!");
+					log.info(e.toString());
+				}
+			}
 		}
 		
 		/**
@@ -92,7 +111,7 @@ implements Serializable
 				output.close();
 			}
 			catch (IOException e) {
-				log.warning("[TimeBan] Error while writing to stream.");
+				log.warning("[TimeBan] Error while writing to stream!");
 				log.info(e.toString());
 			}
 		}
@@ -113,11 +132,11 @@ implements Serializable
 				input.close();
 			}
 			catch (IOException e) {
-				log.warning("[TimeBan IOHelper] Error while writing to stream.");
+				log.warning("[TimeBan IOHelper] Error while writing to stream!");
 				log.info(e.toString());
 			}
 			catch (ClassNotFoundException e) {
-				log.warning("[TimeBan IOHelper] Class not found.");
+				log.warning("[TimeBan IOHelper] Class not found!");
 				log.info(e.toString());
 			}
 		}
