@@ -13,5 +13,6 @@ public class TimeBanRunnable implements Runnable
 	}
 	
 	public void run() {
+		this.plugin.getServer();
 	}
 }
