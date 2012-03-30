@@ -16,7 +16,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * @TODO: Use EventSystem!
  * @author Bambusstock
  *
  */
@@ -58,11 +57,20 @@ public class TimeBanExecutor implements CommandExecutor
 	 */
 	public void ban(Player sender, String[] args) {
 		String[] banPlayers = args[1].split(",");	
-		UntilStringParser parser = new UntilStringParser(args[2]);
-		Calendar until = parser.getCalendar();
+		Calendar until;
+		
+		if(args.length < 3) {
+			until = Calendar.getInstance();
+			until.set(Calendar.SECOND, until.get(Calendar.SECOND) + Ban.stdBanDuration);
+		}
+		else {
+			UntilStringParser parser = new UntilStringParser(args[2]);
+			 until = parser.getCalendar();
+		}
+		String reason = (args.length < 4 || args[3].equals("''")) ? Ban.stdReason : args[3];
 		
 		for(String playerName : banPlayers) {
-			Ban ban = new Ban(this.plugin, playerName, until, args[3]);			
+			Ban ban = new Ban(this.plugin, playerName, until, reason);
 			TimeBanEvent event = new TimeBanEvent(sender, ban);
 			this.plugin.getServer().getPluginManager().callEvent(event);
 		}
@@ -100,10 +108,14 @@ public class TimeBanExecutor implements CommandExecutor
 	 * @param args
 	 */
 	public void list(Player sender, String[] args) {
+		for (int i = 0; i < args.length; i++) log.info("#"+i + " --> " + args[i]);
 		BanSet resultSet = new BanSet();
-		// collect data
+
+		/* 
+		 * collect data
+		 */
 		// check for a search query
-		if(!args[2].equalsIgnoreCase("''")) {
+		if(args.length > 1 && !args[1].equals("\"\"")) {
 			Pattern search = Pattern.compile(args[2]);
 			for(Ban ban : this.plugin.banSet) {
 				Matcher m = search.matcher(ban.getPlayer().getName());
@@ -115,21 +127,26 @@ public class TimeBanExecutor implements CommandExecutor
 			resultSet = (BanSet)this.plugin.banSet.clone();
 		}
 		
-		// format output
+		// check for reverse parameter
 		Iterator<Ban> iterator = this.plugin.banSet.iterator();
-		if(args[3].contains("r")) {
+		if(args.length >= 3 && args[2].contains("r")) {
 			iterator = resultSet.descendingIterator(); 
 		}
-		
-		if(args[2].equalsIgnoreCase("''")) {
-			if(args[3].contains("s")) {
+	
+		/*
+		 * no search pattern
+		 */
+		// [(more than 2 arguments and no search) + (parameter s given)]
+		if( (args.length > 2 && args[1].equals("\"\"")) && (args[2].contains("s"))) {
 				while(iterator.hasNext()) sender.sendMessage(iterator.next().toString());
-			}
-			else {
-				while(iterator.hasNext()) {
-					Ban ban = iterator.next();
-					sender.sendMessage("`" + ban.getPlayer().getName() + "` banned until " + ban.getUntil().getTime() + "because `" + ban.getReason() + "`");
-				}
+		}
+		// [(no search) || (no search was given explicit and there no parameters)] 
+		else if( args.length < 2 || (args.length < 3 && args[1].equals("\"\""))){
+			while(iterator.hasNext()) {
+				Ban ban = iterator.next();
+				sender.sendMessage("`" + ChatColor.RED + ban.getPlayer().getName() + ChatColor.WHITE 
+						+ "` until " + ChatColor.AQUA + ban.getUntil().getTime() + ChatColor.WHITE
+						+ " because `" + ChatColor.GOLD + ban.getReason() + ChatColor.WHITE + "`");
 			}
 		}
 	}
