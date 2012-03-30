@@ -2,7 +2,8 @@ package me.Bambusstock.TimeBan;
 
 import java.util.Calendar;
 import java.util.logging.Logger;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UntilStringParser
 {
@@ -11,17 +12,22 @@ public class UntilStringParser
 	public Calendar calendar;
 	
 	public UntilStringParser(String input) {
+		this.parseUserInput(input);
+		this.text = input;
 	}
 	
 	public UntilStringParser(Calendar input) {
 		if(input.after(Calendar.getInstance())) {
 			this.parseCalenderInput(input);
 		}
-		else {
-			//System.("Date in future.");
-		}
 	}
 	
+	/**
+	 * Get the difference of a field between to calendars
+	 * @param field Field to research
+	 * @param future Date in future
+	 * @return Difference as int
+	 */
 	protected int getFieldDifference(int field, Calendar future) {
 		Calendar actual = Calendar.getInstance();
 		return future.get(field) - actual.get(field);
@@ -37,17 +43,31 @@ public class UntilStringParser
 		String[] labels = {"y", "m", "w", "d", "h", "s"};
 		for(int i = 0; i < fields.length; i++) {
 			int diff = this.getFieldDifference(fields[i], input);
-			log.info("Differz von " + labels[i] + ": " + diff);
-			//if(diff > 0) {
-				output = output.concat(diff + labels[i]);
-				input.set(fields[i], input.get(fields[i]) - diff);
-			//}
+			output = output.concat(diff + labels[i]);
+			input.add(fields[i], diff);
 		}
 		this.text = output;
 	}
 	
-	protected void parseUserInput() {
-		
+	/**
+	 * Parse user input into calendar object.
+	 * @param input The user input
+	 */
+	protected void parseUserInput(String input) {
+		Calendar output = Calendar.getInstance();
+		int[] fields = {Calendar.YEAR, Calendar.MONTH, Calendar.WEEK_OF_YEAR, Calendar.DAY_OF_YEAR, Calendar.HOUR_OF_DAY, Calendar.SECOND};
+		String[] labels = {"y", "m", "w", "d", "h", "s"};
+		for(int i = 0; i < fields.length; i++) {
+			Pattern p = Pattern.compile("(\\d{1,})" + labels[i] + ".*");
+			Matcher m = p.matcher(input);
+			if(m.matches()) {
+				//log.info("---> Anzahl " + label + ": " + m.group(1));
+				output.add(fields[i], Integer.parseInt(m.group(1)));
+				input = input.replace(m.group(1) + labels[i], ""); // remove so that the regexpr works
+				if(input.length() == 0) break;
+			}
+		}
+		this.calendar = output;
 	}
 	
 	public Calendar getCalendar() {
