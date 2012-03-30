@@ -151,7 +151,8 @@ implements Serializable, Comparable<Ban>
 	 * Convert this object into a string.
 	 */
 	public String toString() {
-		return "`" +  this.player + "` until " + this.until.getTime().toString() + " --> "  + this.reason;
+		String until = this.until.get(Calendar.DAY_OF_MONTH) + "." + this.until.get(Calendar.MONTH) + "." + this.until.get(Calendar.YEAR);
+		return "`" +  this.player + "` until " + until + " - "  + this.reason;
 	}
 	
 	/**
