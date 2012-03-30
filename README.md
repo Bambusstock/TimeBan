@@ -42,6 +42,10 @@ Use this to define a default duration. If you leave out the <seconds> pattern, t
 
 Define your default reason.
 
+#### `bansetCreate` (Default: true)
+
+Use this to define if TimeBan automatically create a file to save the ban list if there is none.
+
 Permissions
 -----------
 
@@ -54,9 +58,6 @@ TODO
 ----
 
 - Add features:
-	- comfortable use of <seconds> pattern, e.g. use __3h__ for a ban duration of 3 hours. Some more capabilities: y (year), w (week), d (days), s (seconds), m (minutes). Provide a extra class...
-	- `/timeban ban`
-	- `/timeban unban`
 	- `/timeban list` to show a list of all banned user including duration in human readable format
 		- improve with e.g. `timeban list a*` to list all players starts with a
 		- display left time like "1d 20h 10min"
@@ -64,4 +65,5 @@ TODO
 	- `/timeban import/export`
 	- provide permissions
 	- provide configuration
+	- automatically unban player when comes back on server
 	
