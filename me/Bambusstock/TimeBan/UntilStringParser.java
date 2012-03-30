@@ -61,7 +61,6 @@ public class UntilStringParser
 			Pattern p = Pattern.compile("(\\d{1,})" + labels[i] + ".*");
 			Matcher m = p.matcher(input);
 			if(m.matches()) {
-				//log.info("---> Anzahl " + label + ": " + m.group(1));
 				output.add(fields[i], Integer.parseInt(m.group(1)));
 				input = input.replace(m.group(1) + labels[i], ""); // remove so that the regexpr works
 				if(input.length() == 0) break;
