@@ -32,6 +32,6 @@ public class BanListener implements Listener
 	public void onTimeBanEvent(TimeBanEvent event) {
 		event.getBan().getPlayer().setBanned(true);
 		this.plugin.banSet.add(event.getBan());
-		log.info("Banned `"+ event.getBan().getPlayer().getName() + "` until " + event.getBan().until + " by " + event.getSender());
+		log.info("Banned `"+ event.getBan().getPlayer().getName() + "` until " + event.getBan().until.getTime() + " by " + event.getSender());
 	}
 }
