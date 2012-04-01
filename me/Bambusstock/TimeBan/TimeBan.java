@@ -25,7 +25,7 @@ public class TimeBan extends JavaPlugin
 	public void onEnable() {
 		this.banSet.load(new File("./plugins/TimeBan/banlist.dat"), this);		
 		this.getServer().getPluginManager().registerEvents(new BanListener(this), this);
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, 200L); // all 10 secs
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, 1200L); // all 10 minutes
 		this.getCommand("timeban").setExecutor(new TimeBanExecutor(this));
 	}
 	
