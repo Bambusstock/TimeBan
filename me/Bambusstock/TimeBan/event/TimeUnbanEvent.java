@@ -16,6 +16,10 @@ public class TimeUnbanEvent extends Event {
      	this.ban = ban;
      	this.sender = sender;
     }
+    
+    public TimeUnbanEvent(Ban ban) {
+     	this.ban = ban;
+    }
  
     /**
      * Return a ban object.
@@ -25,8 +29,19 @@ public class TimeUnbanEvent extends Event {
         return this.ban;
     }
     
+    /**
+     *
+     * @return Return sender
+     */
     public Player getSender() {
     	return this.sender;
+    }
+    
+    /*
+     * @return Return if the sender is a player.
+     */
+    public boolean isSenderPlayer() {
+    	return (this.sender.isEmpty()) ? false : true;
     }
      
     public HandlerList getHandlers() {
