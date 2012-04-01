@@ -139,12 +139,7 @@ implements Serializable, Comparable<Ban>
      * @return Reason
      */
     public String getReason() {
-    	if(!this.reason.isEmpty()) {
-    		return this.reason;
-    	}
-    	else {
-    		return Ban.stdReason;
-    	}
+   		return this.reason;
     }
 	
 	/**
@@ -160,9 +155,7 @@ implements Serializable, Comparable<Ban>
 	 * @return
 	 */
 	public boolean isEmpty() {
-		if(!this.player.isEmpty() && !this.reason.isEmpty()) {
-		 return true;
-		}
-		return false;
+		if(!this.player.isEmpty() && !this.reason.isEmpty()) return false;
+		return true;
 	}
 }
