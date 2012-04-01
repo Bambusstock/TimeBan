@@ -83,14 +83,15 @@ public class TimeBanExecutor implements CommandExecutor
 	 */
 	public void unban(Player sender, String[] args) {
 		// with -a go through all
-		if(args[2].equalsIgnoreCase("-a")) {
+		if(args.length > 2 && args[2].equalsIgnoreCase("-a")) {
 			for(Ban ban : this.plugin.banSet) {
 				TimeUnbanEvent event = new TimeUnbanEvent(sender, ban);
 				this.plugin.getServer().getPluginManager().callEvent(event);
 			}
 		}
 		else {
-			String[] unbanPlayers = args[1].split(",");
+			String[] unbanPlayers = {args[1]};
+			if(args[1].contains(",")) unbanPlayers = args[1].split(",");
 			for(String playerName : unbanPlayers) {
 				Ban ban = this.plugin.banSet.getBanByPlayerName(playerName);
 				if(!ban.isEmpty()) {
