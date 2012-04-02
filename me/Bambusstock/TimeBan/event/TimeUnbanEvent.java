@@ -1,7 +1,7 @@
 package me.Bambusstock.TimeBan.event;
 
 
-import me.Bambusstock.TimeBan.Ban;
+import me.Bambusstock.TimeBan.util.Ban;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -37,7 +37,7 @@ public class TimeUnbanEvent extends Event {
     	return this.sender;
     }
     
-    /*
+    /**
      * @return Return if the sender is a player.
      */
     public boolean isSenderPlayer() {
