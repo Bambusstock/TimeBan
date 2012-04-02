@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.logging.Logger;
 
 
+import me.Bambusstock.TimeBan.util.BanSet;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -25,7 +27,7 @@ public class TimeBan extends JavaPlugin
 	public void onEnable() {
 		this.banSet.load(new File("./plugins/TimeBan/banlist.dat"), this);		
 		this.getServer().getPluginManager().registerEvents(new BanListener(this), this);
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, 1200L); // all 10 minutes
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, 12000L); // all 10 minutes
 		this.getCommand("timeban").setExecutor(new TimeBanExecutor(this));
 	}
 	
