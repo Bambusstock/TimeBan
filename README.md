@@ -27,7 +27,11 @@ Use this to unban a user or more. If you add the flag "-a" all players banned wi
 
 ### /timeban clear [-keep|-rm]
 
-Use this command to remove all bans from the TimeBan object. -keep if you would like to keep the players banned or -rm if all players should be unbanned. 
+Use this command to remove all bans from the TimeBan object. -keep if you would like to keep the players banned or -rm if all players should be unbanned.
+
+### /timeban run
+
+Manually run scheduler 
 
 Configuration
 -------------
