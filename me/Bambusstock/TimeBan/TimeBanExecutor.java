@@ -67,7 +67,7 @@ public class TimeBanExecutor implements CommandExecutor
 			UntilStringParser parser = new UntilStringParser(args[2]);
 			 until = parser.getCalendar();
 		}
-		String reason = (args.length < 4 || args[3].equals("''")) ? Ban.stdReason : args[3];
+		String reason = (args.length < 4 || args[3].equals("\"\"")) ? Ban.stdReason : args[3].replaceAll("\"", "");
 		
 		for(String playerName : banPlayers) {
 			Ban ban = new Ban(this.plugin, playerName, until, reason);
@@ -158,6 +158,13 @@ public class TimeBanExecutor implements CommandExecutor
 			return true;
 		}
 		else if(args[0].equalsIgnoreCase("ban")) {
+			for(int i = 4; i<args.length; i++) {
+				args[3] = args[3].concat(" " + args[i]);
+				args[i] = "";
+				if(args[i].contains("\"")) break;
+			}
+			args[3].replaceAll("\"", "");
+			
 			this.ban((Player)sender, args);
 			return true;
 		}
@@ -174,6 +181,7 @@ public class TimeBanExecutor implements CommandExecutor
 			}
 			return true;
 		}
+		
 		return false;
 	}
 
