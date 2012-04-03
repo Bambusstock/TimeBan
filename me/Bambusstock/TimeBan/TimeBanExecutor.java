@@ -88,6 +88,25 @@ public class TimeBanExecutor implements CommandExecutor
 			return true;
 		}
 		
+		else if(args[0].equalsIgnoreCase("rm")) {
+			if(this.plugin.banSet.size() == 0) {
+				if(sender instanceof Player) { ((Player)sender).sendMessage(ChatColor.RED + "No bans found!"); }
+				else { log.info("No bans found!"); }
+				return true;
+			}
+			
+			if(helper.containsParameter(args, "a")) {
+				if(sender instanceof Player) { this.rmAll((Player)sender); }
+				else { this.rmAll(); }
+			}
+			else {
+				String[] players = args[1].split(",");
+				if(sender instanceof Player) { this.rm((Player)sender, players); }
+				else { this.rm(players); }
+			}
+			return true;
+		}
+		
 		else if(args[0].equalsIgnoreCase("list")) {
 			if(this.plugin.banSet.size() == 0) {
 				sender.sendMessage(ChatColor.RED + "Ban list is empty!");
@@ -123,14 +142,17 @@ public class TimeBanExecutor implements CommandExecutor
 		receiver.sendMessage(ChatColor.DARK_GREEN + "TimeBan Helptext");
 		receiver.sendMessage(ChatColor.DARK_GREEN + "==============");
 		
-		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban ban <username,...> <seconds> <reason>");
-		receiver.sendMessage(ChatColor.GOLD + "Ban a player or more for x seconds.");
+		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban ban <username,...> [untilstring] [reason]");
+		receiver.sendMessage(ChatColor.GOLD + "Ban a player or more for [untilstring] because of [reason].");
 		
 		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban unban <username,username2>");
 		receiver.sendMessage(ChatColor.GOLD + "Unban a player or more.");
 		
+		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban rm [username,username2] [-a]");
+		receiver.sendMessage(ChatColor.GOLD + "Remove a ban from the ban list. Use \"-a\" for all.");
+		
 		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban list [search] [-r]");
-		receiver.sendMessage(ChatColor.GOLD + "List all bans. See docu for more information.");
+		receiver.sendMessage(ChatColor.GOLD + "List all bans. Use \"-r\" for reverse order.");
 	}
 	
 	/*
@@ -310,6 +332,64 @@ public class TimeBanExecutor implements CommandExecutor
 		}
 	}
 	
+	/*
+	 * --------------------
+	 * rm
+	 * --------------------
+	 */
+	
+	/**
+	 * Search for a ban for the given players and remove him. No event is fired.
+	 * @param sender
+	 * @param players
+	 */
+	public void rm(Player sender, String[] players) {
+		for(String playerName : players) {
+			Ban ban = this.plugin.banSet.getBanByPlayerName(playerName);
+			if(!ban.isEmpty()) {
+				this.plugin.banSet.remove(ban);
+				sender.sendMessage("Removed.");
+			}
+			else {
+				sender.sendMessage(ChatColor.RED + "No ban for player `" + playerName + "` found!");
+			}
+		}
+	}
+	
+	/**
+	 * Search for a ban for the given players and remove him. No event is fired. Console version.
+	 * @param players
+	 */
+	public void rm(String[] players) {
+		for(String playerName : players) {
+			Ban ban = this.plugin.banSet.getBanByPlayerName(playerName);
+			if(!ban.isEmpty()) {
+				this.plugin.banSet.remove(ban);
+				log.info("Removed.");
+			}
+			else {
+				log.info("No ban for player `" + playerName + "` found!");
+			}
+		}
+	}
+	
+	/**
+	 * Remove all bans. No event is fired.
+	 * @param sender
+	 */
+	public void rmAll(Player sender) {
+		this.plugin.banSet.clear();
+		sender.sendMessage("All bans are removed!");
+	}
+	
+	/**
+	 * Remove all bans. Console version.
+	 */
+	public void rmAll() {
+		this.plugin.banSet.clear();
+		log.info("All bans are removed!");
+	}
+
 	class FormatHelper {
 		/**
 		 * Extract a string from an array.
