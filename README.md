@@ -25,9 +25,9 @@ Use this command to display a list of all bans. The list is default sorted by pl
 
 Use this to unban a user or more. If you add the flag "-a" all players banned with TimeBan are unbanned.  
 
-### /timeban clear [-keep|-rm]
+### /timeban rm [username,username2] [-a]
 
-Use this command to remove all bans from the TimeBan object. -keep if you would like to keep the players banned or -rm if all players should be unbanned.
+Use this command to remove all bans from the ban list. The players keep banned. Use unban for unbanning a player.
 
 ### /timeban run
 
@@ -62,12 +62,11 @@ TODO
 ----
 
 - Add features:
-	- `/timeban list` to show a list of all banned user including duration in human readable format
-		- improve with e.g. `timeban list a*` to list all players starts with a
-		- display left time like "1d 20h 10min"
-	- `/timeban undo`
-	- `/timeban import/export`
 	- provide permissions
 	- provide configuration
-	- automatically unban player when comes back on server
+	
+Possible features:
+------------------
+- Undo
+- Import and Export of ban list 
 	
