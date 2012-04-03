@@ -42,13 +42,13 @@ Configuration
 
 Use this to define a default duration. If you leave out the <seconds> pattern, this is automatically used.
 
-#### `defaultReason` (Default: "Default reason.")
+#### `defaultReason` (Default: Default reason.)
 
 Define your default reason.
 
-#### `bansetCreate` (Default: true)
+#### `runDelay` (Default: 600)
 
-Use this to define if TimeBan automatically create a file to save the ban list if there is none.
+Define the amount of seconds between one run of the scheduler and the next.
 
 Permissions
 -----------

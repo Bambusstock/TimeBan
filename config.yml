@@ -1,0 +1,3 @@
+defaultBanDuration: 3600
+defaultBanReason: Default reason!
+runDelay: 600
