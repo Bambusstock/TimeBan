@@ -8,7 +8,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
  
 public class TimeBanEvent extends Event {
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     protected Ban ban;
     protected Player sender;
  
@@ -19,6 +19,7 @@ public class TimeBanEvent extends Event {
     
     public TimeBanEvent(Ban ban) {
      	this.ban = ban;
+     	this.sender = null;
     }
  
     /**
@@ -30,18 +31,18 @@ public class TimeBanEvent extends Event {
     }
     
     /**
-     * Return player object of the sender
-     * @return
+     * @return Return sender
      */
     public Player getSender() {
     	return this.sender;
     }
     
     /**
-     * @return Return if the sender is a player.
+     * @return Return true if the sender is a player.
      */
     public boolean isSenderPlayer() {
-    	return (this.sender.isEmpty()) ? false : true;
+   		if(sender != null && !sender.isEmpty() && sender instanceof Player) return true;
+    	return false;
     }
      
     public HandlerList getHandlers() {
