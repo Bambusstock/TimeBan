@@ -31,7 +31,7 @@ Use this command to remove all bans from the ban list. The players keep banned. 
 
 ### /timeban run
 
-Manually run scheduler 
+Manually run the scheduler. 
 
 Configuration
 -------------
@@ -62,9 +62,9 @@ TODO
 ----
 
 - Add features:
+	- list uses ChatPaginator...
 	- provide permissions
-	- provide configuration
-	
+	- display ban message if user wan't to join (LoginEvent)
 Possible features:
 ------------------
 - Undo
