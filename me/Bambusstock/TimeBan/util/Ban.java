@@ -18,8 +18,8 @@ implements Serializable, Comparable<Ban>
 	private static final long	serialVersionUID	= -4327491657720734089L;
 	private transient TimeBan plugin;
 	
-	public static String stdReason = "Standard reason";
-	public static int stdBanDuration = 3600;
+	public String stdReason = "Standard reason";
+	public int stdBanDuration = 3600;
 	
 	public String player;
 	public Calendar until;
@@ -54,7 +54,7 @@ implements Serializable, Comparable<Ban>
 		this.player = player;
 		this.plugin = plugin;
 		this.until = until;
-		this.reason = Ban.stdReason;
+		this.reason = this.stdReason;
 	}
 	
 	/**
@@ -77,7 +77,7 @@ implements Serializable, Comparable<Ban>
 		this.player = player;
 		this.plugin = plugin;
 		this.until = this.stdDurationToCalendar();
-		this.reason = Ban.stdReason;
+		this.reason = this.stdReason;
 	}
 	
 	/**
@@ -97,16 +97,16 @@ implements Serializable, Comparable<Ban>
 	 * Set the standard ban duration in seconds.
 	 * @param duration Amount of seconds a user is banned, if no duration was given.
 	 */
-	public static void setStandardBanDuration(int duration) {
-		Ban.stdBanDuration= duration;
+	public void setStandardBanDuration(int duration) {
+		this.stdBanDuration= duration;
 	}
 	
 	/**
-	 * Set the standard reasons.
+	 * Set the standard reason.
 	 * @param Standard reason used if no given
 	 */
-	public static void setStandardReasons(String reason) {
-		Ban.stdReason = reason;
+	public void setStandardReason(String reason) {
+		this.stdReason = reason;
 	}
 	
 	/**
@@ -116,7 +116,7 @@ implements Serializable, Comparable<Ban>
 	 */
 	private Calendar stdDurationToCalendar() {
 		Calendar result = Calendar.getInstance();
-		result.set(Calendar.SECOND, result.get(Calendar.SECOND) + Ban.stdBanDuration);
+		result.set(Calendar.SECOND, result.get(Calendar.SECOND) + this.stdBanDuration);
 		return result;
 	}
 	

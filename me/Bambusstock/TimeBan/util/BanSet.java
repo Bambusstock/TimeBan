@@ -15,8 +15,6 @@ import me.Bambusstock.TimeBan.TimeBan;
 
 
 /**
- * TODO:
- * 	- add security for file management
  * @author Bambusstock
  *
  */
@@ -34,11 +32,7 @@ implements Serializable
 	 */
 	public Ban getBanByPlayerName(String name) {
 		Ban result = new Ban();
-		for(Ban ban : this) {
-			if(ban.getPlayer().getName().equals(name)) {
-				result = ban;
-			}
-		}
+		for(Ban ban : this) if(ban.getPlayer().getName().equals(name)) result = ban;
 		return result;
 	}
 	
@@ -65,7 +59,7 @@ implements Serializable
 	}
 	
 	/**
-	 * Helper class to serialize and deserialize a ban list.
+	 * Helper class to serialize and unserialize a ban list.
 	 * @author Bambusstock
 	 *
 	 */
@@ -85,7 +79,7 @@ implements Serializable
 		}
 		
 		/**
-		 * Check if a file to save the banlist exists. If not it will be created if
+		 * Check if a file to save the ban list exists. If not it will be created if
 		 * defined in the configuration.
 		 */
 		private void checkFileExists() {
@@ -129,7 +123,7 @@ implements Serializable
 				set = (BanSet)input.readObject();
 				for(Iterator<Ban> it = set.iterator(); it.hasNext(); ) {
 					Ban tmp = it.next();
-					BanSet.this.add(new Ban(this.plugin, tmp.player, tmp.until, tmp.reason));
+					add(new Ban(this.plugin, tmp.player, tmp.until, tmp.reason));
 				}
 				input.close();
 			}

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.logging.Logger;
 
 
-import me.Bambusstock.TimeBan.util.Ban;
 import me.Bambusstock.TimeBan.util.BanSet;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,8 +34,6 @@ public class TimeBan extends JavaPlugin
 	
 	public void configureMe() {
 		this.getConfig().options().copyDefaults(false);
-		Ban.stdBanDuration 	= this.getConfig().getInt("defaultBanDuration");
-		Ban.stdReason		= this.getConfig().getString("defaultReason");
 		this.runDelay 		= this.getConfig().getLong("runDelay");
 	}
 	
@@ -44,7 +41,7 @@ public class TimeBan extends JavaPlugin
 	 * Save a ban list.
 	 */
 	public void onDisable() {
-		this.banSet.save(new File("plugins/TimeBan/banlist.dat"), this);
+		this.banSet.save(new File("./plugins/TimeBan/banlist.dat"), this);
 	}		
 
 }
