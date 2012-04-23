@@ -1,9 +1,10 @@
 package me.Bambusstock.TimeBan;
 
-import java.util.Calendar;
+import java.util.*;
 import java.util.logging.Logger;
 
-import me.Bambusstock.TimeBan.event.TimeUnbanEvent;
+import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
+import me.Bambusstock.TimeBan.util.Ban;
 
 /**
  * Check if there is a player to unban.
@@ -20,13 +21,24 @@ public class TimeBanRunnable implements Runnable
 	}
 	
 	public void run() {
-		if(this.plugin.banSet.isEmpty()) return;
-		log.info("[TimeBan Scheduler] Go to check if there some guys to unban...");
-		
-		// go through list until unban date is in future
-		while(this.plugin.banSet.last().until.after(Calendar.getInstance())) {
-			TimeUnbanEvent event = new TimeUnbanEvent(this.plugin.banSet.last());
-			this.plugin.getServer().getPluginManager().callEvent(event);
+		synchronized (this.plugin.banSet) {
+			if(this.plugin.banSet.isEmpty()) return;
+			log.info("[TimeBan Scheduler] Go to check if there some guys to unban...");
+			
+			// go through list until unban date is in future
+			Iterator<Ban> it = this.plugin.banSet.descendingIterator();
+			while(it.hasNext()) {
+				Ban next  = it.next();
+				log.info("Check ban for ´" + next.player + "´ ...");
+				if(next.until.before(Calendar.getInstance())) {
+					TimeBanUnbanEvent event = new TimeBanUnbanEvent(next);
+					this.plugin.getServer().getPluginManager().callEvent(event);
+				} else {
+					log.info("No unbans.");
+					break;
+				}
+			}
+			
 		}
 	}
 }
