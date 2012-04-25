@@ -32,14 +32,26 @@ public class TimeBanExecutor implements CommandExecutor
 		FormatHelper helper = new FormatHelper();
 		ArrayList<String> formattedArgs = helper.preFormatArgs(args, "\"");
 		if(args[0].equalsIgnoreCase("ban")) {
+			if(sender instanceof Player && !sender.hasPermission("timeban.ban")) {
+				sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+				return true;
+			}
 			this.ban(sender, helper, formattedArgs);
 			return true;
 		}
 		if(args[0].equalsIgnoreCase("help")) {
+			if(sender instanceof Player && !sender.hasPermission("timeban.help")) {
+				sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+				return true;
+			}
 			this.help(sender);
 			return true;
 		}
 		if(args[0].equalsIgnoreCase("info")) {
+			if(sender instanceof Player && !sender.hasPermission("timeban.info")) {
+				sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+				return true;
+			}
 			this.info(sender);
 			return true;
 		}
@@ -50,22 +62,37 @@ public class TimeBanExecutor implements CommandExecutor
 			return true;
 		}
 		if(args[0].equalsIgnoreCase("list")) {
+			if(sender instanceof Player && !sender.hasPermission("timeban.list")) {
+				sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+				return true;
+			}
 			this.list(sender, helper, formattedArgs);
 			return true;
 		}
 		if(args[0].equalsIgnoreCase("rm")) {
+			if(sender instanceof Player && !sender.hasPermission("timeban.rm")) {
+				sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+				return true;
+			}
 			this.rm(sender, helper, formattedArgs);
 			return true;
 		}
 		if(args[0].equalsIgnoreCase("run")) {
+			if(sender instanceof Player && !sender.hasPermission("timeban.run")) {
+				sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+				return true;
+			}
 			this.run(sender);
 			return true;
 		}
 		if(args[0].equalsIgnoreCase("unban")) {
+			if(sender instanceof Player && !sender.hasPermission("timeban.unban")) {
+				sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+				return true;
+			}
 			this.unban(sender, helper, formattedArgs);			
 			return true;
 		}		
-		
 		return false;
 	}
 	

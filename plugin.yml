@@ -1,9 +1,33 @@
 name: TimeBan
 main: me.Bambusstock.TimeBan.TimeBan
-version: 0.2
+version: 0.3
 commands:
  timeban:
   description: Use `/timeban help` to display help for all commands
   usage: /<command> [argument]
-  permission: TimeBan.timeban
-  permission-message: You don't have <permission>
+  permission: timeban.all
+  permission-message: Sorry, you're not validly to use the timeban command on this server.
+permissions:
+ timeban.all:
+  description: The Timeban command itself.
+  default: op
+ timeban.ban:
+   description: Define who can ban a player using Timeban.
+   default: op
+ timeban.unban:
+  description: Define who can unban a player using Timeban.
+  default: op
+ timeban.info:
+  description: Define who is able to view information like amount of bans.
+  default: op
+ timeban.help:
+  description: Define who is able to see help information.
+ timeban.list:
+  description: Define who can list all bans.
+  default: op
+ timeban.rm:
+  description: Define who can remove a Timeban.
+  default: op
+ timeban.run:
+  description: Define who can run the Timeban task.
+  default: op
