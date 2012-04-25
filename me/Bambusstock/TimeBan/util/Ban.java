@@ -82,13 +82,23 @@ implements Serializable, Comparable<Ban>
 	
 	/**
 	 * Compare two bans by time.
+	 *  0 > if before comparator
+	 *  0 < if after
+	 *  0 if equal
 	 */
 	public int compareTo(Ban ban) {
-		if(this.until.after(ban)) {
-			return 1;
-		} else if(this.until.before(ban)) {
+		// not exactly equal but already exists
+		if(!ban.player.equalsIgnoreCase(this.player)) {
+			if(this.until.after(ban)) {
+				return 1;
+			} 
+			else if(this.until.before(ban)) {
+				return -1;
+			}
+			// would mean that the dates are equal, however, append it
 			return -1;
-		} else {
+		}
+		else {
 			return 0;
 		}
 	}

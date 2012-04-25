@@ -28,13 +28,13 @@ public class TimeBan extends JavaPlugin
 		this.configureMe();
 		this.banSet.load(new File("./plugins/TimeBan/banlist.dat"), this);		
 		this.getServer().getPluginManager().registerEvents(new BanListener(this), this);
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, this.runDelay * 20); // all 10 minutes
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, this.runDelay * 20 * 60);
 		this.getCommand("timeban").setExecutor(new TimeBanExecutor(this));
 	}
 	
 	public void configureMe() {
 		this.getConfig().options().copyDefaults(false);
-		this.runDelay 		= this.getConfig().getLong("runDelay");
+		this.runDelay = this.getConfig().getLong("runDelay");
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
+import me.Bambusstock.TimeBan.util.BanSet;
 
 public class UnbanCmd extends Cmd
 {
@@ -53,19 +54,35 @@ public class UnbanCmd extends Cmd
 	 * @param sender
 	 */
 	public void unbanAll(Player sender) {
-		for(Ban ban : this.plugin.banSet) {
-			TimeBanUnbanEvent event = new TimeBanUnbanEvent(sender, ban);
-			this.plugin.getServer().getPluginManager().callEvent(event);
+		/**
+		 * To prevent a java.util.ConcurrentModificationException we 'll
+		 * use a workSet. The events take care of the ´real´ banlist, so
+		 * we don't need to care about it.
+		 */
+		synchronized (this.plugin.banSet) {
+			BanSet workSet = (BanSet) this.plugin.banSet.clone();
+			for(Ban ban : workSet) {
+				TimeBanUnbanEvent event = new TimeBanUnbanEvent(sender, ban);
+				this.plugin.getServer().getPluginManager().callEvent(event);
+			}
 		}
 	}
 	
 	/**
-	 * Unban all banned players. Console version.s
+	 * Unban all banned players. Console version.
 	 */
 	public void unbanAll() {
-		for(Ban ban : this.plugin.banSet) {
-			TimeBanUnbanEvent event = new TimeBanUnbanEvent(ban);
-			this.plugin.getServer().getPluginManager().callEvent(event);
+		/**
+		 * To prevent a java.util.ConcurrentModificationException we 'll
+		 * use a workSet. The events take care of the ´real´ banlist, so
+		 * we don't need to care about it.
+		 */
+		synchronized (this.plugin.banSet) {
+			BanSet workSet = (BanSet) this.plugin.banSet.clone();
+			for(Ban ban : workSet) {
+				TimeBanUnbanEvent event = new TimeBanUnbanEvent(ban);
+				this.plugin.getServer().getPluginManager().callEvent(event);
+			}
 		}
 	}
 }

@@ -20,8 +20,8 @@ public class ListCmd extends Cmd
 	public void list(Player sender, String search, boolean reverse, boolean simple) {
 		BanSet resultSet = this.getResultSet(search);
 		if(!resultSet.isEmpty()) {
-			Iterator<Ban> iterator = resultSet.iterator();
-			if(reverse == true) iterator = resultSet.descendingIterator(); 
+			Iterator<Ban> iterator = resultSet.descendingIterator();
+			if(reverse == true) iterator = resultSet.iterator(); 
 			if(simple == true) {
 				while(iterator.hasNext()) sender.sendMessage(iterator.next().toString());
 			}

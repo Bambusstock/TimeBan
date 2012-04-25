@@ -46,9 +46,9 @@ Use this to define a default duration. If you leave out the <seconds> pattern, t
 
 Define your default reason.
 
-#### `runDelay` (Default: 600)
+#### `runDelay` (Default: 1)
 
-Define the amount of seconds between one run of the scheduler and the next.
+Define the amount of minutes between one run of the scheduler and the next.
 
 Permissions
 -----------
@@ -62,11 +62,12 @@ TODO
 ----
 
 - Add features:
-	- list uses ChatPaginator...
-	- provide permissions
 	- display ban message if user wan't to join (LoginEvent)
+	
 Possible features:
 ------------------
+- list uses ChatPaginator...
 - Undo
 - Import and Export of ban list 
+- additional permissions like a permission to ban a player more than 10 hours
 	

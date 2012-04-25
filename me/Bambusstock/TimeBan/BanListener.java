@@ -6,6 +6,7 @@ import me.Bambusstock.TimeBan.event.TimeBanBanEvent;
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
 
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,17 +34,28 @@ public class BanListener implements Listener
 		if(player.isOnline()) {
 			((Player) player).kickPlayer(ban.getReason());
 		}
-		if(ban.equals(this.plugin.banSet.last())) {
-			log.info("meeeep");
+		
+		boolean banResult;
+		synchronized (this.plugin.banSet) {
+			banResult = this.plugin.banSet.add(ban);
 		}
-		log.info("Return: " + this.plugin.banSet.add(ban));
 		
 		if(event.isSenderPlayer()) {
-			log.info("Banned `"+ player.getName() + "` until " + ban.until.getTime() + " by " + event.getSender());
-			event.getSender().sendMessage("Banned `"+ player.getName() + "` until " + ban.until.getTime());
+			if(banResult) {
+				event.getSender().sendMessage("Banned `"+ player.getName() + "` until " + ban.until.getTime());
+				log.info("Banned `"+ player.getName() + "` until " + ban.until.getTime() + " by " + event.getSender());
+			}
+			else {
+				event.getSender().sendMessage(ChatColor.RED + "Seems that `" + player.getName() + "` is already banned...");
+			}
 		}
 		else {
-			log.info("Banned `"+ player.getName() + "` until " + ban.until.getTime());
+			if(banResult) {
+				log.info("Banned `"+ player.getName() + "` until " + ban.until.getTime());
+			}
+			else {
+				log.info("Seems that `" + player.getName() + "` is already banned...");
+			}
 		}
 	}
 	
@@ -51,12 +63,17 @@ public class BanListener implements Listener
 	public void onTimeUnbanEvent(TimeBanUnbanEvent event) {
 		OfflinePlayer player = event.getBan().getPlayer();
 		player.setBanned(false);
-		this.plugin.banSet.remove(event.getBan());
+		
+		synchronized (this.plugin.banSet) {
+			this.plugin.banSet.remove(event.getBan());	
+		}
+		
 		if(event.isSenderPlayer()) {
+			event.getSender().sendMessage("Unbaned and removed `" + player.getName() + "` from banlist.");
 			log.info("Unbaned and removed `" + player.getName() + "` from ban list by " + event.getSender());
 		} 
 		else {
-			log.info("Unbaned and removed `" + player.getName() + " ` from ban list.");
+			log.info("Unbaned and removed `" + player.getName() + "` from banlist.");
 		}
 	}
 }

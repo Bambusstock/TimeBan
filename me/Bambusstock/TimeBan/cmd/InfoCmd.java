@@ -15,7 +15,7 @@ public class InfoCmd extends Cmd
 		sender.sendMessage("===============");
 		sender.sendMessage("Amount of bans: " + this.plugin.banSet.size());
 		if(this.plugin.banSet.size() > 0) {
-			sender.sendMessage("Next unban at: " + this.plugin.banSet.last().getUntil().getTime());
+			sender.sendMessage("Next unban at: " + this.plugin.banSet.first().getUntil().getTime());
 		}
 	}
 	
@@ -24,7 +24,7 @@ public class InfoCmd extends Cmd
 		log.info("===============");
 		log.info("Amount of bans: " + this.plugin.banSet.size());
 		if(this.plugin.banSet.size() > 0) {
-			log.info("Next unban at: " + this.plugin.banSet.last().getUntil().getTime());
+			log.info("Next unban at: " + this.plugin.banSet.first().getUntil().getTime());
 		}
 	}
 }

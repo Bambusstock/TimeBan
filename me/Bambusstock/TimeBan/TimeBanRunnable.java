@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
+import me.Bambusstock.TimeBan.util.BanSet;
 
 /**
  * Check if there is a player to unban.
@@ -25,16 +26,20 @@ public class TimeBanRunnable implements Runnable
 			if(this.plugin.banSet.isEmpty()) return;
 			log.info("[TimeBan Scheduler] Go to check if there some guys to unban...");
 			
+			/**
+			 * To prevent a java.util.ConcurrentModificationException we 'll
+			 * use a workSet. The events take care of the ´real´ banlist, so
+			 * we don't need to care about it.
+			 */
+			BanSet workSet = (BanSet) this.plugin.banSet.clone(); 		
 			// go through list until unban date is in future
-			Iterator<Ban> it = this.plugin.banSet.descendingIterator();
+			Iterator<Ban> it = workSet.iterator();
 			while(it.hasNext()) {
 				Ban next  = it.next();
-				log.info("Check ban for ´" + next.player + "´ ...");
 				if(next.until.before(Calendar.getInstance())) {
 					TimeBanUnbanEvent event = new TimeBanUnbanEvent(next);
 					this.plugin.getServer().getPluginManager().callEvent(event);
 				} else {
-					log.info("No unbans.");
 					break;
 				}
 			}
