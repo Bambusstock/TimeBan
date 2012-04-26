@@ -37,7 +37,6 @@ public class BanCmd extends Cmd
 	 * @param reason Reason
 	 */
 	public void ban(String[] players, Calendar until, String reason) {
-		log.info("g");
 		for(String playerName : players) {
 			Ban ban = new Ban(this.plugin, playerName, until, reason);
 			TimeBanBanEvent event = new TimeBanBanEvent(ban);

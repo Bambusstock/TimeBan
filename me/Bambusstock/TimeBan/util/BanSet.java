@@ -21,8 +21,7 @@ import me.Bambusstock.TimeBan.TimeBan;
 public class BanSet extends TreeSet<Ban>
 implements Serializable
 {
-	transient Logger log = Logger.getLogger("Minecraft");
-
+	transient Logger log = Logger.getLogger("Minecraft"); // transient --> serializiation
 	private static final long	serialVersionUID	= -5972004136609506533L;
 	
 	/**
@@ -31,7 +30,7 @@ implements Serializable
 	 * @return Ban object for the player. If not found return empty Ban!
 	 */
 	public Ban getBanByPlayerName(String name) {
-		Ban result = new Ban();
+		Ban result = null;
 		for(Ban ban : this) if(ban.getPlayer().getName().equals(name)) result = ban;
 		return result;
 	}
@@ -85,12 +84,11 @@ implements Serializable
 		private void checkFileExists() {
 			if(!this.handle.exists()) {
 				try {
-					log.info("[TimeBan IOHelper] Create file to load and save the banlist...");
+					log.info("[TimeBan] Create file to load and save the banlist...");
 					this.handle.createNewFile();
-					log.info("[TimeBan IOHelper] Done.");
 				}
 				catch (IOException e) {
-					log.warning("[TimeBan IOHelper] Error while creating new file to save!");
+					log.warning("[TimeBan] Error while creating new file to save!");
 					log.info(e.toString());
 				}
 			}
@@ -107,7 +105,7 @@ implements Serializable
 				output.close();
 			}
 			catch (IOException e) {
-				log.warning("[TimeBan] Error while writing to stream!");
+				log.warning("[TimeBan] Error while writing to stream! Try a server reload...");
 				log.info(e.toString());
 			}
 		}
@@ -128,11 +126,11 @@ implements Serializable
 				input.close();
 			}
 			catch (IOException e) {
-				log.warning("[TimeBan IOHelper] Error while writing to stream!");
+				log.warning("[TimeBan] Error while reading from stream! Try a server reload...");
 				log.info(e.toString());
 			}
 			catch (ClassNotFoundException e) {
-				log.warning("[TimeBan IOHelper] Class not found!");
+				log.warning("[TimeBan] Class not found!");
 				log.info(e.toString());
 			}
 		}

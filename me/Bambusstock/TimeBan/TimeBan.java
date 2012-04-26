@@ -8,22 +8,12 @@ import me.Bambusstock.TimeBan.util.BanSet;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * @TODO:
- * 	- add permission system
- *  - add commands
- *  	- make it available from console and ingame
- * @author Bambusstock
- *
- */
 public class TimeBan extends JavaPlugin
 {
 	Logger log = Logger.getLogger("Minecraft");
 	public BanSet banSet = new BanSet();
 	public Long runDelay;
-	/**
-	 * Load a ban list, initialize Listener of TimeBan event and a synchronous scheduler. 
-	 */
+
 	public void onEnable() {
 		this.configureMe();
 		this.banSet.load(new File("./plugins/TimeBan/banlist.dat"), this);		
@@ -33,15 +23,12 @@ public class TimeBan extends JavaPlugin
 	}
 	
 	public void configureMe() {
-		this.getConfig().options().copyDefaults(false);
+		this.getConfig().options().copyDefaults(true);
+		this.saveConfig();
 		this.runDelay = this.getConfig().getLong("runDelay");
 	}
 	
-	/**
-	 * Save a ban list.
-	 */
 	public void onDisable() {
 		this.banSet.save(new File("./plugins/TimeBan/banlist.dat"), this);
 	}		
-
 }

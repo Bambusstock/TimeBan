@@ -22,12 +22,12 @@ public class UnbanCmd extends Cmd
 	public void unban(Player sender, String[] players) {
 		for(String playerName : players) {
 			Ban ban = this.plugin.banSet.getBanByPlayerName(playerName);
-			if(!ban.isEmpty()) {
+			if(ban != null) {
 				TimeBanUnbanEvent event = new TimeBanUnbanEvent(sender, ban);
 				this.plugin.getServer().getPluginManager().callEvent(event);
 			}
 			else {
-				sender.sendMessage(ChatColor.RED + "No ban for player `" + playerName + "` found!");
+				sender.sendMessage(ChatColor.RED + "No ban for player ´" + playerName + "´ found!");
 			}
 		}
 	}
@@ -39,12 +39,12 @@ public class UnbanCmd extends Cmd
 	public void unban(String[] players) {
 		for(String playerName : players) {
 			Ban ban = this.plugin.banSet.getBanByPlayerName(playerName);
-			if(!ban.isEmpty()) {
+			if(ban != null) {
 				TimeBanUnbanEvent event = new TimeBanUnbanEvent(ban);
 				this.plugin.getServer().getPluginManager().callEvent(event);
 			}
 			else {
-				log.info("No ban for player `" + playerName + "` found!");
+				log.info("[TimeBan] No ban for player ´" + playerName + "´ found!");
 			}
 		}
 	}

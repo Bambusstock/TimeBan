@@ -7,11 +7,6 @@ import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
 import me.Bambusstock.TimeBan.util.BanSet;
 
-/**
- * Check if there is a player to unban.
- * @author Bambusstock
- *
- */
 public class TimeBanRunnable implements Runnable
 {
 	Logger log = Logger.getLogger("Minecraft");
@@ -24,7 +19,7 @@ public class TimeBanRunnable implements Runnable
 	public void run() {
 		synchronized (this.plugin.banSet) {
 			if(this.plugin.banSet.isEmpty()) return;
-			log.info("[TimeBan Scheduler] Go to check if there some guys to unban...");
+			log.info("[TimeBan] Check for unbans...");
 			
 			/**
 			 * To prevent a java.util.ConcurrentModificationException we 'll

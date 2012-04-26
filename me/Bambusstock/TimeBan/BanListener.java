@@ -16,11 +16,7 @@ public class BanListener implements Listener
 {
 	Logger log = Logger.getLogger("Minecraft");
 	private TimeBan 		plugin;
-	
-	/**
-	 *
-	 * @param instance
-	 */
+
 	public BanListener(TimeBan instance) {
 		this.plugin = instance;
 	}
@@ -31,9 +27,7 @@ public class BanListener implements Listener
 		OfflinePlayer player = ban.getPlayer();
 		
 		player.setBanned(true);
-		if(player.isOnline()) {
-			((Player) player).kickPlayer(ban.getReason());
-		}
+		if(player.isOnline()) ((Player) player).kickPlayer(ban.getReason());
 		
 		boolean banResult;
 		synchronized (this.plugin.banSet) {
@@ -43,7 +37,7 @@ public class BanListener implements Listener
 		if(event.isSenderPlayer()) {
 			if(banResult) {
 				event.getSender().sendMessage("Banned `"+ player.getName() + "` until " + ban.until.getTime());
-				log.info("Banned `"+ player.getName() + "` until " + ban.until.getTime() + " by " + event.getSender());
+				log.info("[TimeBan] Banned `"+ player.getName() + "` until " + ban.until.getTime() + " by " + event.getSender());
 			}
 			else {
 				event.getSender().sendMessage(ChatColor.RED + "Seems that `" + player.getName() + "` is already banned...");
@@ -51,10 +45,10 @@ public class BanListener implements Listener
 		}
 		else {
 			if(banResult) {
-				log.info("Banned `"+ player.getName() + "` until " + ban.until.getTime());
+				log.info("[TimeBan] Banned `"+ player.getName() + "` until " + ban.until.getTime());
 			}
 			else {
-				log.info("Seems that `" + player.getName() + "` is already banned...");
+				log.info("[TimeBan] Seems that `" + player.getName() + "` is already banned...");
 			}
 		}
 	}
@@ -70,10 +64,10 @@ public class BanListener implements Listener
 		
 		if(event.isSenderPlayer()) {
 			event.getSender().sendMessage("Unbaned and removed `" + player.getName() + "` from banlist.");
-			log.info("Unbaned and removed `" + player.getName() + "` from ban list by " + event.getSender());
+			log.info("[TimeBan] Unbaned and removed `" + player.getName() + "` from ban list by " + event.getSender());
 		} 
 		else {
-			log.info("Unbaned and removed `" + player.getName() + "` from banlist.");
+			log.info("[TimeBan] Unbaned and removed `" + player.getName() + "` from banlist.");
 		}
 	}
 }

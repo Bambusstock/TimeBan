@@ -8,6 +8,10 @@ import java.util.regex.Pattern;
 public class UntilStringParser
 {
 	Logger log = Logger.getLogger("Minecraft");
+	
+	protected final int[] fields = {Calendar.YEAR, Calendar.MONTH, Calendar.WEEK_OF_YEAR, Calendar.DAY_OF_YEAR, Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND};
+	protected final String[] labels = {"y", "m", "w", "d", "h", "i", "s"};
+	
 	public String text;
 	public Calendar calendar;
 	
@@ -39,8 +43,6 @@ public class UntilStringParser
 	 */
 	protected void parseCalenderInput(Calendar input) {
 		String output = "";
-		int[] fields = {Calendar.YEAR, Calendar.MONTH, Calendar.WEEK_OF_YEAR, Calendar.DAY_OF_YEAR, Calendar.HOUR_OF_DAY, Calendar.SECOND};
-		String[] labels = {"y", "m", "w", "d", "h", "s"};
 		for(int i = 0; i < fields.length; i++) {
 			int diff = this.getFieldDifference(fields[i], input);
 			output = output.concat(diff + labels[i]);
@@ -55,8 +57,6 @@ public class UntilStringParser
 	 */
 	protected void parseUserInput(String input) {
 		Calendar output = Calendar.getInstance();
-		int[] fields = {Calendar.YEAR, Calendar.MONTH, Calendar.WEEK_OF_YEAR, Calendar.DAY_OF_YEAR, Calendar.HOUR_OF_DAY, Calendar.SECOND};
-		String[] labels = {"y", "m", "w", "d", "h", "s"};
 		for(int i = 0; i < fields.length; i++) {
 			Pattern p = Pattern.compile("(\\d{1,})" + labels[i] + ".*");
 			Matcher m = p.matcher(input);

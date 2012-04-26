@@ -16,32 +16,44 @@ public class HelpCmd extends Cmd
 		log.info("==============");
 		
 		log.info("/timeban ban <username,...> [untilstring] [reason]");
-		log.info("Ban a player or more for [untilstring] because of [reason].");
+		log.info("Ban a player or more until [untilstring] because of [reason].");
 		
-		log.info("/timeban unban <username,username2>");
-		log.info("Unban a player or more.");
+		log.info("/timeban unban <[username,username2] [-a]>");
+		log.info("Unban a player or more. Use \"-a\" to unban all.");
 		
-		log.info("/timeban rm [username,username2] [-a]");
+		log.info("/timeban rm <[username,username2] [-a]>");
 		log.info("Remove a ban from the ban list. Use \"-a\" for all.");
 		
-		log.info("/timeban list [search] [-r]");
-		log.info("List all bans. Use \"-r\" for reverse order.");
+		log.info("/timeban info");
+		log.info("Display some information like ban amount.");
+		
+		log.info("/timeban list [search] [-rs]");
+		log.info("List all bans. Use \"-r\" for reverse order. \"s for short display.");
+		
+		log.info("/timeban run");
+		log.info("Check for unbans.");
 	}
 	
 	public void help(Player receiver) {
 		receiver.sendMessage(ChatColor.DARK_GREEN + "TimeBan Helptext");
 		receiver.sendMessage(ChatColor.DARK_GREEN + "==============");
 		
-		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban ban <username,...> [untilstring] [reason]");
-		receiver.sendMessage(ChatColor.GOLD + "Ban a player or more for [untilstring] because of [reason].");
+		receiver.sendMessage(ChatColor.DARK_GREEN + "/timeban ban <username,...> [untilstring] [reason]");
+		receiver.sendMessage(ChatColor.GOLD + "Ban a player or more until [untilstring] because of [reason].");
 		
-		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban unban <username,username2>");
-		receiver.sendMessage(ChatColor.GOLD + "Unban a player or more.");
+		receiver.sendMessage(ChatColor.DARK_GREEN + "/timeban unban <[username,username2] [-a]>");
+		receiver.sendMessage(ChatColor.GOLD + "Unban a player or more. Use \"-a\" to unban all.");
 		
-		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban rm [username,username2] [-a]");
+		receiver.sendMessage(ChatColor.DARK_GREEN + "/timeban rm <[username,username2] [-a]>");
 		receiver.sendMessage(ChatColor.GOLD + "Remove a ban from the ban list. Use \"-a\" for all.");
 		
-		receiver.sendMessage(ChatColor.DARK_AQUA + "/timeban list [search] [-r]");
-		receiver.sendMessage(ChatColor.GOLD + "List all bans. Use \"-r\" for reverse order.");
+		receiver.sendMessage(ChatColor.DARK_GREEN + "/timeban info");
+		receiver.sendMessage(ChatColor.GOLD + "Display some information like ban amount.");
+		
+		receiver.sendMessage(ChatColor.DARK_GREEN + "/timeban list [search] [-rs]");
+		receiver.sendMessage(ChatColor.GOLD + "List all bans. Use \"-r\" for reverse order. \"s for short display.");
+		
+		receiver.sendMessage(ChatColor.DARK_GREEN + "/timeban run");
+		receiver.sendMessage(ChatColor.GOLD + "Check for unbans.");
 	}
 }

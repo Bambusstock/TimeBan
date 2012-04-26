@@ -10,9 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
-/**
- * @author Bambusstock
- */
 public class TimeBanExecutor implements CommandExecutor
 {
 	Logger log = Logger.getLogger("Minecraft");
@@ -130,7 +127,7 @@ public class TimeBanExecutor implements CommandExecutor
 	}
 	
 	/**
-	 * Provide logic to examine the parameters to display the help text.
+	 * Display a helptext.
 	 * @param sender
 	 * @param helper
 	 * @param args
@@ -141,6 +138,10 @@ public class TimeBanExecutor implements CommandExecutor
 		else { help.help(); }
 	}
 	
+	/**
+	 * Display some information about TimeBan on the server.
+	 * @param sender
+	 */
 	public void info(CommandSender sender) {
 		InfoCmd info = new InfoCmd(this.plugin);
 		if(sender instanceof Player) { info.info((Player) sender); }

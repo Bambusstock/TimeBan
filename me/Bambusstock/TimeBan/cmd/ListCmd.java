@@ -53,7 +53,7 @@ public class ListCmd extends Cmd
 			else {
 				while(iterator.hasNext()) {
 					Ban ban = iterator.next();
-					log.info("`" + ban.getPlayer().getName() + "` until " + ban.getUntil().getTime() + " because `" + ban.getReason() + "`");
+					log.info("[TimeBan] `" + ban.getPlayer().getName() + "` until " + ban.getUntil().getTime() + " because `" + ban.getReason() + "`");
 				}
 			}
 		}

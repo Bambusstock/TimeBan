@@ -7,11 +7,6 @@ import me.Bambusstock.TimeBan.TimeBan;
 
 import org.bukkit.OfflinePlayer;
 
-/**
- * Class to handle a ban.
- * @author Bambusstock
- *
- */
 public class Ban
 implements Serializable, Comparable<Ban>
 {
@@ -24,13 +19,6 @@ implements Serializable, Comparable<Ban>
 	public String player;
 	public Calendar until;
 	public String reason;
-	
-	/**
-	 * Instantiate a empty ban.
-	 */
-	public Ban() {
-		
-	}
 	
 	/**
 	 * Instantiate a ban.

@@ -20,12 +20,12 @@ public class RmCmd extends Cmd
 	public void rm(Player sender, String[] players) {
 		for(String playerName : players) {
 			Ban ban = this.plugin.banSet.getBanByPlayerName(playerName);
-			if(!ban.isEmpty()) {
+			if(ban != null) {
 				this.plugin.banSet.remove(ban);
-				sender.sendMessage("Removed.");
+				sender.sendMessage("Removed temporary ban for ´" + playerName + "´. He is still banned!");
 			}
 			else {
-				sender.sendMessage(ChatColor.RED + "No ban for player `" + playerName + "` found!");
+				sender.sendMessage(ChatColor.RED + "No ban for player ´" + playerName + "´ found!");
 			}
 		}
 	}
@@ -37,12 +37,12 @@ public class RmCmd extends Cmd
 	public void rm(String[] players) {
 		for(String playerName : players) {
 			Ban ban = this.plugin.banSet.getBanByPlayerName(playerName);
-			if(!ban.isEmpty()) {
+			if(ban != null) {
 				this.plugin.banSet.remove(ban);
-				log.info("Removed.");
+				log.info("[TimeBan] Removed temporary ban for ´" + playerName + "´. He is still banned!");
 			}
 			else {
-				log.info("No ban for player `" + playerName + "` found!");
+				log.info("[TimeBan] No ban for player ´" + playerName + "´ found!");
 			}
 		}
 	}
@@ -61,6 +61,6 @@ public class RmCmd extends Cmd
 	 */
 	public void rmAll() {
 		this.plugin.banSet.clear();
-		log.info("All bans are removed!");
+		log.info("[TimeBan] All temporary bans are removed! The players are still banned!");
 	}
 }
