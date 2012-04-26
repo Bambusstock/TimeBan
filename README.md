@@ -28,9 +28,9 @@ You wan't to ban a player? No problem:
 	/timeban ban <username,username2> <until> <reason>
 
 It's quite easier then it looks at first. Let's have a look a the parameters. (For more detailed information see below!)
-- <username,username2> --> enter the username(s) of the player(s) you wan't to ban.
-- <until> --> there is a [simple format] to tell TimeBan how long you wan't to ban a bad guy. Leave out and TimeBan uses the standard ban duration.
-- <reason> --> Enter a reason embeded in a ". Example: `/timeban ban testuser 1d "No griefing!"`
+- `<username,username2>` Enter the username(s) of the player(s) you wan't to ban.
+- `<until>` There is a [simple format] to tell TimeBan how long you wan't to ban a bad guy. Leave out and TimeBan uses the standard ban duration.
+- `<reason>` Enter a reason embeded in a ". Example: `/timeban ban testuser 1d "No griefing!"`
 
 ### Unban a player
 
@@ -52,9 +52,7 @@ How do you tell TimeBan, how long a player should be banned? There is a simple s
 
 You can combine this however you wan't (theoretically, there would be so many test cases ;)). Two more examples:
 
-	1y5m20w
-	
-	2h30i
+	1y5m20w, 2h30i
 	
 Command Syntax
 --------------
@@ -86,11 +84,11 @@ This command will display some information: the amount of temporary bans and the
 
 ### /timeban list [search] [-r|s]
 
-Use this command to display a list of all bans. The list is default sorted ascending by unban date (newest first). With [search] you can define a pattern to match a user (this is following the conventions of [Java's Regular Expressions]). For example if you want to get all bans for players starting with "a" you could use `/timeban list *a`. If you 'd like to get the list ordered descending use the "-r" parameter. Use the "-s" parameter to get a shortened output.
+Use this command to display a list of all bans. The list is default sorted ascending by unban date (newest first). With [search] you can define a pattern to match a user (this is following the conventions of [Java's Regular Expressions](http://docs.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html#sum "JavaDoc")). For example if you want to get all bans for players starting with "a" you could use `/timeban list a.*`. If you 'd like to get the list ordered descending use the "-r" parameter. Use the "-s" parameter to get a shortened output.
 
 ### /timeban rm <[username,username2] [-a]>
 
-With this command you can remove the temporary ban for a player. This means that TimeBan no longer check if the user should be unbanned. Also the reason and unban date get lost! However, the player will still be banned! If you wan't to unban a player use the [unban command]!
+With this command you can remove the temporary ban for a player. This means that TimeBan no longer check if the user should be unbanned. Also the reason and unban date get lost! __However, the player will still be banned!__ If you wan't to unban a player banned with TimeBan use the TimeBan unban command!
 
 ### /timeban run
 
