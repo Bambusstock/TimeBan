@@ -8,7 +8,7 @@ Features
 - Temporary ban a player as long as you like. With custom reason.
 - Banned players will see the reason when they are kicked an also if they try to login.
 - Ban multiple users with the same duration and same custom reason in one command.
-- TimeBan automatically check for unbans. (You can set the interval in minutes.)
+- TimeBan automatically check for unbans. On login and while the server is running. (You can set the interval in minutes.)
 - Unban multiple users with one command. Or even all with "-a". (More information below.)
 - List all temporary bans. Possible parameters: search(regular expression), reverse ordering, short output.
 - Remove a temporary ban, but keep the ban itself.
@@ -145,10 +145,11 @@ Define who can remove a Timeban.
 
 Define who can run the Timeban task.
 
-TODO
-----
-- display ban message if user wan't to join (LoginEvent)
-	
+Known Bugs
+----------
+
+Actually there is a problem with the sorting of the banlist. It's possible that you get a ascending order and after a reload a descending order, if you use the list command. The "r" parameter will help you out. :)
+
 Possible features:
 ------------------
 - Ban command:
