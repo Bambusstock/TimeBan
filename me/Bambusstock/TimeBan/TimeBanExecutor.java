@@ -232,24 +232,13 @@ public class TimeBanExecutor implements CommandExecutor
 					//log.info("(1) #" + i + " Add " + input[i]);
 				}
 				else {
-					//log.info("(2) #" + i + " Add " + getStringFromArray(input, i, delimiter) + " and jumping over...");
+					//log.info("(2) #" + i + " Add " + getStringFromArray(input, i, delimiter) + " and jumping over " + getJumpOver(input, i, delimiter));
 					result.add(getStringFromArray(input, i, delimiter));
-					int jumpOver = getJumpOver(input, i, delimiter) - i; 
+					int jumpOver = getJumpOver(input, i, delimiter); 
 					i += jumpOver;
 				}
 			}
 			return result;			
-		}
-		
-		/**
-		 * Extract a string from an array.
-		 * @param String[] Input
-		 * @return String
-		 */
-		public String getStringFromArray(String[] input) {
-			String output = input[0];
-			for(String str : input) output = output.concat(" " + str);
-			return output;
 		}
 		
 		/**
@@ -263,8 +252,10 @@ public class TimeBanExecutor implements CommandExecutor
 			if(input.length < start) return "";
 			String output = input[start];
 			for(int i = start+1; i<input.length; i++) {
-				log.info("Input: " + input[i]);
-				if(input[i].contains(delimiter)) break;
+				if(input[i].contains(delimiter)) {
+					output = output.concat(" " + input[i]);
+					break;
+				}
 				output = output.concat(" " + input[i]);
 			}
 			return output;
@@ -279,10 +270,8 @@ public class TimeBanExecutor implements CommandExecutor
 		 */
 		public int getJumpOver(String[] input, int start, String delimiter) {
 			if(input.length < start) return 0;
-			int i = start+1;
-			for(i = start+1; i<input.length; i++) {
-				if(input[i].contains(delimiter)) break;
-			}
+			int i;
+			for(i = start; i<input.length; i++) if(input[i].contains(delimiter)) break;
 			return i;
 		}
 		

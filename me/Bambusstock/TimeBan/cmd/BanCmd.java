@@ -24,7 +24,6 @@ public class BanCmd extends Cmd
 	public void ban(Player sender, String[] players, Calendar until, String reason) {
 		for(String playerName : players) {
 			Ban ban = new Ban(this.plugin, playerName, until, reason);
-			this.plugin.banSet.add(ban);
 			TimeBanBanEvent event = new TimeBanBanEvent(sender, ban);
 			this.plugin.getServer().getPluginManager().callEvent(event);
 		}

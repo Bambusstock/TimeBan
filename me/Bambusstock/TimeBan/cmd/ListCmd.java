@@ -18,6 +18,7 @@ public class ListCmd extends Cmd
 	}
 	
 	public void list(Player sender, String search, boolean reverse, boolean simple) {
+		sender.sendMessage("=== TimeBan - Listing ===");
 		BanSet resultSet = this.getResultSet(search);
 		if(!resultSet.isEmpty()) {
 			Iterator<Ban> iterator = resultSet.descendingIterator();
@@ -34,6 +35,7 @@ public class ListCmd extends Cmd
 				}
 			}
 		}
+		sender.sendMessage("======================");
 	}
 	
 	/**

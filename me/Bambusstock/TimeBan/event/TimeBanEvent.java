@@ -41,7 +41,7 @@ public class TimeBanEvent extends Event {
      * @return Return true if the sender is a player.
      */
     public boolean isSenderPlayer() {
-   		if(sender != null && !sender.isEmpty() && sender instanceof Player) return true;
+   		if(sender != null && sender instanceof Player) return true;
     	return false;
     }
      

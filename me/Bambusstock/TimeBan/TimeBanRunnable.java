@@ -20,7 +20,6 @@ public class TimeBanRunnable implements Runnable
 		synchronized (this.plugin.banSet) {
 			if(this.plugin.banSet.isEmpty()) return;
 			log.info("[TimeBan] Check for unbans...");
-			
 			/**
 			 * To prevent a java.util.ConcurrentModificationException we 'll
 			 * use a workSet. The events take care of the ´real´ banlist, so
@@ -38,7 +37,7 @@ public class TimeBanRunnable implements Runnable
 					break;
 				}
 			}
-			
+			log.info("[TimeBan] Check complete.");
 		}
 	}
 }
