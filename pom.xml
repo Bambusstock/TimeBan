@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+    http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- The Basics -->
+    <groupId>me.Bambusstock.minecraft</groupId>
+    <artifactId>me.Bambusstock.TimeBan</artifactId>
+    <version>0.5-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <dependencies>
+        <!-- Bukkit API -->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>LATEST</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <project.build.finalName>TimeBan</project.build.finalName>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- Build Settings -->
+    <build>
+        <finalName>${project.build.finalName}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifestEntries>
+                            <Built-By>mum</Built-By>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <includes>
+                        <include>**/README.md</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- More Project Information -->
+    <name>TimeBan</name>
+    <description>A Craftbukkit plugin.</description>
+    <url>http://dev.bukkit.org/bukkit-plugins/timeban/</url>
+    <licenses>
+        <license>
+            <name>GNU General Public License version 2 (GPLv2)</name>
+            <url>http://dev.bukkit.org/licenses/6-gnu-general-public-license-version-2-gplv2/</url>
+        </license>
+    </licenses>
+
+    <!-- Environment Settings -->
+    <repositories>
+        <repository>
+            <id>Bukkit Official</id>
+            <url>http://repo.bukkit.org/content/repositories/public</url>
+        </repository>
+    </repositories>
+
+</project>
