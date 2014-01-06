@@ -1,34 +1,42 @@
 package me.Bambusstock.TimeBan;
 
-import java.io.File;
 import java.util.logging.Logger;
-
-
-import me.Bambusstock.TimeBan.util.BanSet;
-
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class TimeBan extends JavaPlugin
-{
-	Logger log = Logger.getLogger("Minecraft");
-	public BanSet banSet = new BanSet();
-	public Long runDelay;
+public class TimeBan extends JavaPlugin {
 
-	public void onEnable() {
-		this.configureMe();
-		this.banSet.load(new File("./plugins/TimeBan/banlist.dat"), this);		
-		this.getServer().getPluginManager().registerEvents(new BanListener(this), this);
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, this.runDelay * 20 * 60);
-		this.getCommand("timeban").setExecutor(new TimeBanExecutor(this));
-	}
-	
-	public void configureMe() {
-		this.getConfig().options().copyDefaults(true);
-		this.saveConfig();
-		this.runDelay = this.getConfig().getLong("runDelay");
-	}
-	
-	public void onDisable() {
-		this.banSet.save(new File("./plugins/TimeBan/banlist.dat"), this);
-	}		
+    private static final Logger log = Logger.getLogger("Minecraft");
+    private BanController controller;
+    private long runDelay;
+
+    public void onEnable() {
+        // set up configuration
+        this.configureMe();
+
+        // init ban model...
+        controller = new BanController();
+        controller.init();
+
+        // register listener
+        this.getServer().getPluginManager().registerEvents(new BanListener(this), this);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, this.runDelay * 20 * 60);
+
+        // register commands
+        this.getCommand("timeban").setExecutor(new TimeBanExecutor(this));
+    }
+
+    public void onDisable() {
+        controller.close();
+        
+    }
+
+    public void configureMe() {
+        this.getConfig().options().copyDefaults(true);
+        this.saveConfig();
+        this.runDelay = this.getConfig().getLong("runDelay");
+    }
+
+    public BanController getController() {
+        return controller;
+    }
 }

@@ -1,88 +1,119 @@
 package me.Bambusstock.TimeBan;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.Bambusstock.TimeBan.event.TimeBanBanEvent;
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
-//import me.Bambusstock.TimeBan.cmd.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
-public class BanListener implements Listener
-{
-	Logger log = Logger.getLogger("Minecraft");
-	private TimeBan 		plugin;
+public class BanListener implements Listener {
 
-	public BanListener(TimeBan instance) {
-		this.plugin = instance;
-	}
-	
-	@EventHandler
-	public void onPlayerPreLoginEvent(PlayerPreLoginEvent event) {
-		Ban ban = this.plugin.banSet.getBanByPlayerName(event.getName());
-		// player is still banned, but he should already be unbanned
-		if(ban != null && Calendar.getInstance().after(ban.getUntil())) {
-			log.info("bu");
-			TimeBanUnbanEvent unbanEvent = new TimeBanUnbanEvent(ban);
-			this.plugin.getServer().getPluginManager().callEvent(unbanEvent);
-		}
-		else if(ban != null && Calendar.getInstance().before(ban.getUntil())) {
-			event.disallow(PlayerPreLoginEvent.Result.KICK_BANNED, "Youre banned from this server until " + ban.getUntil().getTime() + " because '" + ban.getReason() + "'!");
-			log.info("Muhm");
-		}
-	}
-	
-	@EventHandler
-	public void onTimeBanEvent(TimeBanBanEvent event) {
-		Ban ban = event.getBan();
-		OfflinePlayer player = ban.getPlayer();
-		
-		player.setBanned(true);
-		if(player.isOnline()) ((Player) player).kickPlayer(ban.getReason());
-		
-		boolean banResult = this.plugin.banSet.add(ban);
+    private static final Logger log = Logger.getLogger("Minecraft");
+    private TimeBan plugin;
 
-		if(event.isSenderPlayer()) {
-			if(banResult) {
-				event.getSender().sendMessage(ChatColor.DARK_GREEN + "Banned '" + player.getName() + "' until " + ban.until.getTime());
-				log.info("[TimeBan] Banned `"+ player.getName() + "` until " + ban.until.getTime() + " by " + event.getSender().getDisplayName());
-			}
-			else {
-				event.getSender().sendMessage(ChatColor.RED + "Seems that '" + player.getName() + "' is already banned...");
-			}
-		}
-		else {
-			if(banResult) {
-				log.info("[TimeBan] Banned '"+ player.getName() + "' until " + ban.until.getTime());
-			}
-			else {
-				log.info("[TimeBan] Seems that `" + player.getName() + "` is already banned...");
-			}
-		}
-	}
-	
-	@EventHandler
-	public void onTimeUnbanEvent(TimeBanUnbanEvent event) {
-		OfflinePlayer player = event.getBan().getPlayer();
-		player.setBanned(false);
-		
-		synchronized (this.plugin.banSet) {
-			this.plugin.banSet.remove(event.getBan());	
-		}
-		
-		if(event.isSenderPlayer()) {
-			event.getSender().sendMessage(ChatColor.DARK_GREEN + "Unbaned and removed `" + player.getName() + "` from banlist.");
-			log.info("[TimeBan] Unbaned and removed `" + player.getName() + "` from ban list by " + event.getSender().getDisplayName());
-		} 
-		else {
-			log.info("[TimeBan] Unbaned and removed `" + player.getName() + "` from banlist.");
-		}
-	}
+    public BanListener(TimeBan instance) {
+        this.plugin = instance;
+    }
+
+    /**
+     * This method is called when someone tries to login. We use this one to
+     * check if the player is banned by TimeBan.
+     *
+     * @param event Event send when player logs in
+     */
+    @EventHandler
+    public void onPlayerPreLoginEvent(AsyncPlayerPreLoginEvent event) {
+        String playerName = event.getName();
+
+        // Get a ban event
+        Ban ban = plugin.getController().getBan(playerName);
+
+        // player is still banned, but he should already be unbanned
+        if (ban != null && Calendar.getInstance().after(ban.getUntil())) {
+            TimeBanUnbanEvent unbanEvent = new TimeBanUnbanEvent(ban);
+            plugin.getServer().getPluginManager().callEvent(unbanEvent);
+
+            // player is banned...
+        } else if (ban != null && Calendar.getInstance().before(ban.getUntil())) {
+            String banMessage = String.format("You're banned from this server until %s because '%s'!",
+                    ban.getUntil().getTime(),
+                    ban.getReason());
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, banMessage);
+        }
+    }
+
+    /**
+     * Someone is going to be banned...
+     *
+     * @param event ban event
+     */
+    @EventHandler
+    public void onTimeBanEvent(TimeBanBanEvent event) {
+        Ban b = event.getBan();
+        String admin = event.getSender().getDisplayName();
+        String player = b.getPlayer().getName();
+        Date bannedUntil = b.getUntil().getTime();
+
+        boolean successfull = plugin.getController().executeBan(b);
+
+        if (successfull) {
+            if (event.isSenderPlayer()) {
+                String userMessage = String.format("%sBanned `%s` until %s",
+                        ChatColor.DARK_GREEN,
+                        player,
+                        bannedUntil);
+                event.getSender().sendMessage(userMessage);
+            }
+
+            String serverMessage = String.format("[TimeBan] Banned `%s` until %s by %s",
+                    player,
+                    bannedUntil,
+                    admin);
+            log.info(serverMessage);
+        } else {
+            if (event.isSenderPlayer()) {
+                String userMessage = String.format("%sSomething went wrong banning `%s`...",
+                        ChatColor.RED,
+                        player);
+                event.getSender().sendMessage(userMessage);
+            }
+
+            String serverMessage = String.format("[TimeBan] Something went wrong banning `%s`...",
+                    player);
+            log.info(serverMessage);
+        }
+    }
+
+    @EventHandler
+    public void onTimeUnbanEvent(TimeBanUnbanEvent event) {
+        Ban ban = event.getBan();
+        String player = ban.getPlayer().getName();
+        String admin = event.getSender().getDisplayName();
+        plugin.getController().executeUnban(ban);
+
+        if (event.isSenderPlayer()) {
+            String userMessage = String.format("%sUnbanned `%s` from banlist.",
+                    ChatColor.DARK_GREEN,
+                    player);
+            event.getSender().sendMessage(userMessage);
+
+            String serverMessage = String.format("[TimeBan] Unbaned and removed `%s` from banlist by %s",
+                    player,
+                    admin);
+
+            log.log(Level.INFO, serverMessage);
+        } else {
+            log.log(Level.INFO, "[TimeBan] Unbaned and removed `{0}` from banlist.", player);
+        }
+    }
 }
