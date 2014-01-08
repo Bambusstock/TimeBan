@@ -73,8 +73,6 @@ public class UntilStringParserTest {
         assertEquals(supposedResult.get(Calendar.SECOND), result.get(Calendar.SECOND));
         assertEquals(supposedResult.get(Calendar.MINUTE), result.get(Calendar.MINUTE));
         assertEquals(supposedResult.get(Calendar.HOUR), result.get(Calendar.HOUR));
-
-        System.out.println("Here we go...");
         
         // day week month year
         supposedResult = Calendar.getInstance();
