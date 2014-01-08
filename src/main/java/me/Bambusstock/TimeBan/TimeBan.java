@@ -1,5 +1,6 @@
 package me.Bambusstock.TimeBan;
 
+import me.Bambusstock.TimeBan.cmd.TimeBanExecutor;
 import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 

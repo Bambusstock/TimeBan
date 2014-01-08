@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -11,9 +12,9 @@ import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
 
-public class UnbanCmd extends Cmd {
+public class TimeBanUnbanCommand extends TimeBanCommand {
 
-    public UnbanCmd(TimeBan plugin) {
+    public TimeBanUnbanCommand(TimeBan plugin) {
         super(plugin);
     }
 
@@ -48,7 +49,7 @@ public class UnbanCmd extends Cmd {
                 TimeBanUnbanEvent event = new TimeBanUnbanEvent(ban);
                 this.plugin.getServer().getPluginManager().callEvent(event);
             } else {
-                log.info("[TimeBan] No ban for player ´" + playerName + "´ found!");
+                log.log(Level.INFO, "[TimeBan] No ban for player \u00b4{0}\u00b4 found!", playerName);
             }
         }
     }

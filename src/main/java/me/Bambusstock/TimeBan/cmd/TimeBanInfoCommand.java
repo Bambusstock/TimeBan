@@ -1,17 +1,18 @@
 package me.Bambusstock.TimeBan.cmd;
 
 import java.util.Map;
+import me.Bambusstock.TimeBan.TimeBan;
 import org.bukkit.entity.Player;
 
-import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.util.Ban;
+import org.bukkit.command.PluginCommand;
 
-public class InfoCmd extends Cmd {
+public class TimeBanInfoCommand extends TimeBanCommand {
 
-    public InfoCmd(TimeBan plugin) {
+    public TimeBanInfoCommand(TimeBan plugin) {
         super(plugin);
     }
-
+    
     public void info(Player sender) {
         Map<String, Ban> bans = plugin.getController().getBans();
         sender.sendMessage("TimeBan - Info:");

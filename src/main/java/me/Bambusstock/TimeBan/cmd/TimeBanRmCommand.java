@@ -6,9 +6,9 @@ import me.Bambusstock.TimeBan.util.Ban;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class RmCmd extends Cmd {
+public class TimeBanRmCommand extends TimeBanCommand {
 
-    public RmCmd(TimeBan plugin) {
+    public TimeBanRmCommand(TimeBan plugin) {
         super(plugin);
     }
 

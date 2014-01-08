@@ -8,7 +8,7 @@ import me.Bambusstock.TimeBan.util.Ban;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class ListCmd extends Cmd {
+public class TimeBanListCommand extends TimeBanCommand {
 
     private static final String userMessage;
     private static final String consoleMessage = "[TimeBan] `%s` until %s because `%s`";
@@ -26,7 +26,7 @@ public class ListCmd extends Cmd {
     }
     
 
-    public ListCmd(TimeBan plugin) {
+    public TimeBanListCommand(TimeBan plugin) {
         super(plugin);
     }
 

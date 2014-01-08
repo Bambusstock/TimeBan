@@ -6,6 +6,9 @@
 
 package me.Bambusstock.TimeBan.test;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -38,7 +41,7 @@ public class BanSetTest {
         //TimeBan tb = new TimeBan();
         for(int i = 0; i <= 1000; i++) {
             String name = names[namesCnt] + addTo[addToCnt];
-            Ban b = new Ban(null, name);
+            Ban b = new Ban(null, name, Calendar.getInstance(), "test");
             set.put(name, b);
             
             namesCnt++;
