@@ -66,6 +66,13 @@ public class TimeBanExecutor implements CommandExecutor {
             }
 
             return info(sender);
+        } else if (args[0].equals(Commands.RM.getName())) {
+            if (sender instanceof Player && !sender.hasPermission("timeban.rm")) {
+                sender.sendMessage(String.format(noPermissionMessage, Commands.RM.getName()));
+                return true;
+            }
+            
+            return rm(sender, commandArgs);
         }
 //       else if (args[0].equalsIgnoreCase("help")) {
 //            if (sender instanceof Player && !sender.hasPermission("timeban.help")) {
@@ -74,14 +81,7 @@ public class TimeBanExecutor implements CommandExecutor {
 //            }
 //            this.help(sender);
 //            return true;
-//        } else if (args[0].equalsIgnoreCase("rm")) {
-//            if (sender instanceof Player && !sender.hasPermission("timeban.rm")) {
-//                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
-//                return true;
-//            }
-//            this.rm(sender, helper, formattedArgs);
-//            return true;
-//        } else if (args[0].equalsIgnoreCase("run")) {
+        // else if (args[0].equalsIgnoreCase("run")) {
 //            if (sender instanceof Player && !sender.hasPermission("timeban.run")) {
 //                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
 //                return true;
@@ -212,30 +212,34 @@ public class TimeBanExecutor implements CommandExecutor {
         return true;
     }
 
-//    /**
-//     * Provide logic to examine the parameters to remove the ban of a player.
-//     *
-//     * @param sender
-//     * @param helper
-//     * @param args
-//     */
-//    public void rm(CommandSender sender, String[] args) {
-//        TimeBanRmCommand rm = new TimeBanRmCommand(this.plugin);
-//        if (helper.containsParameter(args, "a")) {
-//            if (sender instanceof Player) {
-//                rm.rmAll((Player) sender);
-//            } else {
-//                rm.rmAll();
-//            }
-//        } else {
-//            String[] players = args.get(1).split(",");
-//            if (sender instanceof Player) {
-//                rm.rm((Player) sender, players);
-//            } else {
-//                rm.rm(players);
-//            }
-//        }
-//    }
+    /**
+     * Provide logic to examine the parameters to remove the ban of a player.
+     *
+     * @param sender
+     * @param helper
+     * @param args
+     */
+    public boolean rm(CommandSender sender, String[] args) {
+        TimeBanRmCommand rm = new TimeBanRmCommand(plugin);
+        
+        if(CommandLineParser.isOptionPresent(args[0], 'a')) {
+            if(sender instanceof Player) {
+                rm.rmAll((Player) sender);
+            } else {
+                rm.rmAll();
+            }
+        } else {
+            List<String> players = CommandLineParser.getListOfString(args[0]);
+            
+            if(sender instanceof Player) {
+                rm.rm((Player) sender, players);
+            } else {
+                rm.rm(players);
+            }
+        }
+        
+        return true;
+    }
 //
 //    /**
 //     * Provide logic to examine the parameters to remove the ban of a player.

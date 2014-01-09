@@ -1,9 +1,9 @@
 package me.Bambusstock.TimeBan.cmd;
 
+import java.util.List;
 import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.util.Ban;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class TimeBanRmCommand extends TimeBanCommand {
@@ -18,13 +18,13 @@ public class TimeBanRmCommand extends TimeBanCommand {
      * @param sender
      * @param players
      */
-    public void rm(Player sender, String[] players) {
+    public void rm(Player sender, List<String> players) {
         for (String playerName : players) {
             Ban removedBan = plugin.getController().getBans().remove(playerName);
             if (removedBan != null) {
-                sender.sendMessage("Removed temporary ban for ´" + playerName + "´. He is still banned!");
+                writeMessage(sender, "Removed temporary ban for ´" + playerName + "´. Player is still banned!");
             } else {
-                sender.sendMessage(ChatColor.RED + "No ban for player ´" + playerName + "´ found!");
+                writeMessage(sender, "No ban for player ´" + playerName + "´ found!");
             }
         }
     }
@@ -35,15 +35,8 @@ public class TimeBanRmCommand extends TimeBanCommand {
      *
      * @param players
      */
-    public void rm(String[] players) {
-        for (String playerName : players) {
-            Ban removedBan = plugin.getController().getBans().remove(playerName);
-            if (removedBan != null) {
-                log.info("[TimeBan] Removed temporary ban for ´" + playerName + "´. He is still banned!");
-            } else {
-                log.info("[TimeBan] No ban for player ´" + playerName + "´ found!");
-            }
-        }
+    public void rm(List<String> players) {
+        rm(null, players);
     }
 
     /**
@@ -53,14 +46,13 @@ public class TimeBanRmCommand extends TimeBanCommand {
      */
     public void rmAll(Player sender) {
         plugin.getController().getBans().clear();
-        sender.sendMessage("All bans removed!");
+        writeMessage(sender, "All bans removed! Players still banned.");
     }
 
     /**
      * Remove all bans. Console version.
      */
     public void rmAll() {
-        plugin.getController().getBans().clear();
-        log.info("[TimeBan] All temporary bans are removed! The players are still banned!");
+        rmAll(null);
     }
 }

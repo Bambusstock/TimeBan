@@ -61,14 +61,6 @@ public class TimeBanListCommand extends TimeBanCommand {
         writeMessage(sender, "======================");
     }
     
-    protected void writeMessage(Player sender, String message) {
-        if(sender == null) {
-            log.info(message);
-        } else {
-            sender.sendMessage(message);
-        }
-    }
-    
     protected void writePrettyMessage(Player sender, String... args) {
         if(sender == null) {
             log.info(String.format(consoleMessage, args));
