@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import me.Bambusstock.TimeBan.util.Ban;
 import me.Bambusstock.TimeBan.util.BanComparator;
 import me.Bambusstock.TimeBan.util.BanMapLoader;
-import org.bukkit.entity.Player;
-
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 /**
  *
  * @author ferenc
@@ -24,6 +23,9 @@ public class BanController {
 
     public void init() {
         bans = BanMapLoader.load("./plugins/TimeBan/banlist.dat");
+        if(bans.isEmpty()) {
+            bans = new TreeMap<String, Ban>();
+        }
     }
 
     public void close() {
@@ -37,12 +39,12 @@ public class BanController {
      * @return true if ban was successful.
      */
     public boolean executeBan(Ban ban) {
-        Player player = ban.getPlayer();
+        OfflinePlayer player = ban.getPlayer();
         String reason = ban.getReason();
 
         player.setBanned(true);
         if (player.isOnline()) {
-            player.kickPlayer(reason);
+            Bukkit.getPlayer(player.getName()).kickPlayer(reason);
         }
 
         bans.put(player.getName(), ban);
@@ -56,7 +58,7 @@ public class BanController {
      * @return true
      */
     public boolean executeUnban(Ban ban) {
-        Player player = ban.getPlayer();
+        OfflinePlayer player = ban.getPlayer();
         player.setBanned(false);
 
         synchronized (bans) {
@@ -91,7 +93,7 @@ public class BanController {
     public List<Ban> searchBans(String search, boolean reverse) {
         List<Ban> result = new ArrayList<Ban>();
 
-        if (search.isEmpty()) {
+        if (search == null || search.isEmpty()) {
             result.addAll(bans.values());
         } else {
 

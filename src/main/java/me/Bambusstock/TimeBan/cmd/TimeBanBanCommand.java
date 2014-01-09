@@ -6,6 +6,7 @@ import java.util.List;
 import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.event.TimeBanBanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
+import org.bukkit.Bukkit;
 
 import org.bukkit.entity.Player;
 
@@ -27,7 +28,7 @@ public class TimeBanBanCommand extends TimeBanCommand {
         for (String playerName : players) {
             Ban ban = new Ban(this.plugin, playerName, until, reason);
             TimeBanBanEvent event = new TimeBanBanEvent(sender, ban);
-            this.plugin.getServer().getPluginManager().callEvent(event);
+            Bukkit.getServer().getPluginManager().callEvent(event);
         }
     }
 
@@ -40,9 +41,10 @@ public class TimeBanBanCommand extends TimeBanCommand {
      */
     public void ban(List<String> players, Calendar until, String reason) {
         for (String playerName : players) {
-            Ban ban = new Ban(this.plugin, playerName, until, reason);
+            Ban ban = new Ban(plugin, playerName, until, reason);
+            
             TimeBanBanEvent event = new TimeBanBanEvent(ban);
-            this.plugin.getServer().getPluginManager().callEvent(event);
+            Bukkit.getServer().getPluginManager().callEvent(event);
         }
     }
 }

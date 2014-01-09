@@ -10,8 +10,6 @@ import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
 
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -60,7 +58,6 @@ public class BanListener implements Listener {
     @EventHandler
     public void onTimeBanEvent(TimeBanBanEvent event) {
         Ban b = event.getBan();
-        String admin = event.getSender().getDisplayName();
         String player = b.getPlayer().getName();
         Date bannedUntil = b.getUntil().getTime();
 
@@ -68,18 +65,25 @@ public class BanListener implements Listener {
 
         if (successfull) {
             if (event.isSenderPlayer()) {
+                String admin = event.getSender().getDisplayName();
                 String userMessage = String.format("%sBanned `%s` until %s",
                         ChatColor.DARK_GREEN,
                         player,
                         bannedUntil);
                 event.getSender().sendMessage(userMessage);
-            }
 
-            String serverMessage = String.format("[TimeBan] Banned `%s` until %s by %s",
-                    player,
-                    bannedUntil,
-                    admin);
-            log.info(serverMessage);
+                String serverMessage = String.format("[TimeBan] Banned `%s` until %s by %s",
+                        player,
+                        bannedUntil,
+                        admin);
+                log.info(serverMessage);
+            } else {
+                 String serverMessage = String.format("[TimeBan] Banned `%s` until %s by %s",
+                        player,
+                        bannedUntil,
+                        "console");
+                log.info(serverMessage);
+            }
         } else {
             if (event.isSenderPlayer()) {
                 String userMessage = String.format("%sSomething went wrong banning `%s`...",

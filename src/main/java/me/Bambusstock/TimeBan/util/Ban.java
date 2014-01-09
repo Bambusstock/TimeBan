@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import me.Bambusstock.TimeBan.TimeBan;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 import org.bukkit.entity.Player;
 
@@ -87,8 +89,8 @@ public class Ban implements Serializable, Comparable<Ban> {
      *
      * @return OfflinePlayer object for this ban.
      */
-    public Player getPlayer() {
-        return plugin.getServer().getPlayer(player);
+    public OfflinePlayer getPlayer() {
+        return Bukkit.getServer().getOfflinePlayer(player);
     }
 
     /**

@@ -9,7 +9,8 @@ public class TimeBanCommand {
     public enum Commands {
         
         BAN("ban"),
-        UNBAN("unban");
+        UNBAN("unban"),
+        LIST("list");
         
         private String cmdName;
         private Commands(String cmdName) {
