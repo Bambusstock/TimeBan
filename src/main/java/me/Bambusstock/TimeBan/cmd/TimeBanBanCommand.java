@@ -10,6 +10,9 @@ import org.bukkit.Bukkit;
 
 import org.bukkit.entity.Player;
 
+/**
+ * Command used to ban players.
+ */
 public class TimeBanBanCommand extends TimeBanCommand {
 
     public TimeBanBanCommand(TimeBan plugin) {

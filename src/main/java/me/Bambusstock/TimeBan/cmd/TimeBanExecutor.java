@@ -11,9 +11,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
+/**
+ * Executor checking for incoming command calls. Processes incoming arguments
+ * and call expected commands.
+ */
 public class TimeBanExecutor implements CommandExecutor {
 
+    /**
+     * Logger used by this class.
+     */
     private static final Logger log = Logger.getLogger("Minecraft");
+    
+    /**
+     * Message to be shown if a player misses a permission to use a command.
+     */
     private static final String noPermissionMessage = ChatColor.RED + "You don't have the permission to use the %s command!";
 
     private TimeBan plugin;
@@ -102,6 +113,8 @@ public class TimeBanExecutor implements CommandExecutor {
      * @param sender Sender of the command (player or console)
      * @param args Arguments given for the command (doesn't include timeban
      * command (e.g. ban or unban).
+     * 
+     * @return true if ok, false if wrong syntax
      */
     public boolean ban(CommandSender sender, String[] args) {
         List<String> players = CommandLineParser.getListOfString(args[0]);
@@ -144,16 +157,16 @@ public class TimeBanExecutor implements CommandExecutor {
     }
 
     /**
-     * Display a helptext.
+     * Calls the command to display a help text.
      *
-     * @param sender
-     * @param helper
-     * @param args
+     * @param receiver Receiver of the help text.
+     * 
+     * @return true
      */
-    public boolean help(CommandSender sender) {
+    public boolean help(CommandSender receiver) {
         TimeBanHelpCommand help = new TimeBanHelpCommand(this.plugin);
-        if (sender instanceof Player) {
-            help.help((Player) sender);
+        if (receiver instanceof Player) {
+            help.help((Player) receiver);
         } else {
             help.help();
         }
@@ -164,14 +177,14 @@ public class TimeBanExecutor implements CommandExecutor {
     /**
      * Display some information about TimeBan on the server.
      *
-     * @param sender
+     * @param receiver Receiver of the information
      *
      * @return true
      */
-    public boolean info(CommandSender sender) {
+    public boolean info(CommandSender receiver) {
         TimeBanInfoCommand info = new TimeBanInfoCommand(this.plugin);
-        if (sender instanceof Player) {
-            info.info((Player) sender);
+        if (receiver instanceof Player) {
+            info.info((Player) receiver);
         } else {
             info.info();
         }
@@ -182,12 +195,12 @@ public class TimeBanExecutor implements CommandExecutor {
     /**
      * Fetch parameters and call TimeBanList command.
      *
-     * @param sender
+     * @param receiver Receiver of the information.
      * @param args
      *
      * @return true if finished or false on error.
      */
-    public boolean list(CommandSender sender, String[] args) {
+    public boolean list(CommandSender receiver, String[] args) {
         String search = null;
         boolean listReverse = false;
         boolean listSimple = false;
@@ -207,8 +220,8 @@ public class TimeBanExecutor implements CommandExecutor {
         }
 
         TimeBanListCommand list = new TimeBanListCommand(plugin);
-        if (sender instanceof Player) {
-            list.list((Player) sender, search, listReverse, listSimple);
+        if (receiver instanceof Player) {
+            list.list((Player) receiver, search, listReverse, listSimple);
         } else {
             list.list(search, listReverse, listSimple);
         }
@@ -220,8 +233,9 @@ public class TimeBanExecutor implements CommandExecutor {
      * Provide logic to examine the parameters to remove the ban of a player.
      *
      * @param sender
-     * @param helper
      * @param args
+     * 
+     * @return true
      */
     public boolean rm(CommandSender sender, String[] args) {
         TimeBanRmCommand rm = new TimeBanRmCommand(plugin);
@@ -249,6 +263,8 @@ public class TimeBanExecutor implements CommandExecutor {
      * Provide logic to examine the parameters to remove the ban of a player.
      *
      * @param sender
+     * 
+     * @return true
      */
     public boolean run(CommandSender sender) {
         new TimeBanRunCommand(plugin).run();

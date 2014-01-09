@@ -1,7 +1,6 @@
 package me.Bambusstock.TimeBan.cmd;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -12,6 +11,9 @@ import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
 
+/**
+ * Command to unban a player watched by TimeBan.
+ */
 public class TimeBanUnbanCommand extends TimeBanCommand {
 
     public TimeBanUnbanCommand(TimeBan plugin) {

@@ -6,6 +6,9 @@ import me.Bambusstock.TimeBan.util.Ban;
 
 import org.bukkit.entity.Player;
 
+/**
+ * Command to remove a ban from the TimeBan watchlist.
+ */
 public class TimeBanRmCommand extends TimeBanCommand {
 
     public TimeBanRmCommand(TimeBan plugin) {

@@ -14,8 +14,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
+
+/**
+ * Main listener on events like prelogin or bans unbans.
+ */
 public class BanListener implements Listener {
 
+    /** 
+     * Logger used by this class.
+     */
     private static final Logger log = Logger.getLogger("Minecraft");
     private TimeBan plugin;
 

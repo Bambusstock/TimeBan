@@ -8,11 +8,16 @@ import me.Bambusstock.TimeBan.util.Ban;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+/**
+ * Command to list bans currently watched by TimeBan.
+ */
 public class TimeBanListCommand extends TimeBanCommand {
 
+    /**
+     * Colored user message. Constructed using a static initializer.
+     */
     private static final String userMessage;
-    private static final String consoleMessage = "[TimeBan] `%s` until %s because `%s`";
-
+    
     static {
         StringBuilder b = new StringBuilder();
         b.append(ChatColor.RED);
@@ -25,6 +30,10 @@ public class TimeBanListCommand extends TimeBanCommand {
         userMessage = b.toString();
     }
     
+    /**
+     * Console message.
+     */
+    private static final String consoleMessage = "[TimeBan] `%s` until %s because `%s`";
 
     public TimeBanListCommand(TimeBan plugin) {
         super(plugin);
@@ -61,15 +70,7 @@ public class TimeBanListCommand extends TimeBanCommand {
         writeMessage(sender, "======================");
     }
     
-    protected void writePrettyMessage(Player sender, String... args) {
-        if(sender == null) {
-            log.info(String.format(consoleMessage, args));
-        } else {
-            sender.sendMessage(String.format(userMessage, args));
-        }
-    }
-
-    /**
+      /**
      * List all bans. Console version
      *
      * @param search Regex used for a search
@@ -79,4 +80,20 @@ public class TimeBanListCommand extends TimeBanCommand {
     public void list(String search, boolean reverse, boolean simple) {
         list(null, search, reverse, simple);
     }
+    
+    /**
+     * Write a colored message to the player or a plain message to the console.
+     * 
+     * @param receiver Player to receive this message, null if console is output
+     * @param args Arguments to be inserted into message.
+     * 
+     */
+    protected void writePrettyMessage(Player receiver, String... args) {
+        if(receiver == null) {
+            log.info(String.format(consoleMessage, args));
+        } else {
+            receiver.sendMessage(String.format(userMessage, args));
+        }
+    }
+
 }

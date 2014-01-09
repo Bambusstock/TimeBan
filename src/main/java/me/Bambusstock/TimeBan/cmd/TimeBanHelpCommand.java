@@ -5,73 +5,63 @@ import me.Bambusstock.TimeBan.TimeBan;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+/**
+ * Command to display help for all TimeBan commands.
+ */
 public class TimeBanHelpCommand extends TimeBanCommand {
 
-    private static final String banSyntax = "/timeban ban <username,...> [untilstring] [reason]";
-    private static final String banInfo = "Ban a player or more until [untilstring] because of [reason].";
-    
-    private static final String unbanSyntax = "/timeban unban <[username,username2,...] [-a]>";
-    private static final String unbanInfo = "Unban a player or more. Use \"-a\" to unban all.";
-    
-    private static final String rmSyntax = "/timeban rm <[username,username2,...] [-a]>";
-    private static final String rmInfo = "Remove a ban from the ban list. Use \"-a\" for all.";
-    
-    private static final String infoSyntax = "/timeban info";
-    private static final String infoInfo = "Display some information like ban amount.";
-    
-    private static final String listSyntax = "/timeban list [search] [-rs]";
-    private static final String listInfo = "List all bans. Use \"-r\" for reverse order. \"s for short display.";
-    
-    private static final String runSyntax = "/timeban run";
-    private static final String runInfo = "Check for unbans.";
-            
+    private static final String[] text = {
+        "TimeBan Help page",
+        "===================================================\n",
+        
+        "/timeban ban <username,...> [untilstring] [reason]",
+        "Ban a player or more until [untilstring] because of [reason].\n",
+        
+        "/timeban unban <[username,username2,...] [-a]>",
+        "Unban a player or more. Use \"-a\" to unban all.\n",
+        
+        "/timeban rm <[username,username2,...] [-a]>",
+        "Remove a ban from the ban list. Use \"-a\" for all.\n",
+        
+        "/timeban info",
+        "Display some information like ban amount.\n",
+        
+        "/timeban list [search] [-rs]",
+        "List all bans. Use \"-r\" for reverse order. \"s for short display.\n",
+        
+        "/timeban run",
+        "Check for unbans."
+    };
+
     public TimeBanHelpCommand(TimeBan plugin) {
         super(plugin);
     }
 
+    /**
+     * Display a help text on the console.
+     */
     public void help() {
-        log.info("TimeBan Help");
-        log.info("==============");
-
-        log.info(banSyntax);
-        log.info(banInfo);
-
-        log.info(unbanSyntax);
-        log.info(unbanInfo);
-
-        log.info(rmSyntax);
-        log.info(rmInfo);
-
-        log.info(infoSyntax);
-        log.info(infoInfo);
-
-        log.info(listSyntax);
-        log.info(listInfo);
-
-        log.info(runSyntax);
-        log.info(runInfo);
+        for(String s : text) {
+            log.info(s);
+        }
     }
 
+    /**
+     * Display a help text to the player.
+     *
+     * @param receiver Receiver of the help text.
+     */
     public void help(Player receiver) {
-        receiver.sendMessage(ChatColor.DARK_GREEN + "TimeBan Help");
-        receiver.sendMessage(ChatColor.DARK_GREEN + "==============");
-
-        receiver.sendMessage(ChatColor.DARK_GREEN + banSyntax);
-        receiver.sendMessage(ChatColor.GOLD + banInfo);
-
-        receiver.sendMessage(ChatColor.DARK_GREEN + unbanSyntax);
-        receiver.sendMessage(ChatColor.GOLD + unbanInfo);
-
-        receiver.sendMessage(ChatColor.DARK_GREEN + rmSyntax);
-        receiver.sendMessage(ChatColor.GOLD + rmInfo);
-
-        receiver.sendMessage(ChatColor.DARK_GREEN + infoSyntax);
-        receiver.sendMessage(ChatColor.GOLD + infoInfo);
-
-        receiver.sendMessage(ChatColor.DARK_GREEN + listSyntax);
-        receiver.sendMessage(ChatColor.GOLD + listInfo);
-
-        receiver.sendMessage(ChatColor.DARK_GREEN + runSyntax);
-        receiver.sendMessage(ChatColor.GOLD + runInfo);
+        for(int i = 0; i < text.length; i++) {
+            String output = "";
+            if(i % 2 == 0) {
+                output += ChatColor.DARK_GREEN;
+            } else {
+                output += ChatColor.GOLD;
+            }
+            output += text[i];
+            
+            receiver.sendMessage(output);
+        }
     }
 }

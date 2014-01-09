@@ -6,29 +6,34 @@ import org.bukkit.entity.Player;
 
 import me.Bambusstock.TimeBan.util.Ban;
 
+/**
+ * Command to display some general status information about TimeBan.
+ */
 public class TimeBanInfoCommand extends TimeBanCommand {
 
     public TimeBanInfoCommand(TimeBan plugin) {
         super(plugin);
     }
-    
-    public void info(Player sender) {
+   
+    /**
+     * Player version of the command.
+     * 
+     * @param receiver Receiver of the info.
+     */
+    public void info(Player receiver) {
         Map<String, Ban> bans = plugin.getController().getBans();
-        sender.sendMessage("TimeBan - Info:");
-        sender.sendMessage("===============");
-        sender.sendMessage("Amount of bans: " + bans.size());
+        writeMessage(receiver, "TimeBan - Info:");
+        writeMessage(receiver, "===============");
+        writeMessage(receiver, "Amount of bans: " + bans.size());
         if (bans.size() > 0) {
-            sender.sendMessage("Next unban at: " + plugin.getController().getUpcomingBan().getUntil().getTime());
+            writeMessage(receiver, "Next unban at: " + plugin.getController().getUpcomingBan().getUntil().getTime());
         }
     }
 
+    /**
+     * Console version of the command.
+     */
     public void info() {
-        Map<String, Ban> bans = plugin.getController().getBans();
-        log.info("TimeBan - Info:");
-        log.info("===============");
-        log.info("Amount of bans: " + bans.size());
-        if (bans.size() > 0) {
-            log.info("Next unban at: " + plugin.getController().getUpcomingBan().getUntil().getTime());
-        }
+        info(null);
     }
 }

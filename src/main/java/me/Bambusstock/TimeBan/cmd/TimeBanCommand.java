@@ -5,17 +5,24 @@ import java.util.logging.Logger;
 import me.Bambusstock.TimeBan.TimeBan;
 import org.bukkit.entity.Player;
 
+/**
+ * Basic class to extend if you wanna create a new TimeBan command. This class
+ * provides you with a logger an enum and some methods to write messages.
+ */
 public class TimeBanCommand {
 
+    /**
+     * Enum containing available commands and their "names".
+     */
     public enum Commands {
 
         BAN("ban"),
-        UNBAN("unban"),
+        HELP("help"),
         INFO("info"),
         LIST("list"),
         RM("rm"),
         RUN("run"),
-        HELP("help");
+        UNBAN("unban");
 
         private String cmdName;
 
@@ -23,12 +30,22 @@ public class TimeBanCommand {
             this.cmdName = cmdName;
         }
 
+        /**
+         * Get the "name" of the command.
+         */
         public String getName() {
             return cmdName;
         }
     };
 
+    /**
+     * "Global" logger used by all commands.
+     */
     protected static final Logger log = Logger.getLogger("Minecraft");
+    
+    /**
+     * Plugin reference used by all commands.
+     */
     protected TimeBan plugin;
 
     public TimeBanCommand(TimeBan plugin) {
