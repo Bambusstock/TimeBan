@@ -30,7 +30,7 @@ public class TimeBanHelpCommand extends TimeBanCommand {
     }
 
     public void help() {
-        log.info("TimeBan Helptext");
+        log.info("TimeBan Help");
         log.info("==============");
 
         log.info(banSyntax);
@@ -53,7 +53,7 @@ public class TimeBanHelpCommand extends TimeBanCommand {
     }
 
     public void help(Player receiver) {
-        receiver.sendMessage(ChatColor.DARK_GREEN + "TimeBan Helptext");
+        receiver.sendMessage(ChatColor.DARK_GREEN + "TimeBan Help");
         receiver.sendMessage(ChatColor.DARK_GREEN + "==============");
 
         receiver.sendMessage(ChatColor.DARK_GREEN + banSyntax);

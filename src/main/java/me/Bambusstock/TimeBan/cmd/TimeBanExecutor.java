@@ -30,6 +30,10 @@ public class TimeBanExecutor implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        if(args.length == 0) {
+            return help(sender);
+        }
+        
         String subCommand = args[0];
 
         // fetch args for command
@@ -73,14 +77,14 @@ public class TimeBanExecutor implements CommandExecutor {
             }
             
             return rm(sender, commandArgs);
+        } else if (args[0].equalsIgnoreCase("help")) {
+            if (sender instanceof Player && !sender.hasPermission("timeban.help")) {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+                return true;
+            }
+            
+            return help(sender);
         }
-//       else if (args[0].equalsIgnoreCase("help")) {
-//            if (sender instanceof Player && !sender.hasPermission("timeban.help")) {
-//                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
-//                return true;
-//            }
-//            this.help(sender);
-//            return true;
         // else if (args[0].equalsIgnoreCase("run")) {
 //            if (sender instanceof Player && !sender.hasPermission("timeban.run")) {
 //                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
