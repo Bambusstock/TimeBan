@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author ferenc
+ * @author Bambusstock
  */
 public class BanComparator implements Comparator<Ban> {
     

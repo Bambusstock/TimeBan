@@ -14,7 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 /**
  *
- * @author ferenc
+ * @author Bambusstock
  */
 public class BanController {
 
