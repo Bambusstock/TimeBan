@@ -24,14 +24,25 @@ public class TimeBanUnbanCommand extends TimeBanCommand {
      * @param sender
      * @param players
      */
-    public void unban(Player sender, String[] players) {
+    public void unban(Player sender, List<String> players) {
         for (String playerName : players) {
+            
             Ban ban = plugin.getController().getBan(playerName);
             if (ban != null) {
-                TimeBanUnbanEvent event = new TimeBanUnbanEvent(sender, ban);
+                
+                TimeBanUnbanEvent event;
+                if(sender != null) {
+                    event = new TimeBanUnbanEvent(sender, ban);
+                } else {
+                    event = new TimeBanUnbanEvent(ban);
+                }
+                
                 this.plugin.getServer().getPluginManager().callEvent(event);
             } else {
-                sender.sendMessage(ChatColor.RED + "No ban for player ´" + playerName + "´ found!");
+                if(sender != null) {
+                    sender.sendMessage(ChatColor.RED + "No ban for player ´" + playerName + "´ found!");
+                }
+                log.log(Level.INFO, "No ban for player ´" + playerName + "´ found!");
             }
         }
     }
@@ -42,16 +53,8 @@ public class TimeBanUnbanCommand extends TimeBanCommand {
      *
      * @param players
      */
-    public void unban(String[] players) {
-        for (String playerName : players) {
-            Ban ban = plugin.getController().getBan(playerName);
-            if (ban != null) {
-                TimeBanUnbanEvent event = new TimeBanUnbanEvent(ban);
-                this.plugin.getServer().getPluginManager().callEvent(event);
-            } else {
-                log.log(Level.INFO, "[TimeBan] No ban for player \u00b4{0}\u00b4 found!", playerName);
-            }
-        }
+    public void unban(List<String> players) {
+        unban(null, players);
     }
 
     /**

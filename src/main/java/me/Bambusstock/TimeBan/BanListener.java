@@ -102,7 +102,6 @@ public class BanListener implements Listener {
     public void onTimeUnbanEvent(TimeBanUnbanEvent event) {
         Ban ban = event.getBan();
         String player = ban.getPlayer().getName();
-        String admin = event.getSender().getDisplayName();
         plugin.getController().executeUnban(ban);
 
         if (event.isSenderPlayer()) {
@@ -111,6 +110,7 @@ public class BanListener implements Listener {
                     player);
             event.getSender().sendMessage(userMessage);
 
+            String admin = event.getSender().getDisplayName();
             String serverMessage = String.format("[TimeBan] Unbaned and removed `%s` from banlist by %s",
                     player,
                     admin);

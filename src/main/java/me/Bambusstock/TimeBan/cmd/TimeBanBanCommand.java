@@ -15,7 +15,7 @@ public class TimeBanBanCommand extends TimeBanCommand {
     public TimeBanBanCommand(TimeBan plugin) {
         super(plugin);
     }
-
+    
     /**
      * Create a ban and fire a ban event.
      *
@@ -27,7 +27,14 @@ public class TimeBanBanCommand extends TimeBanCommand {
     public void ban(Player sender, List<String> players, Calendar until, String reason) {
         for (String playerName : players) {
             Ban ban = new Ban(this.plugin, playerName, until, reason);
-            TimeBanBanEvent event = new TimeBanBanEvent(sender, ban);
+            
+            TimeBanBanEvent event;
+            if(sender != null) {
+                event = new TimeBanBanEvent(sender, ban);
+            } else {
+                event = new TimeBanBanEvent(ban);
+            }
+            
             Bukkit.getServer().getPluginManager().callEvent(event);
         }
     }
@@ -40,11 +47,6 @@ public class TimeBanBanCommand extends TimeBanCommand {
      * @param reason Reason
      */
     public void ban(List<String> players, Calendar until, String reason) {
-        for (String playerName : players) {
-            Ban ban = new Ban(plugin, playerName, until, reason);
-            
-            TimeBanBanEvent event = new TimeBanBanEvent(ban);
-            Bukkit.getServer().getPluginManager().callEvent(event);
-        }
+        ban(null, players, until, reason);
     }
 }

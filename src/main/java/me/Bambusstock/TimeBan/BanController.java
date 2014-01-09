@@ -62,7 +62,7 @@ public class BanController {
         player.setBanned(false);
 
         synchronized (bans) {
-            bans.remove(ban);
+            bans.remove(ban.getPlayer().getName());
         }
 
         return true;

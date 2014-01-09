@@ -40,11 +40,18 @@ public class TimeBanExecutor implements CommandExecutor {
 
         if (subCommand.equals(Commands.BAN.getName())) {
             if (sender instanceof Player && !sender.hasPermission("timeban.ban")) {
-                sender.sendMessage(String.format(noPermissionMessage, "ban"));
+                sender.sendMessage(String.format(noPermissionMessage, Commands.BAN.getName()));
                 return true;
             }
             
             return ban(sender, commandArgs);
+        } else if(subCommand.equals(Commands.UNBAN.getName())) {
+            if (sender instanceof Player && !sender.hasPermission("timeban.unban")) {
+                sender.sendMessage(String.format(noPermissionMessage, Commands.UNBAN.getName()));
+                return true;
+            }
+            
+            return unban(sender, commandArgs);
         } else if (subCommand.equals(Commands.LIST.getName())) {
             if (sender instanceof Player && !sender.hasPermission("timeban.list")) {
                 sender.sendMessage(String.format(noPermissionMessage, "list"));
@@ -56,14 +63,7 @@ public class TimeBanExecutor implements CommandExecutor {
 //        FormatHelper helper = new FormatHelper();
 //        ArrayList<String> formattedArgs = helper.preFormatArgs(args, "\"");
 //
-//        if (args[0].equalsIgnoreCase("ban")) {
-//            if (sender instanceof Player && !sender.hasPermission("timeban.ban")) {
-//                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
-//                return true;
-//            }
-//            this.ban(sender, helper, formattedArgs);
-//            return true;
-//        } else if (args[0].equalsIgnoreCase("help")) {
+//       else if (args[0].equalsIgnoreCase("help")) {
 //            if (sender instanceof Player && !sender.hasPermission("timeban.help")) {
 //                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
 //                return true;
@@ -76,10 +76,6 @@ public class TimeBanExecutor implements CommandExecutor {
 //                return true;
 //            }
 //            this.info(sender);
-//            return true;
-//        } else if (args[0].equalsIgnoreCase("list")) {
-//            
-//            this.list(sender, helper, formattedArgs);
 //            return true;
 //        } else if (args[0].equalsIgnoreCase("rm")) {
 //            if (sender instanceof Player && !sender.hasPermission("timeban.rm")) {
@@ -255,28 +251,36 @@ public class TimeBanExecutor implements CommandExecutor {
 //        new TimeBanRunCommand(this.plugin).run();
 //    }
 //
-//    /**
-//     * Provide logic to examine the parameters to unban a player.
-//     *
-//     * @param sender
-//     * @param helper
-//     * @param args
-//     */
-//    public void unban(CommandSender sender, FormatHelper helper, ArrayList<String> args) {
-//        TimeBanUnbanCommand unban = new TimeBanUnbanCommand(this.plugin);
-//        if (helper.containsParameter(args, "a")) {
-//            if (sender instanceof Player) {
-//                unban.unbanAll((Player) sender);
-//            } else {
-//                unban.unbanAll();
-//            }
-//        } else {
-//            String[] players = args.get(1).split(",");
-//            if (sender instanceof Player) {
-//                unban.unban((Player) sender, players);
-//            } else {
-//                unban.unban(players);
-//            }
-//        }
-//    }
+    /**
+     * Get the parameters to call the TimeBanUnbanEvent.
+     *
+     * @param sender Sender of the command
+     * @param args arguments given with the command
+     * 
+     * @return true if command executed, false if wrong syntax
+     */
+    public boolean unban(CommandSender sender, String[] args) {
+        
+        TimeBanUnbanCommand unban = new TimeBanUnbanCommand(this.plugin);
+        if(CommandLineParser.isOptionPresent(args[0], 'a')) {
+            if(sender instanceof Player) {
+                unban.unbanAll((Player) sender);
+            } else {
+                unban.unbanAll();
+            }
+        } else if(args[0] != null && !args[0].isEmpty()) {
+            List<String> players = CommandLineParser.getListOfString(args[0]);
+            
+            if(sender instanceof Player) {
+                unban.unban((Player) sender, players);
+            } else {
+                unban.unban(players);
+            }
+        } else {
+            log.log(Level.SEVERE, "Error. Wrong syntax!");
+            return false;
+        }
+        
+        return true;
+    }
 }
