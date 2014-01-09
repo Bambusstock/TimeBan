@@ -19,6 +19,7 @@ public class TimeBanRunnable implements Runnable {
         Map<String, Ban> bans = plugin.getController().getBans();
         synchronized (bans) {
             if (bans.isEmpty()) {
+                log.info("[TimeBan] Banlist empty.");
                 return;
             }
             log.info("[TimeBan] Check for unbans...");

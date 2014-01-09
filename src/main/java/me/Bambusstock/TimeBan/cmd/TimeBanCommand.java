@@ -13,7 +13,9 @@ public class TimeBanCommand {
         UNBAN("unban"),
         INFO("info"),
         LIST("list"),
-        RM("rm");
+        RM("rm"),
+        RUN("run"),
+        HELP("help");
 
         private String cmdName;
 

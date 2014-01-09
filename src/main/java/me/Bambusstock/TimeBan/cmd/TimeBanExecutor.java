@@ -77,21 +77,21 @@ public class TimeBanExecutor implements CommandExecutor {
             }
             
             return rm(sender, commandArgs);
-        } else if (args[0].equalsIgnoreCase("help")) {
+        } else if (args[0].equals(Commands.HELP.getName())) {
             if (sender instanceof Player && !sender.hasPermission("timeban.help")) {
-                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+                sender.sendMessage(String.format(noPermissionMessage, Commands.HELP.getName()));
                 return true;
             }
             
             return help(sender);
+        }  else if (args[0].equals(Commands.RUN.getName())) {
+            if (sender instanceof Player && !sender.hasPermission("timeban.run")) {
+                sender.sendMessage(String.format(noPermissionMessage, Commands.RUN.getName()));
+                return true;
+            }
+            
+            return run(sender);
         }
-        // else if (args[0].equalsIgnoreCase("run")) {
-//            if (sender instanceof Player && !sender.hasPermission("timeban.run")) {
-//                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
-//                return true;
-//            }
-//            this.run(sender);
-//            return true;
         return false;
     }
 
@@ -244,16 +244,17 @@ public class TimeBanExecutor implements CommandExecutor {
         
         return true;
     }
-//
-//    /**
-//     * Provide logic to examine the parameters to remove the ban of a player.
-//     *
-//     * @param sender
-//     */
-//    public void run(CommandSender sender) {
-//        new TimeBanRunCommand(this.plugin).run();
-//    }
-//
+
+    /**
+     * Provide logic to examine the parameters to remove the ban of a player.
+     *
+     * @param sender
+     */
+    public boolean run(CommandSender sender) {
+        new TimeBanRunCommand(plugin).run();
+        return true;
+    }
+
     /**
      * Get the parameters to call the TimeBanUnbanEvent.
      *
