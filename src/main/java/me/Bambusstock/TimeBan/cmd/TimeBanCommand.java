@@ -10,6 +10,7 @@ public class TimeBanCommand {
         
         BAN("ban"),
         UNBAN("unban"),
+        INFO("info"),
         LIST("list");
         
         private String cmdName;

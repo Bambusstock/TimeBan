@@ -5,7 +5,6 @@ import me.Bambusstock.TimeBan.TimeBan;
 import org.bukkit.entity.Player;
 
 import me.Bambusstock.TimeBan.util.Ban;
-import org.bukkit.command.PluginCommand;
 
 public class TimeBanInfoCommand extends TimeBanCommand {
 

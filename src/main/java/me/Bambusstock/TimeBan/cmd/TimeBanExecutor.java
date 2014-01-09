@@ -54,15 +54,19 @@ public class TimeBanExecutor implements CommandExecutor {
             return unban(sender, commandArgs);
         } else if (subCommand.equals(Commands.LIST.getName())) {
             if (sender instanceof Player && !sender.hasPermission("timeban.list")) {
-                sender.sendMessage(String.format(noPermissionMessage, "list"));
+                sender.sendMessage(String.format(noPermissionMessage, Commands.LIST.getName()));
                 return true;
             }
             
             return list(sender, commandArgs);
+        } else if(subCommand.equals(Commands.INFO.getName())) {
+             if (sender instanceof Player && !sender.hasPermission("timeban.info")) {
+                sender.sendMessage(String.format(noPermissionMessage, Commands.INFO.getName()));
+                return true;
+            }
+             
+            return info(sender);
         }
-//        FormatHelper helper = new FormatHelper();
-//        ArrayList<String> formattedArgs = helper.preFormatArgs(args, "\"");
-//
 //       else if (args[0].equalsIgnoreCase("help")) {
 //            if (sender instanceof Player && !sender.hasPermission("timeban.help")) {
 //                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
@@ -91,14 +95,6 @@ public class TimeBanExecutor implements CommandExecutor {
 //            }
 //            this.run(sender);
 //            return true;
-//        } else if (args[0].equalsIgnoreCase("unban")) {
-//            if (sender instanceof Player && !sender.hasPermission("timeban.unban")) {
-//                sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
-//                return true;
-//            }
-//            this.unban(sender, helper, formattedArgs);
-//            return true;
-//        }
         return false;
     }
 
@@ -172,6 +168,8 @@ public class TimeBanExecutor implements CommandExecutor {
      * Display some information about TimeBan on the server.
      *
      * @param sender
+     * 
+     * @return true
      */
     public boolean info(CommandSender sender) {
         TimeBanInfoCommand info = new TimeBanInfoCommand(this.plugin);
