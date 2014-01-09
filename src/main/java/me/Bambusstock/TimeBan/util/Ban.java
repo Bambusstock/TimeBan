@@ -1,18 +1,19 @@
 package me.Bambusstock.TimeBan.util;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import me.Bambusstock.TimeBan.TimeBan;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
-import org.bukkit.entity.Player;
-
 public class Ban implements Serializable, Comparable<Ban> {
 
     private static final long serialVersionUID = -4327491657720734089L;
     private transient TimeBan plugin;
+    
+    private static final SimpleDateFormat shortFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
 
     private String stdReason = "Standard reason";
     private int stdBanDuration = 3600;
@@ -113,12 +114,11 @@ public class Ban implements Serializable, Comparable<Ban> {
     /**
      * Convert this object into a string.
      */
+    @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append("`").append(player).append("`").append(" until ");
-        b.append(until.get(Calendar.DAY_OF_MONTH)).append(".");
-        b.append(until.get(Calendar.MONTH)).append(".");
-        b.append(until.get(Calendar.YEAR));
+        b.append(shortFormat.format(until.getTime()));
         b.append(" - ").append(reason);
         
         return b.toString();

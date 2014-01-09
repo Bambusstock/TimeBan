@@ -39,12 +39,12 @@ public class TimeBanListCommand extends TimeBanCommand {
      * @param simple Output style
      */
     public void list(Player sender, String search, boolean reverse, boolean simple) {
-        sender.sendMessage("=== TimeBan - Listing ===");
+        writeMessage(sender, "=== TimeBan search results ===");
         List<Ban> result = plugin.getController().searchBans(search, reverse);
         if (!result.isEmpty()) {
             if (simple == true) {
                 for (Ban b : result) {
-                    sender.sendMessage(b.toString());
+                    writeMessage(sender, b.toString());
                 }
             } else {
                 for (Ban b : result) {
@@ -52,13 +52,29 @@ public class TimeBanListCommand extends TimeBanCommand {
                     String until = b.getUntil().getTime().toString();
                     String reason = b.getReason();
 
-                    sender.sendMessage(String.format(userMessage, player, until, reason));
+                   writePrettyMessage(sender, player, until, reason);
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.GREEN + "No bans found.");
+            writeMessage(sender, "No bans found.");
         }
-        sender.sendMessage("======================");
+        writeMessage(sender, "======================");
+    }
+    
+    protected void writeMessage(Player sender, String message) {
+        if(sender == null) {
+            log.info(message);
+        } else {
+            sender.sendMessage(message);
+        }
+    }
+    
+    protected void writePrettyMessage(Player sender, String... args) {
+        if(sender == null) {
+            log.info(String.format(consoleMessage, args));
+        } else {
+            sender.sendMessage(String.format(userMessage, args));
+        }
     }
 
     /**
@@ -69,23 +85,6 @@ public class TimeBanListCommand extends TimeBanCommand {
      * @param simple True, then the ban information are compressed
      */
     public void list(String search, boolean reverse, boolean simple) {
-        List<Ban> bans = plugin.getController().searchBans(search, reverse);
-        if (!bans.isEmpty()) {
-            if (simple == true) {
-                for(Ban b : bans) {
-                    log.info(b.toString());
-                }
-            } else {
-                for(Ban b : bans) {
-                    String player = b.getPlayer().getName();
-                    String until = b.getUntil().getTime().toString();
-                    String reason = b.getReason();
-                    
-                    log.info(String.format(consoleMessage, player, until, reason));
-                }
-            }
-        } else {
-            log.info("No bans found.");
-        }
+        list(null, search, reverse, simple);
     }
 }

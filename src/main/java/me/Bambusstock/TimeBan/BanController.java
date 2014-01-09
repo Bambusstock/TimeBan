@@ -23,7 +23,7 @@ public class BanController {
 
     public void init() {
         bans = BanMapLoader.load("./plugins/TimeBan/banlist.dat");
-        if(bans.isEmpty()) {
+        if(bans == null || bans.isEmpty()) {
             bans = new TreeMap<String, Ban>();
         }
     }
