@@ -99,9 +99,9 @@ Configuration
 
 ### General
 
-#### `defaultDuration` (Default: 3600 (1 hour))
+#### `defaultDuration` (Default: 1h (1 hour))
 
-Use this to define a default duration. If you leave out the <seconds> pattern, this is automatically used.
+Use this to define a default duration. Understands the "simple format" from above. If you leave out the <seconds> pattern calling a command, this is automatically used.
 
 #### `defaultReason` (Default: "Default reason.")
 
@@ -161,6 +161,7 @@ Possible features:
 - Configuration:
 	- standard ban duration with untilstring instead of seconds
 	- reload option
+	- silent
 - Undo command
 - Import and Export of ban list
 - Ban list in different formats
