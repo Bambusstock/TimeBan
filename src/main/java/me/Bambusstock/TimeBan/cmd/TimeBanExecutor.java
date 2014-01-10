@@ -51,6 +51,7 @@ public class TimeBanExecutor implements CommandExecutor {
         String[] commandArgs = new String[0];
         if (args.length > 1) {
             commandArgs = Arrays.copyOfRange(args, 1, args.length);
+            commandArgs = CommandLineParser.normalizeArgs(commandArgs);
         }
 
         if (subCommand.equals(Commands.BAN.getName())) {
