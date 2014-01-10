@@ -1,6 +1,6 @@
 name: TimeBan
 main: me.Bambusstock.TimeBan.TimeBan
-version: 0.5
+version: 0.5.2
 commands:
  timeban:
   description: Use `/timeban help` to display help for all commands
