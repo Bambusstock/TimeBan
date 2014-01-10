@@ -36,8 +36,8 @@ public class TimeBanExecutor implements CommandExecutor {
         this.plugin = instance;
 
         // Get standard ban duration
-        stdBanDuration = plugin.getConfig().getString("stdBanDuration", "1h");
-        stdBanReason = plugin.getConfig().getString("stdBanReason", "Standard Reason");
+        stdBanDuration = plugin.getConfig().getString("defaultBanDuration", "1h");
+        stdBanReason = plugin.getConfig().getString("defaultBanReason", "No reason given.");
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
