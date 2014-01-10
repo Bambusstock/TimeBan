@@ -27,7 +27,7 @@ public class TimeBanHelpCommand extends TimeBanCommand {
         "Display some information like ban amount.\n",
         
         "/timeban list [search] [-rs]",
-        "List all bans. Use \"-r\" for reverse order. \"s for short display.\n",
+        "List all bans. Use \"-r\" for reverse order. \"s\" for short display.\n",
         
         "/timeban run",
         "Check for unbans."
