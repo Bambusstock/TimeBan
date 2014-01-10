@@ -8,6 +8,59 @@ import java.util.List;
  * @author Bambusstock
  */
 public class CommandLineParser {
+    
+    /**
+     * Processes a array of string passed as args to a command.
+     * The use of Strings like "Hello World!" often results in a
+     * array like ['"Hello ", 'World!"']. This methods is going to
+     * combine these Strings.
+     * 
+     * Strings like '"hello " world"' are considered illegal.
+     * Nevertheless a string like '"hello' etc. is ok.
+     * 
+     * @param args to process
+     * 
+     * @return a normalized pack of args.
+     */
+    public static String[] normalizeArgs(String[] args) {
+        if(args == null) {
+            return null;
+        } else if(args.length == 0) {
+            return new String[0];
+        } else if(args.length == 1) {
+            return args;
+        }
+        
+        List<String> stack = new ArrayList<String>();
+        StringBuilder builder = new StringBuilder();
+        boolean shrinking = false;
+        for(String s : args) {
+            
+            // if this is not a starting '"' and we're not already shrinking...
+            if(!s.startsWith("\"") && !shrinking) {
+                stack.add(s);
+            } else {
+                builder.append(s).append(" ");
+                shrinking = true;
+            }
+            
+            // all this should only happen if we already had a starting "
+            if(s.endsWith("\"") && shrinking) {
+                builder.deleteCharAt(builder.length()-1);
+                stack.add(builder.toString());
+                builder = new StringBuilder();
+                shrinking = false;
+            }
+        }
+        
+        // a string like hello "world or hello world" was entered
+        // "hello " world" may also be possible but is considered illegal...
+        if(shrinking == true) {
+            return args;
+        }
+        
+        return stack.toArray(new String[] {});
+    }
 
     /**
      * Gets all options like /cmd test -ra -> [r, a].

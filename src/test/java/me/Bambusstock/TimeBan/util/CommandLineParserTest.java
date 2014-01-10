@@ -129,4 +129,54 @@ public class CommandLineParserTest {
         result = CommandLineParser.getPrettyString(null);
         assertNull(result);
     }
+    
+    @Test
+    public void testNormalizeArgs() {
+        String[] argsA = {"ban", "someone", "2d", "\"This", "is", "a", "reason!\""};
+        String[] supposedResultA = {"ban", "someone", "2d", "\"This is a reason!\""};
+        
+        String[] argsB = {"ban", "someone", "2d", "\"bla\""};
+        String[] supposedResultB = {"ban", "someone", "2d", "\"bla\""};
+        
+        String[] argsC = {"ban"};
+        
+        String[] argsD = {"\"start", "message\""};
+        String[] supposedResultD = {"\"start message\""};
+        
+        String[] argsE = {"ban", "incomplete", "\"ok", "that"};
+        
+        String[] argsF = {"ban", "something", "finished\""};
+        
+        String[] argsG = {"ban", "someo\"ne"};
+        
+        
+        // Test predefined results...
+        String[] result = CommandLineParser.normalizeArgs(argsA);
+        assertArrayEquals(supposedResultA, result);
+        
+        result = CommandLineParser.normalizeArgs(argsB);
+        assertArrayEquals(supposedResultB, result);
+        
+        result = CommandLineParser.normalizeArgs(argsC);
+        assertArrayEquals(argsC, result);
+        
+        result = CommandLineParser.normalizeArgs(argsD);
+        assertArrayEquals(supposedResultD, result);
+        
+        result = CommandLineParser.normalizeArgs(argsE);
+        assertArrayEquals(argsE, result);
+        
+        result = CommandLineParser.normalizeArgs(argsF);
+        assertArrayEquals(argsF, result);
+        
+        result = CommandLineParser.normalizeArgs(argsG);
+        assertArrayEquals(argsG, result);
+        
+        // Test null and empty arrays        
+        result = CommandLineParser.normalizeArgs(new String[0]);
+        assertArrayEquals(new String[0], result);
+        
+        result = CommandLineParser.normalizeArgs(null);
+        assertNull(result);
+    }
 }
