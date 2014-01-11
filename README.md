@@ -1,16 +1,17 @@
-TimeBan - Banning plugin for Craftbukkit using the Bukkit-API
-=============================================================
+TimeBan - Temporary bans for Craftbukkit
+========================================
 
-Ever wanted to temporary ban a player and don't care about unbanning? With a custom reason, displayed when the players is kicked, or tries to login? Try TimeBan...
+TimeBan provides you with the abillity to temporary ban players. You may also set a custom ban reason displayed when kicking the player and when the player tries to join your server.
 
 Features
 --------
-- Temporary ban a player as long as you like. With custom reason.
-- Banned players will see the reason when they are kicked an also if they try to login.
+- Temporary ban a player with a custom reason.
+- Banned players will see the reason when they are kicked an also if they attempt to login.
 - Ban multiple users with the same duration and same custom reason in one command.
-- TimeBan automatically check for unbans. On login and while the server is running. (You can set the interval in minutes.)
+- TimeBan automatically checks for unbans. On login and while the server is running. (You can define a interval in minutes.)
 - Unban multiple users with one command. Or even all with "-a". (More information below.)
-- List all temporary bans. Possible parameters: search(regular expression), reverse ordering, short output.
+- List all temporary bans.
+- Search through the list of temporary bans.
 - Remove a temporary ban, but keep the ban itself.
 - Get quick information about the amount of temporary bans and the date of the next unban.
 - Run the TimeBan scheduler manually.
@@ -25,26 +26,28 @@ Quick introduction
 
 You wan't to ban a player? No problem:
 
-	/timeban ban <username,username2> <until> <reason>
+	/timeban ban <username,username2> <duration> <reason>
 
-It's quite easier then it looks at first. Let's have a look a the parameters. (For more detailed information see below!)
+Let's have a look a the parameters. (For more detailed information see below!)
+
 - `<username,username2>` Enter the username(s) of the player(s) you wan't to ban.
-- `<until>` There is a [simple format] to tell TimeBan how long you wan't to ban a bad guy. Leave out and TimeBan uses the standard ban duration.
+- `<duration>` There is a [simple format] to tell TimeBan how long you wan't to ban a bad guy. Leave out and TimeBan uses the standard ban duration.
 - `<reason>` Enter a reason embeded in a ". Example: `/timeban ban testuser 1d "No griefing!"`
 
 ### Unban a player
 
-You have mistakable banned a player or wan't to unban him before his unban date? No problem:
+Banned a player by mistake or wan't to unban him early? Use the unban command:
 
 	/timeban unban <username,username2>
-	
+
 The "simple format"
 -------------------
 
 How do you tell TimeBan, how long a player should be banned? There is a simple syntax. Let's say you wan't to ban a player for one day. The "string" would look like this: `1d`. Ban a player for two days and twelve hours: `2d12h`. A overview of "shortcuts":
+
 - `y` - Year
-- `m` - Month 
-- `w` - Week 
+- `m` - Month
+- `w` - Week
 - `d` - Day
 - `h` - Hours
 - `i` - Minutes
@@ -53,17 +56,19 @@ How do you tell TimeBan, how long a player should be banned? There is a simple s
 You can combine this however you wan't (theoretically, there would be so many test cases ;)). Two more examples:
 
 	1y5m20w, 2h30i
-	
+
+__Please keep in mind that you have to maintain the order of the shortcuts from year to seconds!__
+
 Command Syntax
 --------------
 
-Some commands use parameters, some not. Some parameters are voluntary, some are required. Let's talk about the "syntax" desrcibing these types of parameters:
+Some commands use parameters, some not. Some parameters are voluntary, some are required.
 
-Parameters in angle brackets ("<", ">") are required.
-
-Parameters in square brackets ("[", "]") are voluntary.
+- Parameters in angle brackets ("<", ">") are required.
+- Parameters in square brackets ("[", "]") are voluntary.
 
 A combination of angle and square brackets means, that just one of the parameters are required. I think it's logically if you look at the command but a short example:
+
 `<[a] [b]>` You  need to specify either the "a" parameter or the "b" parameter.
 
 Commands
@@ -71,7 +76,11 @@ Commands
 
 ### /timeban ban <username,username2> [duration] "[reason]"
 
-Ban a player or more. [duration] will follow the "simple format" and specifies the ban duration. If no duration is specified TimeBan uses a standard ban duration defined in the configuration. [reason] specifies the reason why the player was banned. If you don't specify the reason TimeBan will use the default reason defined in the configuration.  
+Ban one or more players.
+
+[duration] will follow the "simple format" and specifies the ban duration. If no duration is specified TimeBan uses a standard ban duration defined in the configuration.
+
+[reason] specifies the reason why the player was banned. If you don't specify the reason TimeBan will use the default reason defined in the configuration.
 
 ### /timeban unban <[username,username2] [-a]>
 
@@ -101,7 +110,7 @@ Configuration
 
 #### `defaultDuration` (Default: 1h (1 hour))
 
-Use this to define a default duration. Understands the "simple format" from above. If you leave out the <seconds> pattern calling a command, this is automatically used.
+Use this to define a default duration. Understands the "simple format" from above. If you leave out the <duration> pattern calling a command, this is automatically used.
 
 #### `defaultReason` (Default: "Default reason.")
 
@@ -122,7 +131,7 @@ The TimeBan command itself.
 Define who can ban a player using TimeBan.
 
 ### timeban.unban (Default: op)
-  
+
 Define who can unban a player using Timeban.
 
 ### timeban.info (Default: op)
@@ -130,40 +139,30 @@ Define who can unban a player using Timeban.
 Define who is able to view information like amount of bans.
 
 ### timeban.help (Default: op)
-  
+
 Define who is able to see help information.
 
 ### timeban.list (Default: op)
-  
+
 Define who can list all bans.
 
 ### timeban.rm (Default: op)
- 
+
 Define who can remove a Timeban.
 
 ### timeban.run (Default: op)
 
 Define who can run the Timeban task.
 
-Known Bugs
-----------
-
-Actually there is a problem with the sorting of the banlist. It's possible that you get a ascending order and after a reload a descending order, if you use the list command. The "r" parameter will help you out. :)
+Upcoming features:
+------------------
+- new option to run timeban silent (no output)
+- use the ChatPaginator for timeban list output
 
 Possible features:
 ------------------
-- Ban command:
-	- also possible to ban until a date instead of untilstring
-- List command:
-	- use ChatPaginator
-	- option to list upcoming unbans (maybe a own command?)
-	- ranges
-- Configuration:
-	- standard ban duration with untilstring instead of seconds
-	- reload option
-	- silent
-- Undo command
-- Import and Export of ban list
-- Ban list in different formats
-- Permissions:
-	- additional permissions like a permission to ban a player more than 10 hours	
+- ban until date instead of untilstring
+- list upcoming bans
+- reload timbean configuration
+- undo command
+- import and export the list of bans
