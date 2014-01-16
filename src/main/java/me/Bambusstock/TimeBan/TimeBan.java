@@ -8,7 +8,6 @@ public class TimeBan extends JavaPlugin {
 
     private static final Logger log = Logger.getLogger("Minecraft");
     private BanController controller;
-    private long runDelay;
 
     public void onEnable() {
         // set up configuration
@@ -19,8 +18,8 @@ public class TimeBan extends JavaPlugin {
         controller.init();
 
         // register listener
+        scheduleBanChecker();
         this.getServer().getPluginManager().registerEvents(new BanListener(this), this);
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TimeBanRunnable(this), 60L, this.runDelay * 20 * 60);
 
         // register commands
         this.getCommand("timeban").setExecutor(new TimeBanExecutor(this));
@@ -34,7 +33,14 @@ public class TimeBan extends JavaPlugin {
     public void configureMe() {
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
-        this.runDelay = this.getConfig().getLong("runDelay");
+    }
+    
+    protected void scheduleBanChecker() {
+        boolean isSilent = getConfig().getBoolean("runSilent", false);
+        long runDelay = getConfig().getLong("runDelay", 1);
+        
+        TimeBanRunnable r = new TimeBanRunnable(this, isSilent);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, r, 60L, runDelay * 20 * 60);
     }
 
     public BanController getController() {

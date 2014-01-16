@@ -111,20 +111,22 @@ public class BanListener implements Listener {
         String player = ban.getPlayer().getName();
         plugin.getController().executeUnban(ban);
 
-        if (event.isSenderPlayer()) {
-            String userMessage = String.format("%sUnbanned `%s` from banlist.",
-                    ChatColor.DARK_GREEN,
-                    player);
-            event.getSender().sendMessage(userMessage);
+        if(!event.isSilent()) {
+            if (event.isSenderPlayer()) {
+                String userMessage = String.format("%sUnbanned `%s` from banlist.",
+                        ChatColor.DARK_GREEN,
+                        player);
+                event.getSender().sendMessage(userMessage);
 
-            String admin = event.getSender().getDisplayName();
-            String serverMessage = String.format("[TimeBan] Unbaned and removed `%s` from banlist by %s",
-                    player,
-                    admin);
+                String admin = event.getSender().getDisplayName();
+                String serverMessage = String.format("[TimeBan] Unbaned and removed `%s` from banlist by %s",
+                        player,
+                        admin);
 
-            log.log(Level.INFO, serverMessage);
-        } else {
-            log.log(Level.INFO, "[TimeBan] Unbaned and removed `{0}` from banlist.", player);
+                log.log(Level.INFO, serverMessage);
+            } else {
+                log.log(Level.INFO, "[TimeBan] Unbaned and removed `{0}` from banlist.", player);
+            }
         }
     }
 }

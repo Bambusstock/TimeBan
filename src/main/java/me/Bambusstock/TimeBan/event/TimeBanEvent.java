@@ -11,6 +11,7 @@ public class TimeBanEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     protected Ban ban;
     protected Player sender;
+    private boolean silent;
  
     public TimeBanEvent(Player sender, Ban ban) {
      	this.ban = ban;
@@ -52,4 +53,13 @@ public class TimeBanEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
+
+    public boolean isSilent() {
+        return silent;
+    }
+
+    public void setSilent(boolean silent) {
+        this.silent = silent;
+    }
+    
 }

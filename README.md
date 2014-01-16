@@ -120,6 +120,10 @@ Define a default reason.
 
 Define the amount of minutes between one run of the scheduler and the next.
 
+### `runSilent` (Default: true)
+
+Define if the UnbanBot should produce output (server log).
+
 Permissions
 -----------
 ### timeban.all (Default: op)
@@ -156,13 +160,12 @@ Define who can run the Timeban task.
 
 Upcoming features:
 ------------------
-- new option to run timeban silent (no output)
 - use the ChatPaginator for timeban list output
+- list upcoming bans
 
 Possible features:
 ------------------
 - ban until date instead of untilstring
-- list upcoming bans
 - reload timbean configuration
 - undo command
 - import and export the list of bans

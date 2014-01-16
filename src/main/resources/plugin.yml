@@ -1,12 +1,12 @@
 name: TimeBan
 main: me.Bambusstock.TimeBan.TimeBan
-version: 0.5.2
+version: 0.5.3
 commands:
  timeban:
   description: Use `/timeban help` to display help for all commands
   usage: /<command> [argument]
   permission: timeban.all
-  permission-message: Sorry, you're not validly to use the timeban command on this server.
+  permission-message: Sorry, you're not allowed to use the timeban command on this server.
 permissions:
  timeban.all:
   description: The Timeban command itself.
