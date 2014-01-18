@@ -120,7 +120,7 @@ Define a default reason.
 
 Define the amount of minutes between one run of the scheduler and the next.
 
-### `runSilent` (Default: true)
+#### `runSilent` (Default: true)
 
 Define if the UnbanBot should produce output (server log).
 
