@@ -179,4 +179,28 @@ public class CommandLineParserTest {
         result = CommandLineParser.normalizeArgs(null);
         assertNull(result);
     }
+    
+    @Test
+    public void testIsInteger() {
+        boolean result = CommandLineParser.isInteger("1");
+        assertEquals(result, true);
+        
+        result = CommandLineParser.isInteger("0");
+        assertTrue(result);
+        
+        result = CommandLineParser.isInteger("-1");
+        assertTrue(result);
+        
+        result = CommandLineParser.isInteger("a");
+        assertFalse(result);
+        
+        result = CommandLineParser.isInteger("-1a");
+        assertFalse(result);
+        
+        result = CommandLineParser.isInteger("");
+        assertFalse(result);
+        
+        result = CommandLineParser.isInteger(null);
+        assertFalse(result);
+    }
 }

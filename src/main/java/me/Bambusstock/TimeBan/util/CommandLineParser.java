@@ -102,6 +102,28 @@ public class CommandLineParser {
 
         return result;
     }
+    
+    /**
+     * Check if the given arg is of type integer.
+     * 
+     * @param cmdLineArg arg to check
+     * 
+     * @return true if could be parsed as integer.
+     */
+    public static boolean isInteger(String cmdLineArg) {
+        if(cmdLineArg == null || cmdLineArg.isEmpty()) {
+            return false;
+        }
+        
+        boolean result;
+        try {
+            Integer.parseInt(cmdLineArg);
+            result = true;
+        } catch(NumberFormatException e) {
+            result = false;
+        }
+        return result;
+    }
 
     /**
      * Extract a list of strings from a command line arg. E.g. - user,user2 ->

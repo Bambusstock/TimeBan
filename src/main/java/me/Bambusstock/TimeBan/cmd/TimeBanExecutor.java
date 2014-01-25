@@ -21,7 +21,7 @@ public class TimeBanExecutor implements CommandExecutor {
      * Logger used by this class.
      */
     private static final Logger log = Logger.getLogger("Minecraft");
-    
+
     /**
      * Message to be shown if a player misses a permission to use a command.
      */
@@ -41,10 +41,10 @@ public class TimeBanExecutor implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if(args.length == 0) {
+        if (args.length == 0) {
             return help(sender);
         }
-        
+
         String subCommand = args[0];
 
         // fetch args for command
@@ -87,21 +87,21 @@ public class TimeBanExecutor implements CommandExecutor {
                 sender.sendMessage(String.format(noPermissionMessage, Commands.RM.getName()));
                 return true;
             }
-            
+
             return rm(sender, commandArgs);
         } else if (args[0].equals(Commands.HELP.getName())) {
             if (sender instanceof Player && !sender.hasPermission("timeban.help")) {
                 sender.sendMessage(String.format(noPermissionMessage, Commands.HELP.getName()));
                 return true;
             }
-            
+
             return help(sender);
-        }  else if (args[0].equals(Commands.RUN.getName())) {
+        } else if (args[0].equals(Commands.RUN.getName())) {
             if (sender instanceof Player && !sender.hasPermission("timeban.run")) {
                 sender.sendMessage(String.format(noPermissionMessage, Commands.RUN.getName()));
                 return true;
             }
-            
+
             return run(sender);
         }
         return false;
@@ -114,7 +114,7 @@ public class TimeBanExecutor implements CommandExecutor {
      * @param sender Sender of the command (player or console)
      * @param args Arguments given for the command (doesn't include timeban
      * command (e.g. ban or unban).
-     * 
+     *
      * @return true if ok, false if wrong syntax
      */
     public boolean ban(CommandSender sender, String[] args) {
@@ -161,7 +161,7 @@ public class TimeBanExecutor implements CommandExecutor {
      * Calls the command to display a help text.
      *
      * @param receiver Receiver of the help text.
-     * 
+     *
      * @return true
      */
     public boolean help(CommandSender receiver) {
@@ -202,29 +202,51 @@ public class TimeBanExecutor implements CommandExecutor {
      * @return true if finished or false on error.
      */
     public boolean list(CommandSender receiver, String[] args) {
+        int page = 0;
         String search = null;
         boolean listReverse = false;
         boolean listSimple = false;
-        
-        if (args.length == 2) {
-            search = args[0];
-            listReverse = CommandLineParser.isOptionPresent(args[1], 'r');
-            listSimple = CommandLineParser.isOptionPresent(args[1], 's');
-        } else if(args.length == 1) {
-            listReverse = CommandLineParser.isOptionPresent(args[0], 'r');
-            listSimple = CommandLineParser.isOptionPresent(args[0], 's');
-            if(listReverse || listSimple) {
-                search = null;
+
+        if (args.length == 3) {
+            page = Integer.parseInt(args[0]);
+            search = args[1];
+            listReverse = CommandLineParser.isOptionPresent(args[2], 'r');
+            listSimple = CommandLineParser.isOptionPresent(args[2], 's');
+        } else if (args.length == 2) {
+            if(CommandLineParser.isInteger(args[0])) {
+                page = Integer.parseInt(args[0]);
+                
+                listReverse = CommandLineParser.isOptionPresent(args[1], 'r');
+                listSimple = CommandLineParser.isOptionPresent(args[1], 's');
+                
+                if(!listReverse && !listSimple) {
+                    search = args[1];
+                }
             } else {
                 search = args[0];
+                listReverse = CommandLineParser.isOptionPresent(args[1], 'r');
+                listSimple = CommandLineParser.isOptionPresent(args[1], 's');
+            }
+        } else if (args.length == 1) {
+            if (CommandLineParser.isInteger(args[0])) {
+                page = Integer.parseInt(args[0]);
+            } else {
+                listReverse = CommandLineParser.isOptionPresent(args[0], 'r');
+                listSimple = CommandLineParser.isOptionPresent(args[0], 's');
+
+                if (listReverse || listSimple) {
+                    search = null;
+                } else {
+                    search = args[0];
+                }
             }
         }
 
         TimeBanListCommand list = new TimeBanListCommand(plugin);
         if (receiver instanceof Player) {
-            list.list((Player) receiver, search, listReverse, listSimple);
+            list.list((Player) receiver, page, search, listReverse, listSimple);
         } else {
-            list.list(search, listReverse, listSimple);
+            list.list(page, search, listReverse, listSimple);
         }
 
         return true;
@@ -235,28 +257,28 @@ public class TimeBanExecutor implements CommandExecutor {
      *
      * @param sender
      * @param args
-     * 
+     *
      * @return true
      */
     public boolean rm(CommandSender sender, String[] args) {
         TimeBanRmCommand rm = new TimeBanRmCommand(plugin);
-        
-        if(CommandLineParser.isOptionPresent(args[0], 'a')) {
-            if(sender instanceof Player) {
+
+        if (CommandLineParser.isOptionPresent(args[0], 'a')) {
+            if (sender instanceof Player) {
                 rm.rmAll((Player) sender);
             } else {
                 rm.rmAll();
             }
         } else {
             List<String> players = CommandLineParser.getListOfString(args[0]);
-            
-            if(sender instanceof Player) {
+
+            if (sender instanceof Player) {
                 rm.rm((Player) sender, players);
             } else {
                 rm.rm(players);
             }
         }
-        
+
         return true;
     }
 
@@ -264,7 +286,7 @@ public class TimeBanExecutor implements CommandExecutor {
      * Provide logic to examine the parameters to remove the ban of a player.
      *
      * @param sender
-     * 
+     *
      * @return true
      */
     public boolean run(CommandSender sender) {
