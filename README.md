@@ -160,7 +160,8 @@ Define who can run the Timeban task.
 
 Upcoming features:
 ------------------
-- use the ChatPaginator for timeban list output
+- language files
+- standardized output
 - list upcoming bans
 
 Possible features:
