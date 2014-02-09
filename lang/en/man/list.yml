@@ -1,0 +1,12 @@
+#
+# display list help page
+#
+manTitle: '/timeban list [search] [-r|s]'
+manDescription: 
+  - 'List temporary bans.'
+manParameters: 
+  - '* [search] - search pattern (regex)'
+  - '* -r - sort bans by unban date descending'
+  - '* -s - display short output'
+manExamples:
+  - ''

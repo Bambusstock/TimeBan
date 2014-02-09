@@ -1,0 +1,15 @@
+#
+# display ban help page
+#
+manTitle: '/timeban ban <user,...> [duration] [reason]'
+manDescription: 
+  - 'Temporary ban a player.'
+manParameters:
+  - '* <user,...> - a list of usernames(offline/online)'
+  - '* [duration] - ban duration'
+  - '* [reason] - reason surrounded by "'
+manExamples: 
+  - '/timeban ban test1,test2 2w "Griefing!"'
+  - '/timeban ban test1'
+  - '/timeban ban test 2d'
+  - '/timeban ban test "Griefing!"'

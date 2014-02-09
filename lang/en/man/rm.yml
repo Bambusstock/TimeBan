@@ -1,0 +1,10 @@
+#
+# display rm help page
+#
+manTitle: '/timeban rm <[user,...] [-a]>'
+manDescription:
+  - 'Remove temporary ban but keep the player banned.'
+manParameters:
+  - 'Either specify a list of users(offline/online) or use -a to unban all users.'
+manExamples:
+  - ''

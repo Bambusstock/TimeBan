@@ -1,0 +1,15 @@
+#
+# display a general help page
+#
+manTitle: 'TimeBan Help'
+manDescription:
+  - 'Use ´/timeban help [cmd]´ to get more information on a specific command.'
+manParameters:
+  - '* ban - temporary ban a player'
+  - '* unban - unban a temporary ban'
+  - '* rm - remove a temporary ban'
+  - '* info - display general information'
+  - '* list - list temporary bans'
+  - '* run - check for unbans'
+manExamples:
+  - '/timeban help ban'

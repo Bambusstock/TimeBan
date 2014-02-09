@@ -1,0 +1,10 @@
+#
+# display unban help page
+#
+manTitle: '/timeban unban <user,...>'
+manDescription:
+  - 'Remove the temporary ban and unban a player.'
+manParameters:
+  - '* <user,...> - usernames to unban(online/offline)'
+manExamples:
+  - ''
