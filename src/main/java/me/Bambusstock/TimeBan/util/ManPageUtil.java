@@ -2,6 +2,7 @@ package me.Bambusstock.TimeBan.util;
 
 import java.io.File;
 import java.util.List;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
@@ -58,6 +59,10 @@ public class ManPageUtil {
      * @param page - man page to fetch
      */
     public String getMan(ManPage page) {
+        return getMan(page, false);
+    }
+    
+    public String getMan(ManPage page, boolean colored) {
         StringBuilder result = new StringBuilder();
         
         // load man page
@@ -67,17 +72,24 @@ public class ManPageUtil {
         
         // Construct output
         result.append(TerminalUtil.createHeadline(manPage.getString("manTitle"))).append("\n");
+        if(colored) result.append(ChatColor.GRAY);
         result.append(getContentString(manPage, "manDescription"));
         
         String parameters = getContentString(manPage, "manParameters");
         if(parameters != null && !parameters.isEmpty()) {
-            result.append("\nParameters:").append("\n");
+            result.append("\n");
+            if(colored) result.append(ChatColor.WHITE);
+            result.append("Parameters:").append("\n");
+            if(colored) result.append(ChatColor.GRAY);
             result.append(parameters);
         }
         
         String examples = getContentString(manPage, "manExamples");
         if(examples != null && !examples.isEmpty()) {
-            result.append("\nExamples:").append("\n");
+            result.append("\n");
+            if(colored) result.append(ChatColor.WHITE);
+            result.append("Examples:").append("\n");
+            if(colored) result.append(ChatColor.GRAY);
             result.append(examples);
         }
         
