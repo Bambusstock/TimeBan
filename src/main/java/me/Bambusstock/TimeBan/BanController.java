@@ -22,9 +22,10 @@ public class BanController {
     private Map<String, Ban> bans;
 
     public void init() {
-        bans = BanMapLoader.load("./plugins/TimeBan/banlist.dat");
+        Map<String, Ban> rawMap = BanMapLoader.load("./plugins/TimeBan/banlist.dat");
+        bans = Collections.synchronizedMap(bans);
         if(bans == null || bans.isEmpty()) {
-            bans = new TreeMap<String, Ban>();
+            bans = Collections.synchronizedMap(new TreeMap<String, Ban>());
         }
     }
 
