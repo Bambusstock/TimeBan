@@ -6,13 +6,14 @@ import me.Bambusstock.TimeBan.TimeBanRunnable;
 /**
  * Command used to manually check for unbans.
  */
-public class TimeBanRunCommand extends TimeBanCommand {
+public class TimeBanRunCommand extends AbstractCommand {
 
     public TimeBanRunCommand(TimeBan plugin) {
         super(plugin);
     }
 
-    public void run() {
+    @Override
+    public void execute() {
         new TimeBanRunnable(this.plugin).run();
     }
 }

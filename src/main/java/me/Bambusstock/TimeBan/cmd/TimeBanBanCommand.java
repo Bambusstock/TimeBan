@@ -13,43 +13,59 @@ import org.bukkit.entity.Player;
 /**
  * Command used to ban players.
  */
-public class TimeBanBanCommand extends TimeBanCommand {
+public class TimeBanBanCommand extends AbstractCommand {
 
     public TimeBanBanCommand(TimeBan plugin) {
         super(plugin);
     }
+
+    // list of player names to ban
+    private List<String> players;
     
-    /**
-     * Create a ban and fire a ban event.
-     *
-     * @param sender
-     * @param players Array of player names
-     * @param until Calendar until unban time
-     * @param reason Reason
-     */
-    public void ban(Player sender, List<String> players, Calendar until, String reason) {
+    // calendar object indicating ban duration
+    private Calendar until;
+    
+    // reason for ban
+    private String reason;
+
+    @Override
+    public void execute() {
+        Player receiver = getReceiver();
         for (String playerName : players) {
             Ban ban = new Ban(this.plugin, playerName, until, reason);
-            
+
             TimeBanBanEvent event;
-            if(sender != null) {
-                event = new TimeBanBanEvent(sender, ban);
+            if (receiver != null) {
+                event = new TimeBanBanEvent(receiver, ban);
             } else {
                 event = new TimeBanBanEvent(ban);
             }
-            
+
             Bukkit.getServer().getPluginManager().callEvent(event);
         }
     }
 
-    /**
-     * Create a ban and fire a ban event. Console version.
-     *
-     * @param players Array of player names
-     * @param until Calendar until unban time
-     * @param reason Reason
-     */
-    public void ban(List<String> players, Calendar until, String reason) {
-        ban(null, players, until, reason);
+    public List<String> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<String> players) {
+        this.players = players;
+    }
+
+    public Calendar getUntil() {
+        return until;
+    }
+
+    public void setUntil(Calendar until) {
+        this.until = until;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

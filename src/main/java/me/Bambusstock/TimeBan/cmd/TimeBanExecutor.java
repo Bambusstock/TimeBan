@@ -3,7 +3,7 @@ package me.Bambusstock.TimeBan.cmd;
 import java.util.*;
 import java.util.logging.*;
 import me.Bambusstock.TimeBan.TimeBan;
-import me.Bambusstock.TimeBan.cmd.TimeBanCommand.Commands;
+import me.Bambusstock.TimeBan.cmd.AbstractCommand.Commands;
 
 import me.Bambusstock.TimeBan.util.*;
 import org.bukkit.ChatColor;
@@ -42,7 +42,7 @@ public class TimeBanExecutor implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length == 0) {
-            return help(sender);
+            return help(sender, null);
         }
 
         String subCommand = args[0];
@@ -95,7 +95,7 @@ public class TimeBanExecutor implements CommandExecutor {
                 return true;
             }
 
-            return help(sender);
+            return help(sender, commandArgs);
         } else if (args[0].equals(Commands.RUN.getName())) {
             if (sender instanceof Player && !sender.hasPermission("timeban.run")) {
                 sender.sendMessage(String.format(noPermissionMessage, Commands.RUN.getName()));
@@ -149,11 +149,15 @@ public class TimeBanExecutor implements CommandExecutor {
 
         // Send command
         TimeBanBanCommand ban = new TimeBanBanCommand(plugin);
+        ban.setPlayers(players);
+        ban.setReason(reason);
+        ban.setUntil(until);
+
         if (sender instanceof Player) {
-            ban.ban((Player) sender, players, until, reason);
-        } else {
-            ban.ban(players, until, reason);
+            ban.setReceiver((Player) sender);
         }
+
+        ban.execute();
         return true;
     }
 
@@ -164,14 +168,20 @@ public class TimeBanExecutor implements CommandExecutor {
      *
      * @return true
      */
-    public boolean help(CommandSender receiver) {
+    public boolean help(CommandSender receiver, String[] args) {
         TimeBanHelpCommand help = new TimeBanHelpCommand(this.plugin);
-        if (receiver instanceof Player) {
-            help.help((Player) receiver);
+
+        if (args.length >= 1) {
+            help.setManPage(args[0]);
         } else {
-            help.help();
+            help.setManPage("help");
         }
 
+        if (receiver instanceof Player) {
+            help.setReceiver((Player) receiver);
+        }
+
+        help.execute();
         return true;
     }
 
@@ -185,11 +195,10 @@ public class TimeBanExecutor implements CommandExecutor {
     public boolean info(CommandSender receiver) {
         TimeBanInfoCommand info = new TimeBanInfoCommand(this.plugin);
         if (receiver instanceof Player) {
-            info.info((Player) receiver);
-        } else {
-            info.info();
+            info.setReceiver((Player) receiver);
         }
 
+        info.execute();
         return true;
     }
 
@@ -213,13 +222,13 @@ public class TimeBanExecutor implements CommandExecutor {
             listReverse = CommandLineParser.isOptionPresent(args[2], 'r');
             listSimple = CommandLineParser.isOptionPresent(args[2], 's');
         } else if (args.length == 2) {
-            if(CommandLineParser.isInteger(args[0])) {
+            if (CommandLineParser.isInteger(args[0])) {
                 page = Integer.parseInt(args[0]);
-                
+
                 listReverse = CommandLineParser.isOptionPresent(args[1], 'r');
                 listSimple = CommandLineParser.isOptionPresent(args[1], 's');
-                
-                if(!listReverse && !listSimple) {
+
+                if (!listReverse && !listSimple) {
                     search = args[1];
                 }
             } else {
@@ -243,11 +252,16 @@ public class TimeBanExecutor implements CommandExecutor {
         }
 
         TimeBanListCommand list = new TimeBanListCommand(plugin);
+        list.setPage(page);
+        list.setReverse(listReverse);
+        list.setSearch(search);
+        list.setSimple(listSimple);
+
         if (receiver instanceof Player) {
-            list.list((Player) receiver, page, search, listReverse, listSimple);
-        } else {
-            list.list(page, search, listReverse, listSimple);
+            list.setReceiver((Player) receiver);
         }
+
+        list.execute();
 
         return true;
     }
@@ -262,23 +276,18 @@ public class TimeBanExecutor implements CommandExecutor {
      */
     public boolean rm(CommandSender sender, String[] args) {
         TimeBanRmCommand rm = new TimeBanRmCommand(plugin);
-
-        if (CommandLineParser.isOptionPresent(args[0], 'a')) {
-            if (sender instanceof Player) {
-                rm.rmAll((Player) sender);
-            } else {
-                rm.rmAll();
-            }
-        } else {
-            List<String> players = CommandLineParser.getListOfString(args[0]);
-
-            if (sender instanceof Player) {
-                rm.rm((Player) sender, players);
-            } else {
-                rm.rm(players);
-            }
+        if (sender instanceof Player) {
+            rm.setReceiver((Player) sender);
         }
 
+        if (CommandLineParser.isOptionPresent(args[0], 'a')) {
+            rm.setRmAll(true);
+        } else {
+            List<String> players = CommandLineParser.getListOfString(args[0]);
+            rm.setPlayers(players);
+        }
+
+        rm.execute();
         return true;
     }
 
@@ -290,7 +299,7 @@ public class TimeBanExecutor implements CommandExecutor {
      * @return true
      */
     public boolean run(CommandSender sender) {
-        new TimeBanRunCommand(plugin).run();
+        new TimeBanRunCommand(plugin).execute();
         return true;
     }
 
@@ -303,27 +312,22 @@ public class TimeBanExecutor implements CommandExecutor {
      * @return true if command executed, false if wrong syntax
      */
     public boolean unban(CommandSender sender, String[] args) {
-
         TimeBanUnbanCommand unban = new TimeBanUnbanCommand(this.plugin);
+        if (sender instanceof Player) {
+            unban.setReceiver((Player) sender);
+        }
+
         if (CommandLineParser.isOptionPresent(args[0], 'a')) {
-            if (sender instanceof Player) {
-                unban.unbanAll((Player) sender);
-            } else {
-                unban.unbanAll();
-            }
+            unban.setUnbanAll(true);
         } else if (args[0] != null && !args[0].isEmpty()) {
             List<String> players = CommandLineParser.getListOfString(args[0]);
-
-            if (sender instanceof Player) {
-                unban.unban((Player) sender, players);
-            } else {
-                unban.unban(players);
-            }
+            unban.setPlayers(players);
         } else {
             log.log(Level.SEVERE, "Error. Wrong syntax!");
             return false;
         }
 
+        unban.execute();
         return true;
     }
 }

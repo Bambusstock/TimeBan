@@ -3,95 +3,95 @@ package me.Bambusstock.TimeBan.cmd;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
+import me.Bambusstock.TimeBan.util.TerminalUtil;
 
 /**
  * Command to unban a player watched by TimeBan.
  */
-public class TimeBanUnbanCommand extends TimeBanCommand {
+public class TimeBanUnbanCommand extends AbstractCommand {
+
+    // list of all players to unban
+    private List<String> players;
+    
+    // option to unban all banned players
+    private boolean unbanAll;
 
     public TimeBanUnbanCommand(TimeBan plugin) {
         super(plugin);
     }
 
-    /**
-     * Search for a ban for the given players and fire a unban event.
-     *
-     * @param sender
-     * @param players
-     */
-    public void unban(Player sender, List<String> players) {
-        for (String playerName : players) {
-            
-            Ban ban = plugin.getController().getBan(playerName);
-            if (ban != null) {
-                
-                TimeBanUnbanEvent event;
-                if(sender != null) {
-                    event = new TimeBanUnbanEvent(sender, ban);
+    @Override
+    public void execute() {
+        Player receiver = getReceiver();
+
+        if (!players.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(TerminalUtil.createHeadline("TimeBan unban")).append("\n");
+            for (String playerName : players) {
+
+                Ban ban = plugin.getController().getBan(playerName);
+                if (ban != null) {
+
+                    TimeBanUnbanEvent event;
+                    if (receiver != null) {
+                        event = new TimeBanUnbanEvent(receiver, ban);
+                    } else {
+                        event = new TimeBanUnbanEvent(ban);
+                    }
+
+                    this.plugin.getServer().getPluginManager().callEvent(event);
                 } else {
-                    event = new TimeBanUnbanEvent(ban);
+                    builder.append("No ban for player ´").append(playerName).append("´ found!");
                 }
-                
-                this.plugin.getServer().getPluginManager().callEvent(event);
-            } else {
-                if(sender != null) {
-                    sender.sendMessage(ChatColor.RED + "No ban for player ´" + playerName + "´ found!");
-                }
-                log.log(Level.INFO, "No ban for player ´" + playerName + "´ found!");
             }
+
+            String result = builder.toString();
+            if (receiver == null) {
+                TerminalUtil.printToConsole(result);
+            } else {
+                TerminalUtil.printToPlayer(receiver, result);
+            }
+
+            return;
         }
-    }
 
-    /**
-     * Search for a ban for the given players and fire a unban event. Console
-     * version.
-     *
-     * @param players
-     */
-    public void unban(List<String> players) {
-        unban(null, players);
-    }
-
-    /**
-     * Unban all banned players.
-     *
-     * @param sender
-     */
-    public void unbanAll(Player sender) {
-        /**
-         * To prevent a java.util.ConcurrentModificationException we 'll use a
-         * workSet. The events take care of the ´real´ banlist, so we don't need
-         * to care about it.
-         */
-        Map<String, Ban> bans = plugin.getController().getBans();
-        synchronized (bans) {
+        if (unbanAll) {
+            Map<String, Ban> bans = plugin.getController().getBans();
             List<Ban> workSet = new ArrayList<Ban>(bans.values());
 
-            if (sender == null) {
+            if (receiver == null) {
                 for (Ban ban : workSet) {
                     TimeBanUnbanEvent event = new TimeBanUnbanEvent(ban);
                     this.plugin.getServer().getPluginManager().callEvent(event);
                 }
             } else {
                 for (Ban ban : workSet) {
-                    TimeBanUnbanEvent event = new TimeBanUnbanEvent(sender, ban);
+                    TimeBanUnbanEvent event = new TimeBanUnbanEvent(receiver, ban);
                     this.plugin.getServer().getPluginManager().callEvent(event);
                 }
             }
         }
     }
 
-    /**
-     * Unban all banned players. Console version.
-     */
-    public void unbanAll() {
-        unbanAll(null);
+    public List<String> getPlayers() {
+        return players;
     }
+
+    public void setPlayers(List<String> players) {
+        this.players = players;
+    }
+
+    public boolean isUnbanAll() {
+        return unbanAll;
+    }
+
+    public void setUnbanAll(boolean unbanAll) {
+        this.unbanAll = unbanAll;
+    }
+
 }

@@ -1,6 +1,7 @@
 package me.Bambusstock.TimeBan.cmd;
 
 import java.util.logging.Logger;
+import javax.sound.midi.Receiver;
 
 import me.Bambusstock.TimeBan.TimeBan;
 import org.bukkit.entity.Player;
@@ -9,7 +10,9 @@ import org.bukkit.entity.Player;
  * Basic class to extend if you wanna create a new TimeBan command. This class
  * provides you with a logger an enum and some methods to write messages.
  */
-public class TimeBanCommand {
+public abstract class AbstractCommand {
+    
+    private Player receiver;
 
     /**
      * Enum containing available commands and their "names".
@@ -48,8 +51,18 @@ public class TimeBanCommand {
      */
     protected TimeBan plugin;
 
-    public TimeBanCommand(TimeBan plugin) {
+    public AbstractCommand(TimeBan plugin) {
         this.plugin = plugin;
+    }
+    
+    public abstract void execute();
+    
+    public void setReceiver(Player p) {
+        receiver = p;
+    }
+    
+    public Player getReceiver() {
+        return receiver;
     }
 
     /**

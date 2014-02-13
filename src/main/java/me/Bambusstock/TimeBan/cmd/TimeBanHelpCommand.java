@@ -1,67 +1,61 @@
 package me.Bambusstock.TimeBan.cmd;
 
 import me.Bambusstock.TimeBan.TimeBan;
-
-import org.bukkit.ChatColor;
+import static me.Bambusstock.TimeBan.cmd.AbstractCommand.log;
+import me.Bambusstock.TimeBan.util.ManPageUtil;
+import me.Bambusstock.TimeBan.util.ManPageUtil.ManPage;
+import me.Bambusstock.TimeBan.util.TerminalUtil;
 import org.bukkit.entity.Player;
 
 /**
  * Command to display help for all TimeBan commands.
  */
-public class TimeBanHelpCommand extends TimeBanCommand {
+public class TimeBanHelpCommand extends AbstractCommand {
 
-    private static final String[] text = {
-        "TimeBan Help page",
-        "===================================================\n",
-        
-        "/timeban ban <username,...> [untilstring] [reason]",
-        "Ban a player or more until [untilstring] because of [reason].\n",
-        
-        "/timeban unban <[username,username2,...] [-a]>",
-        "Unban a player or more. Use \"-a\" to unban all.\n",
-        
-        "/timeban rm <[username,username2,...] [-a]>",
-        "Remove a ban from the ban list. Use \"-a\" for all.\n",
-        
-        "/timeban info",
-        "Display some information like ban amount.\n",
-        
-        "/timeban list [search] [-rs]",
-        "List all bans. Use \"-r\" for reverse order. \"s\" for short display.\n",
-        
-        "/timeban run",
-        "Check for unbans."
-    };
+    // serves a parameter to indicate which man page to show.
+    private ManPage manPage;
 
     public TimeBanHelpCommand(TimeBan plugin) {
         super(plugin);
     }
 
-    /**
-     * Display a help text on the console.
-     */
-    public void help() {
-        for(String s : text) {
-            log.info(s);
+    @Override
+    public void execute() {
+        ManPageUtil util = new ManPageUtil("en");
+        Player receiver = getReceiver();
+
+        // display the help to the console
+        if (receiver == null) {
+            String manPageText = util.getMan(getManPage());
+            TerminalUtil.printToConsole(manPageText);
+
+            // display the help to the player
+        } else {
+            String manPageText = util.getMan(getManPage(), true);
+            TerminalUtil.printToPlayer(receiver, manPageText);
         }
     }
 
     /**
-     * Display a help text to the player.
+     * Set the name of the manual page to display.
      *
-     * @param receiver Receiver of the help text.
+     * @param manPage name of the man page. If man page not found standard man
+     * page for help is displayed.
      */
-    public void help(Player receiver) {
-        for(int i = 0; i < text.length; i++) {
-            String output = "";
-            if(i % 2 == 0) {
-                output += ChatColor.DARK_GREEN;
-            } else {
-                output += ChatColor.GOLD;
+    public void setManPage(String manPage) {
+        ManPage page = ManPage.HELP;
+        if (manPage != null && !manPage.isEmpty()) {
+            try {
+                page = ManPage.valueOf(manPage.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                page = ManPage.HELP;
             }
-            output += text[i];
-            
-            receiver.sendMessage(output);
         }
+
+        this.manPage = page;
+    }
+
+    public ManPage getManPage() {
+        return manPage;
     }
 }

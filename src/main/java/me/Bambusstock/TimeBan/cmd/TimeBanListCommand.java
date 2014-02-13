@@ -4,6 +4,7 @@ import java.util.List;
 
 import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.util.Ban;
+import me.Bambusstock.TimeBan.util.TerminalUtil;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ import org.bukkit.util.ChatPaginator.ChatPage;
 /**
  * Command to list bans currently watched by TimeBan.
  */
-public class TimeBanListCommand extends TimeBanCommand {
+public class TimeBanListCommand extends AbstractCommand {
 
     /**
      * Colored user message. Constructed using a static initializer.
@@ -27,7 +28,7 @@ public class TimeBanListCommand extends TimeBanCommand {
         b.append(" until ").append(ChatColor.AQUA);
         b.append("%s").append(ChatColor.WHITE);
         b.append(" because ").append(ChatColor.GOLD);
-        b.append("`%s`").append("\n");
+        b.append("`%s`");
 
         userMessage = b.toString();
     }
@@ -37,29 +38,34 @@ public class TimeBanListCommand extends TimeBanCommand {
      */
     private static final String consoleMessage = "[TimeBan] `%s` until %s because `%s`";
 
-    protected StringBuilder userOutput = new StringBuilder();
+    // page to display
+    private int page;
+
+    // search string
+    private String search;
+
+    // reverse option
+    private boolean reverse;
+
+    // simple option
+    private boolean simple;
 
     public TimeBanListCommand(TimeBan plugin) {
         super(plugin);
     }
 
-    /**
-     * List all bans on the game screen.
-     *
-     * @param sender Receiver of the message.
-     * @param page Page to display. 0 will display everything.
-     * @param search Search string to filter banned users.
-     * @param reverse Sort of the output(sorted by date).
-     * @param simple Output style
-     */
-    public void list(Player sender, int page, String search, boolean reverse, boolean simple) {
-        log.info("Page: " + page);
-        writeMessage(sender, "=== TimeBan search results ===");
+    @Override
+    public void execute() {
+        Player receiver = getReceiver();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(TerminalUtil.createHeadline("TimeBan list")).append("\n");
+
         List<Ban> result = plugin.getController().searchBans(search, reverse);
         if (!result.isEmpty()) {
             if (simple == true) {
                 for (Ban b : result) {
-                    writeMessage(sender, b.toString());
+                    builder.append(b.toString()).append("\n");
                 }
             } else {
                 for (Ban b : result) {
@@ -67,51 +73,69 @@ public class TimeBanListCommand extends TimeBanCommand {
                     String until = b.getUntil().getTime().toString();
                     String reason = b.getReason();
 
-                    appendPrettyMessage(sender, player, until, reason);
+                    String message = createColoredMessage(receiver == null, player, until, reason);
+                    builder.append(message).append("\n");
                 }
             }
         } else {
-            writeMessage(sender, "No bans found.");
+            builder.append("No results.");
         }
-        writeMessage(sender, "======================");
 
-        // send message
-        if (sender != null && sender instanceof Player) {
-            if (page > 0) {
-                ChatPage output = ChatPaginator.paginate(userOutput.toString(), page);
-                sender.sendMessage(output.getLines());
-            } else {
-                sender.sendMessage(userOutput.toString());
-            }
+        String message = builder.toString();
+        if (receiver == null) {
+            TerminalUtil.printToConsole(message);
+        } else {
+            TerminalUtil.printToPlayer(receiver, message, page);
         }
-    }
-
-    /**
-     * List all bans. Console version
-     *
-     * @param page Pager to display. 0 to display everything.
-     * @param search Regex used for a search
-     * @param reverse True, then all bans are sorted reverse (descending time)
-     * @param simple True, then the ban information are compressed
-     */
-    public void list(int page, String search, boolean reverse, boolean simple) {
-        list(null, page, search, reverse, simple);
     }
 
     /**
      * Write a plain message to the console or add a formatted message to the
      * local StringBuffer to use the whole output with a ChatPaginator.
      *
-     * @param receiver Player to receive this message, null if console is output
-     * @param args Arguments to be inserted into message.
+     * @param colored true if should be colored
+     * @param args args to fill the message
      *
+     * @return message
      */
-    protected void appendPrettyMessage(Player receiver, String... args) {
-        if (receiver == null) {
-            log.info(String.format(consoleMessage, args));
+    protected String createColoredMessage(boolean colored, String... args) {
+        if (!colored) {
+            return String.format(consoleMessage, args);
         } else {
-            userOutput.append(String.format(userMessage, args));
+            return String.format(userMessage, args);
         }
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
+    public boolean isReverse() {
+        return reverse;
+    }
+
+    public void setReverse(boolean reverse) {
+        this.reverse = reverse;
+    }
+
+    public boolean isSimple() {
+        return simple;
+    }
+
+    public void setSimple(boolean simple) {
+        this.simple = simple;
     }
 
 }
