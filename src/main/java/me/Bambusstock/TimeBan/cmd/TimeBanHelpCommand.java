@@ -1,7 +1,6 @@
 package me.Bambusstock.TimeBan.cmd;
 
 import me.Bambusstock.TimeBan.TimeBan;
-import static me.Bambusstock.TimeBan.cmd.AbstractCommand.log;
 import me.Bambusstock.TimeBan.util.ManPageUtil;
 import me.Bambusstock.TimeBan.util.ManPageUtil.ManPage;
 import me.Bambusstock.TimeBan.util.TerminalUtil;

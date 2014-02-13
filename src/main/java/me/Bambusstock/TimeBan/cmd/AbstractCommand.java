@@ -1,55 +1,24 @@
 package me.Bambusstock.TimeBan.cmd;
 
 import java.util.logging.Logger;
-import javax.sound.midi.Receiver;
 
 import me.Bambusstock.TimeBan.TimeBan;
 import org.bukkit.entity.Player;
 
 /**
- * Basic class to extend if you wanna create a new TimeBan command. This class
- * provides you with a logger an enum and some methods to write messages.
+ * Basic class to extend if you wanna create a new TimeBan command.
  */
 public abstract class AbstractCommand {
     
     private Player receiver;
 
-    /**
-     * Enum containing available commands and their "names".
-     */
-    public enum Commands {
-
-        BAN("ban"),
-        HELP("help"),
-        INFO("info"),
-        LIST("list"),
-        RM("rm"),
-        RUN("run"),
-        UNBAN("unban");
-
-        private String cmdName;
-
-        private Commands(String cmdName) {
-            this.cmdName = cmdName;
-        }
-
-        /**
-         * Get the "name" of the command.
-         */
-        public String getName() {
-            return cmdName;
-        }
-    };
-
-    /**
-     * "Global" logger used by all commands.
-     */
+    // "Global" logger used by all commands.
     protected static final Logger log = Logger.getLogger("Minecraft");
     
-    /**
-     * Plugin reference used by all commands.
-     */
+    // Plugin reference used by all commands.
     protected TimeBan plugin;
+    
+    private TimeBanCommands commandType;
 
     public AbstractCommand(TimeBan plugin) {
         this.plugin = plugin;
@@ -63,6 +32,18 @@ public abstract class AbstractCommand {
     
     public Player getReceiver() {
         return receiver;
+    }
+    
+    public boolean executionAllowed() {
+        return (receiver == null || receiver.hasPermission(getCommandType().getPermission()));
+    }
+
+    public TimeBanCommands getCommandType() {
+        return commandType;
+    }
+
+    public void setCommandType(TimeBanCommands commandType) {
+        this.commandType = commandType;
     }
 
     /**
