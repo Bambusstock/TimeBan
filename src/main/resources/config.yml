@@ -2,3 +2,4 @@ defaultBanDuration: 1h
 defaultBanReason: Default reason!
 runDelay: 1
 runSilent: true
+locale: en

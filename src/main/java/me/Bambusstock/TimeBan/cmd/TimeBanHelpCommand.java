@@ -21,7 +21,7 @@ public class TimeBanHelpCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        ManPageUtil util = new ManPageUtil("en");
+        ManPageUtil util = new ManPageUtil(plugin.getConfig().getString("locale", "en"));
         Player receiver = getReceiver();
 
         // display the help to the console

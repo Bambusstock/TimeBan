@@ -2,6 +2,7 @@ package me.Bambusstock.TimeBan;
 
 import me.Bambusstock.TimeBan.cmd.TimeBanExecutor;
 import java.util.logging.Logger;
+import me.Bambusstock.TimeBan.util.MessagesUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TimeBan extends JavaPlugin {
@@ -12,6 +13,9 @@ public class TimeBan extends JavaPlugin {
     public void onEnable() {
         // set up configuration
         this.configureMe();
+        
+        // load resources with locale
+        reloadResource();
 
         // init ban model...
         controller = new BanController();
@@ -41,6 +45,11 @@ public class TimeBan extends JavaPlugin {
         
         TimeBanRunnable r = new TimeBanRunnable(this, isSilent);
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, r, 60L, runDelay * 20 * 60);
+    }
+    
+    protected void reloadResource() {
+        String locale = getConfig().getString("locale");
+        MessagesUtil.reload(locale);
     }
 
     public BanController getController() {
