@@ -1,15 +1,13 @@
-package me.Bambusstock.TimeBan;
+package me.Bambusstock.TimeBan.event;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import me.Bambusstock.TimeBan.TimeBan;
 
-import me.Bambusstock.TimeBan.event.TimeBanBanEvent;
-import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
 import me.Bambusstock.TimeBan.util.MessagesUtil;
+import org.bukkit.Bukkit;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,10 +18,10 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
  */
 public class BanListener implements Listener {
 
-    /**
-     * Logger used by this class.
-     */
+    // Logger used by this class.
     private static final Logger log = Logger.getLogger("Minecraft");
+
+    // instance of plugin used to get the controller and server instances
     private TimeBan plugin;
 
     public BanListener(TimeBan instance) {
@@ -46,7 +44,7 @@ public class BanListener implements Listener {
         // player is still banned, but he should already be unbanned
         if (ban != null && Calendar.getInstance().after(ban.getUntil())) {
             TimeBanUnbanEvent unbanEvent = new TimeBanUnbanEvent(ban);
-            plugin.getServer().getPluginManager().callEvent(unbanEvent);
+            Bukkit.getServer().getPluginManager().callEvent(unbanEvent);
 
             // player is banned...
         } else if (ban != null && Calendar.getInstance().before(ban.getUntil())) {
@@ -73,6 +71,7 @@ public class BanListener implements Listener {
             admin = "console";
         }
 
+        // get ban
         Ban b = event.getBan();
         String player = b.getPlayer().getName();
         Date bannedUntil = b.getUntil().getTime();
@@ -85,8 +84,6 @@ public class BanListener implements Listener {
 
         // ban player
         boolean successfull = plugin.getController().executeBan(b);
-
-        // communicate result
         if (successfull) {
             String serverMessage = MessagesUtil.formatMessage("ban_result_console", values);
             log.log(Level.INFO, "[TimeBan] {0}", serverMessage);
@@ -114,6 +111,7 @@ public class BanListener implements Listener {
             admin = "console";
         }
 
+        // get ban
         Ban ban = event.getBan();
         String player = ban.getPlayer().getName();
 
@@ -124,7 +122,6 @@ public class BanListener implements Listener {
 
         // unban player
         boolean successfull = plugin.getController().executeUnban(ban);
-
         if (successfull) {
             if (!event.isSilent()) {
                 String message = MessagesUtil.formatMessage("unban_result", values);

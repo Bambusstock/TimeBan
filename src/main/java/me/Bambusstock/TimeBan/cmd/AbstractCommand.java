@@ -10,10 +10,11 @@ import org.bukkit.entity.Player;
  */
 public abstract class AbstractCommand {
     
-    private Player receiver;
-
     // "Global" logger used by all commands.
     protected static final Logger log = Logger.getLogger("Minecraft");
+    
+    // receiver of repsonses
+    private Player receiver;
     
     // Plugin reference used by all commands.
     protected TimeBan plugin;
@@ -24,6 +25,9 @@ public abstract class AbstractCommand {
         this.plugin = plugin;
     }
     
+    /**
+     * This method is called to execute the specific command.
+     */
     public abstract void execute();
     
     public void setReceiver(Player p) {
@@ -34,6 +38,12 @@ public abstract class AbstractCommand {
         return receiver;
     }
     
+    /**
+     * Check if this command is allowed to be executed.
+     * 
+     * @return true If receiver is a user and has the permission to execute the command.
+     * If the receiver is not a user the command is automatically allowed to be executed.
+     */
     public boolean executionAllowed() {
         return (receiver == null || receiver.hasPermission(getCommandType().getPermission()));
     }
@@ -44,22 +54,5 @@ public abstract class AbstractCommand {
 
     public void setCommandType(TimeBanCommands commandType) {
         this.commandType = commandType;
-    }
-
-    /**
-     * Write a message to the receiver. If reveicer == null message is writtent
-     * to the console log.
-     *
-     * @param receiver Either a Player instance or null if message should be
-     * written to console
-     * @param message Message to write
-     *
-     */
-    protected void writeMessage(Player receiver, String message) {
-        if (receiver == null) {
-            log.info(message);
-        } else {
-            receiver.sendMessage(message);
-        }
     }
 }

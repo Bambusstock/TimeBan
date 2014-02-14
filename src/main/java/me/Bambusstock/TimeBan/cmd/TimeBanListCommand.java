@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
  */
 public class TimeBanListCommand extends AbstractCommand {
 
+    // date format used when short format is requested
     private static final SimpleDateFormat shortFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
 
     // page to display

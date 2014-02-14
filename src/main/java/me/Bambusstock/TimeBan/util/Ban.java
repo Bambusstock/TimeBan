@@ -11,32 +11,33 @@ import org.bukkit.OfflinePlayer;
 public class Ban implements Serializable, Comparable<Ban> {
 
     private static final long serialVersionUID = -4327491657720734089L;
-    private transient TimeBan plugin;
     
-    private static final SimpleDateFormat shortFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
+    // short date format used by toString()
+    private final SimpleDateFormat shortFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
 
+    // player name
     private String player;
+    
+    // unban date
     private Calendar until;
+    
+    // reason of ban
     private String reason;
 
     /**
      * Instantiate a ban.
      *
-     * @param Player Player object
+     * @param player Player object
      * @param until Date until user is banned
      * @param reason Reasons why the user had been banned
      */
-    public Ban(TimeBan plugin, String player, Calendar until, String reason) {
+    public Ban(String player, Calendar until, String reason) {
         this.player = player;
-        this.plugin = plugin;
         this.until = until;
         this.reason = reason;
     }
 
-    /**
-     * Compare two bans by time. 0 > if before comparator 0 < if after 0 if
-     * equal
-     */
+    @Override
     public int compareTo(Ban ban) {
         // not exactly equal but already exists
         if (!ban.player.equalsIgnoreCase(this.player)) {
@@ -102,7 +103,6 @@ public class Ban implements Serializable, Comparable<Ban> {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 11 * hash + (this.plugin != null ? this.plugin.hashCode() : 0);
         hash = 11 * hash + (this.player != null ? this.player.hashCode() : 0);
         hash = 11 * hash + (this.until != null ? this.until.hashCode() : 0);
         hash = 11 * hash + (this.reason != null ? this.reason.hashCode() : 0);
@@ -118,9 +118,6 @@ public class Ban implements Serializable, Comparable<Ban> {
             return false;
         }
         final Ban other = (Ban) obj;
-        if (this.plugin != other.plugin && (this.plugin == null || !this.plugin.equals(other.plugin))) {
-            return false;
-        }
         if ((this.player == null) ? (other.player != null) : !this.player.equals(other.player)) {
             return false;
         }

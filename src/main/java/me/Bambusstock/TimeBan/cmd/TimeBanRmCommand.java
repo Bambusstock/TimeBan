@@ -6,6 +6,7 @@ import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.util.Ban;
 import me.Bambusstock.TimeBan.util.MessagesUtil;
 import me.Bambusstock.TimeBan.util.TerminalUtil;
+import org.bukkit.Bukkit;
 
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,7 @@ public class TimeBanRmCommand extends AbstractCommand {
         if (players != null && !players.isEmpty()) {
             HashMap<String, String> values = new HashMap<String, String>(1);
             builder.append(TerminalUtil.createHeadline("TimeBan rm")).append("\n");
-            
+
             for (String playerName : players) {
                 Ban removedBan = plugin.getController().getBans().remove(playerName);
                 values.put("{user}", playerName);

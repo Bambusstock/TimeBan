@@ -11,6 +11,7 @@ import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
 import me.Bambusstock.TimeBan.util.MessagesUtil;
 import me.Bambusstock.TimeBan.util.TerminalUtil;
+import org.bukkit.Bukkit;
 
 /**
  * Command to unban a player watched by TimeBan.
@@ -47,17 +48,17 @@ public class TimeBanUnbanCommand extends AbstractCommand {
                         event = new TimeBanUnbanEvent(ban);
                     }
 
-                    this.plugin.getServer().getPluginManager().callEvent(event);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
                 } else {
-                    values.put("{user}", playerName);                    
+                    values.put("{user}", playerName);
                     builder.append(MessagesUtil.formatMessage("unban_no_result", values)).append("\n");
                 }
             }
 
             String result = builder.toString();
-            if (receiver == null) {
+            if (!result.isEmpty() && receiver == null) {
                 TerminalUtil.printToConsole(result);
-            } else {
+            } else if(!result.isEmpty() && receiver != null) {
                 TerminalUtil.printToPlayer(receiver, result);
             }
 
@@ -71,12 +72,12 @@ public class TimeBanUnbanCommand extends AbstractCommand {
             if (receiver == null) {
                 for (Ban ban : workSet) {
                     TimeBanUnbanEvent event = new TimeBanUnbanEvent(ban);
-                    this.plugin.getServer().getPluginManager().callEvent(event);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
                 }
             } else {
                 for (Ban ban : workSet) {
                     TimeBanUnbanEvent event = new TimeBanUnbanEvent(receiver, ban);
-                    this.plugin.getServer().getPluginManager().callEvent(event);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
                 }
             }
         }

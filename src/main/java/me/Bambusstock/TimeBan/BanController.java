@@ -1,15 +1,9 @@
 package me.Bambusstock.TimeBan;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import me.Bambusstock.TimeBan.util.Ban;
-import me.Bambusstock.TimeBan.util.BanComparator;
-import me.Bambusstock.TimeBan.util.BanMapLoader;
+import me.Bambusstock.TimeBan.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 /**
@@ -18,9 +12,12 @@ import org.bukkit.OfflinePlayer;
  */
 public class BanController {
 
-    private static final Logger log = Logger.getLogger("Minecraft");
+    // list mapping usernames to according bans
     private Map<String, Ban> bans;
 
+    /**
+     * Initiate the ban controller. Load the serialized map from disk.
+     */
     public void init() {
         Map<String, Ban> rawMap = BanMapLoader.load("./plugins/TimeBan/banlist.dat");
         bans = Collections.synchronizedMap(rawMap);
@@ -30,6 +27,9 @@ public class BanController {
         }
     }
 
+    /**
+     * Save a serialized ban list to the disk.
+     */
     public void close() {
         BanMapLoader.save(bans, "./plugins/TimeBan/banlist.dat");
     }

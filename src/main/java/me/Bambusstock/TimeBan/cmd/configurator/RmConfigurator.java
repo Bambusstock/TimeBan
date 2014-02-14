@@ -4,7 +4,6 @@ import java.util.List;
 import me.Bambusstock.TimeBan.cmd.AbstractCommand;
 import me.Bambusstock.TimeBan.cmd.TimeBanRmCommand;
 import me.Bambusstock.TimeBan.util.CommandLineParser;
-import org.bukkit.entity.Player;
 
 /**
  *

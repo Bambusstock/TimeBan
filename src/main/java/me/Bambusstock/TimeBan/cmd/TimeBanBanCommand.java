@@ -15,25 +15,25 @@ import org.bukkit.entity.Player;
  */
 public class TimeBanBanCommand extends AbstractCommand {
 
+    // list of player names to ban
+    private List<String> players;
+
+    // calendar object indicating ban duration
+    private Calendar until;
+
+    // reason for ban
+    private String reason;
+
     public TimeBanBanCommand(TimeBan plugin) {
         super(plugin);
         setCommandType(TimeBanCommands.BAN);
     }
 
-    // list of player names to ban
-    private List<String> players;
-    
-    // calendar object indicating ban duration
-    private Calendar until;
-    
-    // reason for ban
-    private String reason;
-
     @Override
     public void execute() {
         Player receiver = getReceiver();
         for (String playerName : players) {
-            Ban ban = new Ban(this.plugin, playerName, until, reason);
+            Ban ban = new Ban(playerName, until, reason);
 
             TimeBanBanEvent event;
             if (receiver != null) {

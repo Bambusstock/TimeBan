@@ -8,9 +8,17 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
  
 public class TimeBanEvent extends Event {
+    
+    // list of handlers
     private static final HandlerList handlers = new HandlerList();
+    
+    // ban transported
     protected Ban ban;
+    
+    // sender of command
     protected Player sender;
+    
+    // whether this command should be silent or not
     private boolean silent;
  
     public TimeBanEvent(Player sender, Ban ban) {
@@ -46,6 +54,7 @@ public class TimeBanEvent extends Event {
     	return false;
     }
      
+    @Override
     public HandlerList getHandlers() {
         return handlers;
     }

@@ -8,14 +8,20 @@ import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
 import me.Bambusstock.TimeBan.util.BanComparator;
 import me.Bambusstock.TimeBan.util.MessagesUtil;
+import org.bukkit.Bukkit;
 
 /**
  * Class handling automatic unban checking.
  */
 public class TimeBanRunnable implements Runnable {
 
+    // class' logger
     private static final Logger log = Logger.getLogger("Minecraft");
+    
+    // plugin instance to get server instance
     private TimeBan plugin;
+    
+    // silten mode
     private boolean silent;
 
     /**
@@ -28,7 +34,7 @@ public class TimeBanRunnable implements Runnable {
     /**
      * New object.
      *
-     * @param true if no output should be produced.
+     * @param silent true if no output should be produced.
      */
     public TimeBanRunnable(TimeBan instance, boolean silent) {
         this.plugin = instance;
@@ -60,7 +66,7 @@ public class TimeBanRunnable implements Runnable {
             if (b.getUntil().before(Calendar.getInstance())) {
                 TimeBanUnbanEvent event = new TimeBanUnbanEvent(b);
                 event.setSilent(silent);
-                this.plugin.getServer().getPluginManager().callEvent(event);
+                Bukkit.getServer().getPluginManager().callEvent(event);
             } else {
                 break;
             }

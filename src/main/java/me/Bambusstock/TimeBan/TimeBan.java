@@ -1,5 +1,6 @@
 package me.Bambusstock.TimeBan;
 
+import me.Bambusstock.TimeBan.event.BanListener;
 import me.Bambusstock.TimeBan.cmd.TimeBanExecutor;
 import java.util.logging.Logger;
 import me.Bambusstock.TimeBan.util.MessagesUtil;
@@ -29,6 +30,7 @@ public class TimeBan extends JavaPlugin {
         this.getCommand("timeban").setExecutor(new TimeBanExecutor(this));
     }
 
+    @Override
     public void onDisable() {
         controller.close();
         
@@ -47,6 +49,9 @@ public class TimeBan extends JavaPlugin {
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, r, 60L, runDelay * 20 * 60);
     }
     
+    /**
+     * Reload resources like messages or man pages.
+     */
     protected void reloadResource() {
         String locale = getConfig().getString("locale");
         MessagesUtil.reload(locale);

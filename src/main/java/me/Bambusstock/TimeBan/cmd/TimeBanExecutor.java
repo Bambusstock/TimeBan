@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  * and call expected commands.
  */
 public class TimeBanExecutor implements CommandExecutor {
-    private static final Logger log = Logger.getLogger("Minecraft");
+    // plugin instance to create a new command
     private final TimeBan plugin;
 
     public TimeBanExecutor(TimeBan instance) {

@@ -17,10 +17,18 @@ Features
 - Run the TimeBan scheduler manually.
 - All commands work ingame and via console.
 - Of course: permissions.
-- Configuration: Standard reason, Standard ban duration, scheduler delay.
+- Configuration: Standard reason, Standard ban duration, scheduler delay, silent mode, language files.
+- language files
+- ingame help pages
 
 Quick introduction
 ------------------
+
+### Get help ingame
+
+Use:
+
+	/timeban help
 
 ### Ban a player
 
@@ -124,6 +132,10 @@ Define the amount of minutes between one run of the scheduler and the next.
 
 Define if the UnbanBot should produce output (server log).
 
+#### `locale` (Default: "en")
+
+Define the language files to use.
+
 Permissions
 -----------
 ### timeban.all (Default: op)
@@ -160,8 +172,6 @@ Define who can run the Timeban task.
 
 Upcoming features:
 ------------------
-- language files
-- standardized output
 - list upcoming bans
 
 Possible features:

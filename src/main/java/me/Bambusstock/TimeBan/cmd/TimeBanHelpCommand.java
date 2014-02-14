@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  */
 public class TimeBanHelpCommand extends AbstractCommand {
 
-    // serves a parameter to indicate which man page to show.
+    // serves as a parameter to indicate which man page to show.
     private ManPage manPage;
 
     public TimeBanHelpCommand(TimeBan plugin) {

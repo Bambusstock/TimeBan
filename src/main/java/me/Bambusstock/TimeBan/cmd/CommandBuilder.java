@@ -1,16 +1,16 @@
 package me.Bambusstock.TimeBan.cmd;
 
-import java.util.logging.Logger;
 import me.Bambusstock.TimeBan.TimeBan;
 
 /**
- *
+ * Builder pattern to create a new command based on a command name.
  * @author bambusstock
  */
 public class CommandBuilder {
-
-    private static final Logger log = Logger.getLogger("Minecraft");
     
+    private CommandBuilder() {
+    }
+
     public static AbstractCommand createCommand(TimeBan plugin, String cmd) {
         AbstractCommand result = new NullCommand(plugin);
 
