@@ -19,7 +19,7 @@ public class TimeBanExecutor implements CommandExecutor {
      // Message to be shown if a player misses a permission to use a command.
     private static final String noPermissionMessage = ChatColor.RED + "You don't have the permission to use the %s command!";
 
-    private TimeBan plugin;
+    private final TimeBan plugin;
 
     public TimeBanExecutor(TimeBan instance) {
         this.plugin = instance;
@@ -40,7 +40,7 @@ public class TimeBanExecutor implements CommandExecutor {
         }
 
         // create command
-        AbstractCommand command = CommandBuilder.createCommand(plugin, subCommand, commandArgs);
+        AbstractCommand command = CommandBuilder.createCommand(plugin, subCommand);
         if (sender != null) {
             command.setReceiver((Player) sender);
         }

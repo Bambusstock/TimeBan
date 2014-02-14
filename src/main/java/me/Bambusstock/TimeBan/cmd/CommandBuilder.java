@@ -8,7 +8,7 @@ import me.Bambusstock.TimeBan.TimeBan;
  */
 public class CommandBuilder {
 
-    public static AbstractCommand createCommand(TimeBan plugin, String cmd, String[] args) {
+    public static AbstractCommand createCommand(TimeBan plugin, String cmd) {
         AbstractCommand result = new NullCommand(plugin);
 
         TimeBanCommands command;
