@@ -1,10 +1,13 @@
 package me.Bambusstock.TimeBan;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
+import me.Bambusstock.TimeBan.util.BanComparator;
+import me.Bambusstock.TimeBan.util.MessagesUtil;
 
 /**
  * Class handling automatic unban checking.
@@ -21,10 +24,10 @@ public class TimeBanRunnable implements Runnable {
     public TimeBanRunnable(TimeBan instance) {
         this(instance, false);
     }
-    
+
     /**
      * New object.
-     * 
+     *
      * @param true if no output should be produced.
      */
     public TimeBanRunnable(TimeBan instance, boolean silent) {
@@ -32,42 +35,40 @@ public class TimeBanRunnable implements Runnable {
         this.silent = silent;
     }
 
+    @Override
     public void run() {
         Map<String, Ban> bans = plugin.getController().getBans();
-        synchronized (bans) {
-            if (bans.isEmpty()) {
-                if(!silent) {
-                    log.info("[TimeBan] Banlist empty.");
-                }
-                return;
+
+        // empty ban list print info and stop
+        if (bans.isEmpty()) {
+            if (!silent) {
+                String message = MessagesUtil.formatMessage("run_no_bans", null);
+                log.log(Level.INFO, "[TimeBan] {0}", message);
             }
-            
-            if(!silent) {
-                log.info("[TimeBan] Check for unbans...");
+            return;
+        }
+
+        if (!silent) {
+            String message = MessagesUtil.formatMessage("run_check", null);
+            log.log(Level.INFO, "[TimeBan] {0}", message);
+        }
+
+        // go through list until unban date is in future
+        List<Ban> sortedBans = new ArrayList<Ban>(bans.values());
+        Collections.sort(sortedBans, new BanComparator(false));
+        for (Ban b : sortedBans) {
+            if (b.getUntil().before(Calendar.getInstance())) {
+                TimeBanUnbanEvent event = new TimeBanUnbanEvent(b);
+                event.setSilent(silent);
+                this.plugin.getServer().getPluginManager().callEvent(event);
+            } else {
+                break;
             }
-            
-            /**
-             * To prevent a java.util.ConcurrentModificationException we 'll use
-             * a workSet. The events take care of the ´real´ banlist, so we
-             * don't need to care about it.
-             */
-            List<Ban> workSet = new ArrayList<Ban>();
-            workSet.addAll(bans.values());
-            
-            // go through list until unban date is in future
-            for(Ban b : workSet) {
-                if (b.getUntil().before(Calendar.getInstance())) {
-                    TimeBanUnbanEvent event = new TimeBanUnbanEvent(b);
-                    event.setSilent(silent);
-                    this.plugin.getServer().getPluginManager().callEvent(event);
-                } else {
-                    break;
-                }
-            }
-            
-            if(!silent) {
-                log.info("[TimeBan] Check complete.");
-            }
+        }
+
+        if (!silent) {
+            String message = MessagesUtil.formatMessage("run_check_complete", null);
+            log.log(Level.INFO, "[TimeBan] {0}", message);
         }
     }
 }

@@ -23,7 +23,8 @@ public class BanController {
 
     public void init() {
         Map<String, Ban> rawMap = BanMapLoader.load("./plugins/TimeBan/banlist.dat");
-        bans = Collections.synchronizedMap(bans);
+        bans = Collections.synchronizedMap(rawMap);
+        
         if(bans == null || bans.isEmpty()) {
             bans = Collections.synchronizedMap(new TreeMap<String, Ban>());
         }
@@ -53,20 +54,18 @@ public class BanController {
     }
 
     /**
-     * Executes a unban. If there's not ban nothing happens.
+     * Executes a unban.
      *
      * @param ban Ban object
-     * @return true
+     * @return true if ban found false if no ban could be found.
      */
     public boolean executeUnban(Ban ban) {
         OfflinePlayer player = ban.getPlayer();
         player.setBanned(false);
+        
+        Ban banObject = bans.remove(ban.getPlayer().getName());
 
-        synchronized (bans) {
-            bans.remove(ban.getPlayer().getName());
-        }
-
-        return true;
+        return banObject != null;
     }
 
     public Map<String, Ban> getBans() {
@@ -79,7 +78,7 @@ public class BanController {
 
     public Ban getUpcomingBan() {
         List<Ban> sorted = new ArrayList<Ban>(bans.values());
-        Collections.sort(sorted, new BanComparator());
+        Collections.sort(sorted, new BanComparator(false));
         return sorted.get(0);
     }
 
@@ -108,7 +107,6 @@ public class BanController {
         }
 
         Collections.sort(result, new BanComparator(reverse));
-
         return result;
     }
 }

@@ -7,4 +7,6 @@ manDescription:
 manParameters:
   - 'Either specify a list of users(offline/online) or use -a to unban all users.'
 manExamples:
-  - ''
+  - '/timeban rm -a'
+  - '/timeban rm userA'
+  - '/timeban rm userA,userB'

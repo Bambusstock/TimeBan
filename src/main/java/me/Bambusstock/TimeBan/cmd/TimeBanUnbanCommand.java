@@ -1,6 +1,7 @@
 package me.Bambusstock.TimeBan.cmd;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
+import me.Bambusstock.TimeBan.util.MessagesUtil;
 import me.Bambusstock.TimeBan.util.TerminalUtil;
 
 /**
@@ -23,17 +25,18 @@ public class TimeBanUnbanCommand extends AbstractCommand {
 
     public TimeBanUnbanCommand(TimeBan plugin) {
         super(plugin);
+        setCommandType(TimeBanCommands.UNBAN);
     }
 
     @Override
     public void execute() {
         Player receiver = getReceiver();
 
-        if (!players.isEmpty()) {
+        if (players != null && !players.isEmpty()) {
+            HashMap<String, String> values = new HashMap<String, String>(1);
+            
             StringBuilder builder = new StringBuilder();
-            builder.append(TerminalUtil.createHeadline("TimeBan unban")).append("\n");
             for (String playerName : players) {
-
                 Ban ban = plugin.getController().getBan(playerName);
                 if (ban != null) {
 
@@ -46,7 +49,8 @@ public class TimeBanUnbanCommand extends AbstractCommand {
 
                     this.plugin.getServer().getPluginManager().callEvent(event);
                 } else {
-                    builder.append("No ban for player ´").append(playerName).append("´ found!");
+                    values.put("{user}", playerName);                    
+                    builder.append(MessagesUtil.formatMessage("unban_no_result", values)).append("\n");
                 }
             }
 

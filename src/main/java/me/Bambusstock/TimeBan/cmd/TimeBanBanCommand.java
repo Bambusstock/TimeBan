@@ -17,6 +17,7 @@ public class TimeBanBanCommand extends AbstractCommand {
 
     public TimeBanBanCommand(TimeBan plugin) {
         super(plugin);
+        setCommandType(TimeBanCommands.BAN);
     }
 
     // list of player names to ban

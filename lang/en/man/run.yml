@@ -5,6 +5,6 @@ manTitle: '/timeban run'
 manDescription: 
   - 'Check and perform unbans.'
 manParameters:
-  - ''
+  - '-'
 manExamples:
-  - ''
+  - '-'

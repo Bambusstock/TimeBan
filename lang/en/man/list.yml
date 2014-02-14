@@ -9,4 +9,5 @@ manParameters:
   - '* -r - sort bans by unban date descending'
   - '* -s - display short output'
 manExamples:
-  - ''
+  - '/timeban list a.* -r'
+  - '/timeban list -rs'

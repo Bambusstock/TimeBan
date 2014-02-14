@@ -1,5 +1,6 @@
 package me.Bambusstock.TimeBan.cmd;
 
+import java.util.logging.Logger;
 import me.Bambusstock.TimeBan.TimeBan;
 
 /**
@@ -8,12 +9,14 @@ import me.Bambusstock.TimeBan.TimeBan;
  */
 public class CommandBuilder {
 
+    private static final Logger log = Logger.getLogger("Minecraft");
+    
     public static AbstractCommand createCommand(TimeBan plugin, String cmd) {
         AbstractCommand result = new NullCommand(plugin);
 
         TimeBanCommands command;
         try {
-            command = TimeBanCommands.valueOf(cmd);
+            command = TimeBanCommands.valueOf(cmd.toUpperCase());
         } catch (IllegalArgumentException e) {
             return result;
         } catch (NullPointerException e) {

@@ -5,7 +5,7 @@ package me.Bambusstock.TimeBan.cmd;
  * @author bambusstock
  */
 public enum TimeBanCommands {
-
+    NULL("", ""),
     BAN("ban", "timeban.ban"),
     HELP("help", "timeban.help"),
     INFO("info", "timeban.info"),

@@ -1,12 +1,12 @@
 package me.Bambusstock.TimeBan.cmd;
 
 import java.util.*;
+import java.util.logging.Logger;
 import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.cmd.configurator.AbstractConfigurator;
 import me.Bambusstock.TimeBan.cmd.configurator.ConfiguratorFactory;
 
 import me.Bambusstock.TimeBan.util.*;
-import org.bukkit.ChatColor;
 
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -16,9 +16,7 @@ import org.bukkit.entity.Player;
  * and call expected commands.
  */
 public class TimeBanExecutor implements CommandExecutor {
-     // Message to be shown if a player misses a permission to use a command.
-    private static final String noPermissionMessage = ChatColor.RED + "You don't have the permission to use the %s command!";
-
+    private static final Logger log = Logger.getLogger("Minecraft");
     private final TimeBan plugin;
 
     public TimeBanExecutor(TimeBan instance) {
@@ -28,7 +26,17 @@ public class TimeBanExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length == 0) {
-            new TimeBanHelpCommand(plugin).execute();
+            TimeBanHelpCommand command = new TimeBanHelpCommand(plugin);
+            command.setManPage("help");
+            
+            if(sender != null && sender instanceof Player) {
+                command.setReceiver((Player) sender);
+            }
+            
+            if(command.executionAllowed()) {
+                command.execute();
+            }
+            return true;
         }
 
         // fetch args for command
@@ -41,7 +49,7 @@ public class TimeBanExecutor implements CommandExecutor {
 
         // create command
         AbstractCommand command = CommandBuilder.createCommand(plugin, subCommand);
-        if (sender != null) {
+        if (sender != null &&  sender instanceof Player) {
             command.setReceiver((Player) sender);
         }
 
@@ -51,9 +59,13 @@ public class TimeBanExecutor implements CommandExecutor {
             configurator.configure(command, commandArgs);
             command.execute();
         } else {
-            sender.sendMessage(String.format(noPermissionMessage, command.getCommandType().getName()));
+            HashMap<String, String> values = new HashMap<String, String>(1);
+            values.put("{command}", command.getCommandType().getName());
+            
+            String message = MessagesUtil.formatMessage("no_permission", values);
+            sender.sendMessage(message);
         }
 
-        return false;
+        return true;
     }
 }

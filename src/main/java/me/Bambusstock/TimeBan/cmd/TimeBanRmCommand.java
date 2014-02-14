@@ -1,8 +1,10 @@
 package me.Bambusstock.TimeBan.cmd;
 
+import java.util.HashMap;
 import java.util.List;
 import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.util.Ban;
+import me.Bambusstock.TimeBan.util.MessagesUtil;
 import me.Bambusstock.TimeBan.util.TerminalUtil;
 
 import org.bukkit.entity.Player;
@@ -14,6 +16,7 @@ public class TimeBanRmCommand extends AbstractCommand {
 
     public TimeBanRmCommand(TimeBan plugin) {
         super(plugin);
+        setCommandType(TimeBanCommands.RM);
     }
 
     // list of players to remove from watchlist
@@ -27,14 +30,20 @@ public class TimeBanRmCommand extends AbstractCommand {
         Player receiver = getReceiver();
 
         StringBuilder builder = new StringBuilder();
-        if (!players.isEmpty()) {
+        if (players != null && !players.isEmpty()) {
+            HashMap<String, String> values = new HashMap<String, String>(1);
             builder.append(TerminalUtil.createHeadline("TimeBan rm")).append("\n");
+            
             for (String playerName : players) {
                 Ban removedBan = plugin.getController().getBans().remove(playerName);
+                values.put("{user}", playerName);
+                
                 if (removedBan != null) {
-                    builder.append("Removed temporary ban for ´").append(playerName).append("´. Player is still banned!").append("\n");
+                    String message = MessagesUtil.formatMessage("rm_result", values);
+                    builder.append(message).append("\n");
                 } else {
-                    builder.append("No ban for player ´").append(playerName).append("´ found!").append("\n");
+                    String message = MessagesUtil.formatMessage("rm_no_result", values);
+                    builder.append(message).append("\n");
                 }
             }
             
@@ -53,7 +62,7 @@ public class TimeBanRmCommand extends AbstractCommand {
         if (rmAll) {
             plugin.getController().getBans().clear();
             builder.append(TerminalUtil.createHeadline("TimeBan rm")).append("\n");
-            builder.append("All bans removed! Players still banned.");
+            builder.append(MessagesUtil.formatMessage("rm_result_all", null));
             
             String result = builder.toString();
             if(receiver == null) {

@@ -2,25 +2,25 @@ package me.Bambusstock.TimeBan;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.Bambusstock.TimeBan.event.TimeBanBanEvent;
 import me.Bambusstock.TimeBan.event.TimeBanUnbanEvent;
 import me.Bambusstock.TimeBan.util.Ban;
+import me.Bambusstock.TimeBan.util.MessagesUtil;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-
 
 /**
  * Main listener on events like prelogin or bans unbans.
  */
 public class BanListener implements Listener {
 
-    /** 
+    /**
      * Logger used by this class.
      */
     private static final Logger log = Logger.getLogger("Minecraft");
@@ -40,7 +40,7 @@ public class BanListener implements Listener {
     public void onPlayerPreLoginEvent(AsyncPlayerPreLoginEvent event) {
         String playerName = event.getName();
 
-        // Get a ban event
+        // check if there is a ban...
         Ban ban = plugin.getController().getBan(playerName);
 
         // player is still banned, but he should already be unbanned
@@ -50,9 +50,11 @@ public class BanListener implements Listener {
 
             // player is banned...
         } else if (ban != null && Calendar.getInstance().before(ban.getUntil())) {
-            String banMessage = String.format("You're banned from this server until %s because '%s'!",
-                    ban.getUntil().getTime(),
-                    ban.getReason());
+            HashMap<String, String> values = new HashMap<String, String>(2);
+            values.put("{until}", ban.getUntil().getTime().toString());
+            values.put("{reason}", ban.getReason());
+
+            String banMessage = MessagesUtil.formatMessage("banned_player_login", values);
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, banMessage);
         }
     }
@@ -64,69 +66,82 @@ public class BanListener implements Listener {
      */
     @EventHandler
     public void onTimeBanEvent(TimeBanBanEvent event) {
+        String admin;
+        if (event.getSender() != null && event.isSenderPlayer()) {
+            admin = event.getSender().getDisplayName();
+        } else {
+            admin = "console";
+        }
+
         Ban b = event.getBan();
         String player = b.getPlayer().getName();
         Date bannedUntil = b.getUntil().getTime();
 
+        // prepare map with substitutions
+        HashMap<String, String> values = new HashMap<String, String>(3);
+        values.put("{user}", player);
+        values.put("{until}", bannedUntil.toString());
+        values.put("{admin}", admin);
+
+        // ban player
         boolean successfull = plugin.getController().executeBan(b);
 
+        // communicate result
         if (successfull) {
-            if (event.isSenderPlayer()) {
-                String admin = event.getSender().getDisplayName();
-                String userMessage = String.format("%sBanned `%s` until %s",
-                        ChatColor.DARK_GREEN,
-                        player,
-                        bannedUntil);
-                event.getSender().sendMessage(userMessage);
+            String serverMessage = MessagesUtil.formatMessage("ban_result_console", values);
+            log.log(Level.INFO, "[TimeBan] {0}", serverMessage);
 
-                String serverMessage = String.format("[TimeBan] Banned `%s` until %s by %s",
-                        player,
-                        bannedUntil,
-                        admin);
-                log.info(serverMessage);
-            } else {
-                 String serverMessage = String.format("[TimeBan] Banned `%s` until %s by %s",
-                        player,
-                        bannedUntil,
-                        "console");
-                log.info(serverMessage);
+            if (event.isSenderPlayer()) {
+                String message = MessagesUtil.formatMessage("ban_result", values);
+                event.getSender().sendMessage(message);
             }
         } else {
-            if (event.isSenderPlayer()) {
-                String userMessage = String.format("%sSomething went wrong banning `%s`...",
-                        ChatColor.RED,
-                        player);
-                event.getSender().sendMessage(userMessage);
-            }
+            String message = MessagesUtil.formatMessage("ban_error", values);
+            log.log(Level.INFO, "[TimeBan] {0}", message);
 
-            String serverMessage = String.format("[TimeBan] Something went wrong banning `%s`...",
-                    player);
-            log.info(serverMessage);
+            if (event.isSenderPlayer()) {
+                event.getSender().sendMessage(message);
+            }
         }
     }
 
     @EventHandler
     public void onTimeUnbanEvent(TimeBanUnbanEvent event) {
+        String admin;
+        if (event.getSender() != null && event.isSenderPlayer()) {
+            admin = event.getSender().getDisplayName();
+        } else {
+            admin = "console";
+        }
+
         Ban ban = event.getBan();
         String player = ban.getPlayer().getName();
-        plugin.getController().executeUnban(ban);
 
-        if(!event.isSilent()) {
+        // prepare map with substitutions
+        HashMap<String, String> values = new HashMap<String, String>(2);
+        values.put("{user}", player);
+        values.put("{admin}", admin);
+
+        // unban player
+        boolean successfull = plugin.getController().executeUnban(ban);
+
+        if (successfull) {
+            if (!event.isSilent()) {
+                String message = MessagesUtil.formatMessage("unban_result", values);
+                log.log(Level.INFO, "[TimeBan] {0}", message);
+
+                if (event.isSenderPlayer()) {
+                    event.getSender().sendMessage(message);
+                }
+            }
+        } else {
+            String message = MessagesUtil.formatMessage("unban_no_result", values);
+            log.log(Level.INFO, "[TimeBan] {0}", message);
+
             if (event.isSenderPlayer()) {
-                String userMessage = String.format("%sUnbanned `%s` from banlist.",
-                        ChatColor.DARK_GREEN,
-                        player);
-                event.getSender().sendMessage(userMessage);
-
-                String admin = event.getSender().getDisplayName();
-                String serverMessage = String.format("[TimeBan] Unbaned and removed `%s` from banlist by %s",
-                        player,
-                        admin);
-
-                log.log(Level.INFO, serverMessage);
-            } else {
-                log.log(Level.INFO, "[TimeBan] Unbaned and removed `{0}` from banlist.", player);
+                event.getSender().sendMessage(message);
             }
         }
+
     }
 }

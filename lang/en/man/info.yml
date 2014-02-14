@@ -5,6 +5,6 @@ manTitle: '/timeban info'
 manDescription: 
   - 'Display basic statistics.'
 manParameters: 
-  - ''
+  - '-'
 manExamples:
-  - ''
+  - '-'

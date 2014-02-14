@@ -16,6 +16,7 @@ public class TimeBanHelpCommand extends AbstractCommand {
 
     public TimeBanHelpCommand(TimeBan plugin) {
         super(plugin);
+        setCommandType(TimeBanCommands.HELP);
     }
 
     @Override

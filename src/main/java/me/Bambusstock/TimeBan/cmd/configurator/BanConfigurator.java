@@ -35,7 +35,7 @@ public class BanConfigurator extends AbstractConfigurator {
         List<String> players = CommandLineParser.getListOfString(args[0]);
         String reason = stdBanReason;
         Calendar until = UntilStringParser.parse(stdBanDuration);
-
+        
         // only username was given, all to standard
         if (args.length == 2) {
             // What did we get? reason or duration...
@@ -53,7 +53,7 @@ public class BanConfigurator extends AbstractConfigurator {
 
             reason = CommandLineParser.getPrettyString(args[2]);
             until = UntilStringParser.parse(args[1]);
-        } else {
+        } else if(args.length > 3) {
             log.log(Level.SEVERE, "Error. Wrong syntax!");
         }
 

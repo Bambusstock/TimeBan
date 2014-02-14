@@ -10,6 +10,7 @@ public class TimeBanRunCommand extends AbstractCommand {
 
     public TimeBanRunCommand(TimeBan plugin) {
         super(plugin);
+        setCommandType(TimeBanCommands.RUN);
     }
 
     @Override

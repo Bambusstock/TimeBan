@@ -10,6 +10,7 @@ public class NullCommand extends AbstractCommand {
 
     public NullCommand(TimeBan plugin) {
         super(plugin);
+        setCommandType(TimeBanCommands.NULL);
     }
 
     @Override

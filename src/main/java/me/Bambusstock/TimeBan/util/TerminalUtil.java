@@ -34,7 +34,7 @@ public class TerminalUtil {
 
         return b.toString();
     }
-
+    
     /**
      * Send a new message to the player.
      *

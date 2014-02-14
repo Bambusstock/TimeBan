@@ -15,9 +15,6 @@ public class Ban implements Serializable, Comparable<Ban> {
     
     private static final SimpleDateFormat shortFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
 
-    private String stdReason = "Standard reason";
-    private int stdBanDuration = 3600;
-
     private String player;
     private Calendar until;
     private String reason;
@@ -53,37 +50,6 @@ public class Ban implements Serializable, Comparable<Ban> {
         } else {
             return 0;
         }
-    }
-
-    /**
-     * Set the standard ban duration in seconds.
-     *
-     * @param duration Amount of seconds a user is banned, if no duration was
-     * given.
-     */
-    public void setStandardBanDuration(int duration) {
-        this.stdBanDuration = duration;
-    }
-
-    /**
-     * Set the standard reason.
-     *
-     * @param Standard reason used if no given
-     */
-    public void setStandardReason(String reason) {
-        this.stdReason = reason;
-    }
-
-    /**
-     * Use the standard ban duration to create a standard Calendar-Object, that
-     * is used to define date until user is banned.
-     *
-     * @return
-     */
-    private Calendar stdDurationToCalendar() {
-        Calendar result = Calendar.getInstance();
-        result.set(Calendar.SECOND, result.get(Calendar.SECOND) + this.stdBanDuration);
-        return result;
     }
 
     /**

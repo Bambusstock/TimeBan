@@ -1,42 +1,22 @@
 package me.Bambusstock.TimeBan.cmd;
 
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 
 import me.Bambusstock.TimeBan.TimeBan;
 import me.Bambusstock.TimeBan.util.Ban;
+import me.Bambusstock.TimeBan.util.MessagesUtil;
 import me.Bambusstock.TimeBan.util.TerminalUtil;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.util.ChatPaginator;
-import org.bukkit.util.ChatPaginator.ChatPage;
 
 /**
  * Command to list bans currently watched by TimeBan.
  */
 public class TimeBanListCommand extends AbstractCommand {
 
-    /**
-     * Colored user message. Constructed using a static initializer.
-     */
-    private static final String userMessage;
-
-    static {
-        StringBuilder b = new StringBuilder();
-        b.append(ChatColor.RED);
-        b.append("`%s`").append(ChatColor.WHITE);
-        b.append(" until ").append(ChatColor.AQUA);
-        b.append("%s").append(ChatColor.WHITE);
-        b.append(" because ").append(ChatColor.GOLD);
-        b.append("`%s`");
-
-        userMessage = b.toString();
-    }
-
-    /**
-     * Console message.
-     */
-    private static final String consoleMessage = "[TimeBan] `%s` until %s because `%s`";
+    private static final SimpleDateFormat shortFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
 
     // page to display
     private int page;
@@ -52,6 +32,7 @@ public class TimeBanListCommand extends AbstractCommand {
 
     public TimeBanListCommand(TimeBan plugin) {
         super(plugin);
+        setCommandType(TimeBanCommands.LIST);
     }
 
     @Override
@@ -63,17 +44,23 @@ public class TimeBanListCommand extends AbstractCommand {
 
         List<Ban> result = plugin.getController().searchBans(search, reverse);
         if (!result.isEmpty()) {
+            HashMap<String, String> values = new HashMap<String, String>(3);
             if (simple == true) {
                 for (Ban b : result) {
-                    builder.append(b.toString()).append("\n");
+                    values.put("{user}", b.getPlayer().getName());
+                    values.put("{until}", shortFormat.format(b.getUntil().getTime()));
+                    values.put("{reason}", b.getReason());
+
+                    String message = MessagesUtil.formatMessage("list_short_result", values);
+                    builder.append(message).append("\n");
                 }
             } else {
                 for (Ban b : result) {
-                    String player = b.getPlayer().getName();
-                    String until = b.getUntil().getTime().toString();
-                    String reason = b.getReason();
+                    values.put("{user}", b.getPlayer().getName());
+                    values.put("{until}", b.getUntil().getTime().toString());
+                    values.put("{reason}", b.getReason());
 
-                    String message = createColoredMessage(receiver == null, player, until, reason);
+                    String message = MessagesUtil.formatMessage("list_result", values);
                     builder.append(message).append("\n");
                 }
             }
@@ -86,23 +73,6 @@ public class TimeBanListCommand extends AbstractCommand {
             TerminalUtil.printToConsole(message);
         } else {
             TerminalUtil.printToPlayer(receiver, message, page);
-        }
-    }
-
-    /**
-     * Write a plain message to the console or add a formatted message to the
-     * local StringBuffer to use the whole output with a ChatPaginator.
-     *
-     * @param colored true if should be colored
-     * @param args args to fill the message
-     *
-     * @return message
-     */
-    protected String createColoredMessage(boolean colored, String... args) {
-        if (!colored) {
-            return String.format(consoleMessage, args);
-        } else {
-            return String.format(userMessage, args);
         }
     }
 

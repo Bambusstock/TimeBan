@@ -7,4 +7,5 @@ manDescription:
 manParameters:
   - '* <user,...> - usernames to unban(online/offline)'
 manExamples:
-  - ''
+  - '/timeban unban userA,userB'
+  - '/timeban unban userA'
