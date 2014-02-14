@@ -46,13 +46,12 @@ public class TerminalUtil {
     }
 
     public static void printToPlayer(Player receiver, String text, int page) {
-        String paginatedText = text;
         if (page > 0) {
             ChatPaginator.ChatPage output = ChatPaginator.paginate(text, page);
-            paginatedText = output.toString();
+            receiver.sendMessage(output.getLines());
+        } else if(page == 0) {
+            receiver.sendMessage(text);
         }
-        
-        printToPlayer(receiver, paginatedText);
     }
 
     /**
