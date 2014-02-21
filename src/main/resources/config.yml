@@ -3,3 +3,7 @@ defaultBanReason: Default reason!
 runDelay: 1
 runSilent: true
 locale: en
+shortcuts:
+  griefing:
+    duration: 2d
+    reason: "Griefing bitch!"
