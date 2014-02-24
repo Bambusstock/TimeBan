@@ -7,4 +7,5 @@ shortcuts:
   griefing:
     duration: 2d
     reason: "Griefing!"
+banUntilDate: false
 dateFormat: dd.MM.yyyy-HH:mm
