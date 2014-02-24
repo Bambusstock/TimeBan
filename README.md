@@ -28,6 +28,7 @@ To get help when needed you might want to use the ingame help via:
 ### Ban a player
 
 	/timeban ban userA 1w "Griefing!"
+	/timeban ban userA 21.04.2015-12:00 "Griefing!"
 
 For more detailed information on the parameters see below!
 
@@ -57,6 +58,8 @@ Two more examples:
 
 __Please keep in mind that you have to maintain the order of the shortcuts from year to seconds!__
 
+__If you would like to use a more "human readable" date format like `21.02.2015-12:00` you can enable this in your config!__
+
 Command Syntax
 --------------
 
@@ -78,7 +81,7 @@ Ban one or more players.
 
 #### Parameters:
 
-- [duration] will follow the "simple format" specifying the ban duration. Default is the standard ban duration defined in your configuration.
+- [duration] specifies the ban duration. standard format is the "simple format". Default is the standard ban duration defined in your configuration.
 
 - [reason] specifies the reason why the player was banned. Default is the default reason defined in your configuration.
 
@@ -170,6 +173,14 @@ Define if the scheduler should produce output (server log). `false` enables outp
 `locale`
 
 Define the language files to use. Keep in mind that the languages files need to be present in `/server/plugins/TimeBan/lang`!
+
+`banUntilDate`
+
+Set to true and you will be able to ban using a "human readable" date like `21.02.2015-12:00`. The simple format will no longer work.
+
+`dateFormat`
+
+Specify the date format used to parse the date string provided by you for the ban command. Check out the JavaDoc for more information about [the pattern](http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html).
 
 Language files
 --------------

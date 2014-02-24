@@ -7,7 +7,7 @@
     <!-- The Basics -->
     <groupId>me.Bambusstock.minecraft</groupId>
     <artifactId>me.Bambusstock.TimeBan</artifactId>
-    <version>0.6</version>
+    <version>0.7</version>
     <packaging>jar</packaging>
     <dependencies>
         <!-- Bukkit API -->
