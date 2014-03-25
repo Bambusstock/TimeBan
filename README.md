@@ -174,6 +174,12 @@ Define if the scheduler should produce output (server log). `false` enables outp
 
 Define the language files to use. Keep in mind that the languages files need to be present in `/server/plugins/TimeBan/lang`!
 
+`shortcuts`
+
+Use shortcuts in combination with the ban command. 
+
+	timeban ban userA &griefing
+
 `banUntilDate`
 
 Set to true and you will be able to ban using a "human readable" date like `21.02.2015-12:00`. The simple format will no longer work.
